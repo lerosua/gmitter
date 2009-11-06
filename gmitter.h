@@ -3,9 +3,7 @@
  * 
  *       Filename:  gmitter.h
  * 
- *    Description:  twitter apiçš„æ ¸å¿ƒéƒ¨åˆ? * 
  *        Version:  1.0
- *        Created:  2009å¹?1æœ?2æ—?19æ—?2åˆ?5ç§?CST
  *       Revision:  none
  *       Compiler:  gcc
  * 
@@ -26,6 +24,7 @@ class GMitter
 {
 public:
 	GMitter();
+	void Login(const std::string& account,const std::string& password);
 	void SetStatus(std::string msg);
 	std::string toPercent(std::string str);
 	void OnBegin(const happyhttp::Response* r, void* userdata);

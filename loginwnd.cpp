@@ -53,13 +53,13 @@ BOOL LoginWnd::OnInitDialog()
     m_Account.SetPos(MZM_MARGIN_MAX*2,120,     GetWidth()-MZM_MARGIN_MAX*4,60);
     m_Account.SetID(MZ_IDC_TESTBTN1); //you must set an unique ID for a edit control
     m_Account.SetTip(L"Account:");	// set the tips text
-    m_Account.SetTextColor(RGB(255,0,0)); // you could also set the color of text
+    m_Account.SetTextColor(RGB(0,200,0)); // you could also set the color of text
     m_ScrollWin.AddChild(&m_Account);
     //m_Pass.SetPos(MZM_MARGIN_MAX,MZM_MARGIN_MAX-280,GetWidth()-MZM_MARGIN_MAX*2,140);
     m_Pass.SetPos(MZM_MARGIN_MAX*2,190,GetWidth()-MZM_MARGIN_MAX*4,60);
     m_Pass.SetID(MZ_IDC_TESTBTN2);
     m_Pass.SetTip(L"Password:");
-    m_Pass.SetTextColor(RGB(255,0,0));
+    m_Pass.SetTextColor(RGB(0,200,0));
     m_Pass.SetEditStyle(SINGLELINE_EDIT_STYLE_PASSWORD);
     m_Pass.EnablePassWord();
     //m_Pass.SetText(SINGLELINE_EDIT_STYLE_PASSWORD);
@@ -73,6 +73,7 @@ BOOL LoginWnd::OnInitDialog()
     //m_text.SetText(L"Configure");
     m_text.SetText(L"配置");
     m_text.SetID(MZ_IDC_STATIC_START1);
+	m_text.SetTextColor(RGB(200,200,200));
     //m_text.SetPos(MZM_MARGIN_MAX-300,420,70,MZM_HEIGHT_BUTTON);
     m_text.SetPos(GetWidth()-180,MZM_HEIGHT_BUTTON*3,100,MZM_HEIGHT_BUTTON);
     m_text.SetDrawTextFormat(DT_RIGHT|DT_VCENTER);
@@ -116,7 +117,7 @@ BOOL LoginWnd::OnInitDialog()
     case MZ_IDC_BTNARROW:
       {
 	      //配置界面
-	    SettingWnd m_settingwnd;
+	        SettingWnd m_settingwnd;
 		RECT rcWork = MzGetWorkArea();
 		m_settingwnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
 		m_settingwnd.SetAnimateType_Show(m_count);
@@ -145,18 +146,34 @@ BOOL LoginWnd::OnInitDialog()
         }
         if (nIndex==2)
         {
+		if(m_Account.GetText().IsEmpty()||m_Pass.GetText().IsEmpty()){
+			MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, false);
+			return;
+		}
+
+		wchar_t str_name[128];
+		wchar_t str_pass[128];
+		wsprintf(str_name,m_Account.GetText().C_Str());
+		wsprintf(str_pass,m_Pass.GetText().C_Str());
+
 		MainWnd m_wnd;
 		RECT rcWork = MzGetWorkArea();
 		m_wnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
 		m_wnd.SetAnimateType_Show(m_count);
 		m_wnd.SetAnimateType_Hide(m_count+1);
+
+		
+		m_wnd.Login(str_name,str_pass);
+		//delete me
 		m_wnd.AddMsg(L"lerosua",L"initial twitter");
 		m_wnd.DoModal();
+		/*
 		m_count++;
 		if (m_count>15)
 		{
 		  m_count = 0;
 		}
+		*/
 		          return;
         }
       }
@@ -165,3 +182,9 @@ BOOL LoginWnd::OnInitDialog()
   }
 
 
+void LoginWnd::SetDefault(const std::wstring& name,const std::wstring& pass)
+{
+	m_Account.SetText(name.c_str());
+   m_Pass.SetText(pass.c_str());
+
+}

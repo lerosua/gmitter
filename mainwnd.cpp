@@ -19,6 +19,7 @@
 #include "mainwnd.h"
 #include "saywnd.h"
 #include "Resource.h"
+#include "settings.h"
 
 BOOL MainWnd::OnInitDialog()
 {
@@ -211,4 +212,21 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 }
 
 
+void MainWnd::Login(const wchar_t*  account,const wchar_t* password)
+{
+	std::wstring p_account(account);
+	std::wstring p_pass(password);
+	std::string s_account=ws2s(p_account);
+	std::string s_pass=ws2s(p_pass);
+	Setting conf;
+	conf.applySettings(s_account,s_pass);
+	conf.saveSettings();
+	m_twitter.Login(s_account,s_pass);
+}
 	
+void MainWnd::SendStatus(const wchar_t* msg)
+{
+	std::string status_ = ws2s(wstring(msg));
+	m_twitter.SetStatus(status_);
+
+}

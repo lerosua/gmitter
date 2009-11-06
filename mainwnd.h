@@ -20,11 +20,12 @@
 #define  MAINWND_FILE_HEADER_INC
 
 #include <mzfc_inc.h>
+#include "gmitter.h"
 
 #define MZ_IDC_TOOLBAR2 102
 #define MZ_IDC_SCROLLWIN 105
 #define MZ_IDC_LIST      120
-
+//class GMitter;
 class MsgListItemData
 {
 public:
@@ -49,15 +50,18 @@ class MainWnd:public CMzWndEx
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
 	void AddMsg(wchar_t* author,wchar_t* msg);
-
+	void Login(const wchar_t*  account,const wchar_t* password);
+	void SendStatus(const wchar_t* msg);
 	protected:
 	UiScrollWin m_ScrollWin;
 	UiToolbar_Text m_Toolbar;
 	GMList		m_List;
+	GMitter		m_twitter;
 
-	//delete me
-	//UiButtonEx m_BtnSetting0;
-	
+private:
+	//wstring m_account;
+	//wstring m_pass;
+
 
 
 };

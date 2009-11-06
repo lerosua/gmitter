@@ -17,7 +17,7 @@
  */
 
 #include "saywnd.h"
-#include "gmitter.h"
+//#include "gmitter.h"
 #include "mainwnd.h"
 
 SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
@@ -80,9 +80,10 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    /*·¢ËÍ´¦Àí*/
 
 			    CMzString str(256);
-			    wsprintf(str.C_Str(),L"you twitter :\n%s",m_pEdit->GetText().C_Str());
+			    wsprintf(str.C_Str(),L"%s",m_pEdit->GetText().C_Str());
 				char buf[512];
 				sprintf(buf,"%s",str.C_Str());
+				m_pwnd.SendStatus(str.C_Str());
 			    //GMitter m_itter;
 			//	m_itter.SetStatus(buf);
 			//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);

@@ -20,6 +20,7 @@
 #include "mainwnd.h"
 #include "saywnd.h"
 #include "settingwnd.h"
+#include "settings.h"
 
 MZ_IMPLEMENT_DYNAMIC(LoginWnd)
 MZ_IMPLEMENT_DYNAMIC(MainWnd)
@@ -45,6 +46,14 @@ public:
     m_LoginWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
     if(MzGetParam(MZGP_APP_START_ANIMATION)==TRUE){
 	    m_LoginWnd.AnimateWindow(MZ_ANIMTYPE_ZOOM_IN,true);
+	    Setting conf;
+	    conf.loadSettings();
+		const std::string& name=conf.GetAccount();
+		const std::string& pass=conf.GetPass();
+		if(!name.empty()&&!pass.empty()){
+
+				m_LoginWnd.SetDefault(s2ws(name),s2ws(pass));
+		}
 	    //m_LoginWnd.SetBgColor(RGB(0,0,0));
 	    m_LoginWnd.Show();
     }

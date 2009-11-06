@@ -1,122 +1,155 @@
-/* 
-   base64.cpp and base64.h
+/*
+  Copyright (c) 2005-2009 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
 
-   Copyright (C) 2004-2008 René Nyffenegger
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
 
-   This source code is provided 'as-is', without any express or implied
-   warranty. In no event will the author be held liable for any damages
-   arising from the use of this software.
+  This software is distributed without any warranty.
+ */
 
-   Permission is granted to anyone to use this software for any purpose,
-   including commercial applications, and to alter it and redistribute it
-   freely, subject to the following restrictions:
 
-   1. The origin of this source code must not be misrepresented; you must not
-      claim that you wrote the original source code. If you use this source code
-      in a product, an acknowledgment in the product documentation would be
-      appreciated but is not required.
-
-   2. Altered source versions must be plainly marked as such, and must not be
-      misrepresented as being the original source code.
-
-   3. This notice may not be removed or altered from any source distribution.
-
-   René Nyffenegger rene.nyffenegger@adp-gmbh.ch
-
-*/
 
 #include "base64.h"
 
-static const std::string base64_chars = 
-             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-             "abcdefghijklmnopqrstuvwxyz"
-             "0123456789+/";
+using namespace std;
 
+static const std::string alphabet64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
+static const char pad = '=';
+static const char np = (char) std::string::npos;
+static char table64vals[] = {
+    62, np, np, np, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, np, np, np, np, np,
+    np, np, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+    18, 19, 20, 21, 22, 23, 24, 25, np, np, np, np, np, np, 26, 27, 28, 29, 30, 31,
+    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+};
 
-static inline bool is_base64(unsigned char c) {
-  return (isalnum(c) || (c == '+') || (c == '/'));
+inline char table64(unsigned char c) {
+    return ( c < 43 || c > 122) ? np : table64vals[c - 43];
 }
 
-std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len) {
-  std::string ret;
-  int i = 0;
-  int j = 0;
-  unsigned char char_array_3[3];
-  unsigned char char_array_4[4];
+string base64_encode(const string& input) {
+    string encoded;
+    char c;
+    const unsigned int length = input.length();
 
-  while (in_len--) {
-    char_array_3[i++] = *(bytes_to_encode++);
-    if (i == 3) {
-      char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-      char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-      char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-      char_array_4[3] = char_array_3[2] & 0x3f;
+    encoded.reserve(length * 2);
 
-      for(i = 0; (i <4) ; i++)
-        ret += base64_chars[char_array_4[i]];
-      i = 0;
+    for (unsigned int i = 0; i < length; ++i) {
+        c = (input[i] >> 2) & 0x3f;
+        encoded += alphabet64[c];
+
+        c = (input[i] << 4) & 0x3f;
+        if (++i < length)
+            c |= ((input[i] >> 4) & 0x0f);
+        encoded += alphabet64[c];
+
+        if (i < length) {
+            c = (input[i] << 2) & 0x3c;
+            if (++i < length)
+                c |= (input[i] >> 6) & 0x03;
+            encoded += alphabet64[c];
+        } else {
+            ++i;
+            encoded += pad;
+        }
+
+        if (i < length) {
+            c = input[i] & 0x3f;
+            encoded += alphabet64[c];
+        } else {
+            encoded += pad;
+        }
     }
-  }
 
-  if (i)
-  {
-    for(j = i; j < 3; j++)
-      char_array_3[j] = '\0';
-
-    char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-    char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-    char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-    char_array_4[3] = char_array_3[2] & 0x3f;
-
-    for (j = 0; (j < i + 1); j++)
-      ret += base64_chars[char_array_4[j]];
-
-    while((i++ < 3))
-      ret += '=';
-
-  }
-
-  return ret;
-
+    return encoded;
 }
 
-std::string base64_decode(std::string const& encoded_string) {
-  int in_len = encoded_string.size();
-  int i = 0;
-  int j = 0;
-  int in_ = 0;
-  unsigned char char_array_4[4], char_array_3[3];
-  std::string ret;
+string base64_decode(const string& input) {
+    char c, d;
+    const unsigned int length = input.length();
+    string decoded;
 
-  while (in_len-- && ( encoded_string[in_] != '=') && is_base64(encoded_string[in_])) {
-    char_array_4[i++] = encoded_string[in_]; in_++;
-    if (i ==4) {
-      for (i = 0; i <4; i++)
-        char_array_4[i] = base64_chars.find(char_array_4[i]);
+    decoded.reserve(length);
 
-      char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
-      char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
-      char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
+    for (std::string::size_type i = 0; i < length; ++i) {
+        c = table64(input[i]);
+        ++i;
+        d = table64(input[i]);
+        c = (c << 2) | ((d >> 4) & 0x3);
+        decoded += c;
+        if (++i < length) {
+            c = input[i];
+            if (pad == c)
+                break;
 
-      for (i = 0; (i < 3); i++)
-        ret += char_array_3[i];
-      i = 0;
+            c = table64(input[i]);
+            d = ((d << 4) & 0xf0) | ((c >> 2) & 0xf);
+            decoded += d;
+        }
+
+        if (++i < length) {
+            d = input[i];
+            if (pad == d)
+                break;
+
+            d = table64(input[i]);
+            c = ((c << 6) & 0xc0) | d;
+            decoded += c;
+        }
     }
-  }
 
-  if (i) {
-    for (j = i; j <4; j++)
-      char_array_4[j] = 0;
+    return decoded;
+}
 
-    for (j = 0; j <4; j++)
-      char_array_4[j] = base64_chars.find(char_array_4[j]);
+std::string ws2s(const wstring& inputws)
+{ 
+        return WChar2Ansi(inputws.c_str()); 
+}
 
-    char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
-    char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
-    char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
+std::wstring s2ws(const string& s)
+{
+     return Ansi2WChar(s.c_str(),s.size());
+}
 
-    for (j = 0; (j < i - 1); j++) ret += char_array_3[j];
-  }
+std::string WChar2Ansi(LPCWSTR pwszSrc)
+{
+         int nLen = WideCharToMultiByte(CP_ACP, 0, pwszSrc, -1, NULL, 0, NULL, NULL);
+ 
+         if (nLen<= 0) return std::string("");
+ 
+         char* pszDst = new char[nLen];
+         if (NULL == pszDst) return std::string("");
+ 
+         WideCharToMultiByte(CP_ACP, 0, pwszSrc, -1, pszDst, nLen, NULL, NULL);
+         pszDst[nLen -1] = 0;
+ 
+         std::string strTemp(pszDst);
+         delete [] pszDst;
+ 
+         return strTemp;
+}
 
-  return ret;
+std::wstring Ansi2WChar(LPCSTR pszSrc, int nLen)
+ 
+{
+    int nSize = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)pszSrc, nLen, 0, 0);
+    if(nSize <= 0) return NULL;
+ 
+         WCHAR *pwszDst = new WCHAR[nSize+1];
+    if( NULL == pwszDst) return NULL;
+ 
+    MultiByteToWideChar(CP_ACP, 0,(LPCSTR)pszSrc, nLen, pwszDst, nSize);
+    pwszDst[nSize] = 0;
+ 
+    if( pwszDst[0] == 0xFEFF)                    // skip Oxfeff
+        for(int i = 0; i < nSize; i ++) 
+                            pwszDst[i] = pwszDst[i+1]; 
+ 
+    wstring wcharString(pwszDst);
+         delete pwszDst;
+ 
+    return wcharString;
 }

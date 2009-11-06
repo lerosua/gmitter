@@ -16,11 +16,12 @@
  * =====================================================================================
  */
 
-#ifndef  GMITTER_FILE_HEADER_INC
-#define  GMITTER_FILE_HEADER_INC
+#ifndef  LOGINWND_FILE_HEADER_INC
+#define  LOGINWND_FILE_HEADER_INC
 
 //包含MZFC库的头文件
 #include <mzfc_inc.h>
+#include <iostream>
 
 #define MZ_IDC_TESTBTN1  101
 #define MZ_IDC_TESTBTN2  106
@@ -61,11 +62,13 @@ protected:
 
   /* 重载命令消息的处理函数*/
   virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
-  
+public:
+void SetDefault(const std::wstring& name,const std::wstring& pass);
+
 };
 
 
 
 
-#endif   /* ----- #ifndef GMITTER_FILE_HEADER_INC  ----- */
+#endif   /* ----- #ifndef LOGINWND_FILE_HEADER_INC  ----- */
 

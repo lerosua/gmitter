@@ -25,7 +25,12 @@ GMitter::GMitter()
 	tw_pass="bones7456";
 	tw_version="0.1";
 	status = 0;
+}
 
+void GMitter::Login(const std::string& account,const std::string& password)
+{
+	tw_uname=account;
+	tw_pass = password;
 }
 
 void GMitter::OnBegin(const happyhttp::Response* r, void* userdata) {
@@ -94,15 +99,16 @@ void GMitter::SetStatus(std::string mes)
     int len = params.length();
 
     string enc;
-    enc = tw_uname + ':' + tw_pass;
-    enc = base64_encode(reinterpret_cast<const unsigned char*> (enc.c_str()), enc.length());
-
-    //happyhttp::Connection conn("li2z.cn", 80);
-    happyhttp::Connection conn("lfeng.cn",80);
+	string tmp;
+    tmp = tw_uname + ':' + tw_pass;
+    //enc = base64_encode(reinterpret_cast<const unsigned char*> (enc.c_str()), enc.length());
+    enc=base64_encode(tmp);
+    happyhttp::Connection conn("li2z.cn", 80);
+    //happyhttp::Connection conn("lfeng.cn",80);
     //conn.setcallbacks(OnBegin, 0, OnComplete, 0);
 
-    //conn.putrequest("POST", "/t/statuses/update.xml");
-    conn.putrequest("POST", "/api/statuses/update.xml");
+    conn.putrequest("POST", "/t/statuses/update.xml");
+    //conn.putrequest("POST", "/api/statuses/update.xml");
     conn.putheader("Authorization", "Basic " + enc);
     conn.putheader("Accept", "*/*");
     conn.putheader("Accept-Charset", "utf-8");

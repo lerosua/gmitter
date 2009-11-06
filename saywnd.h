@@ -33,7 +33,7 @@ class SayWnd:public CMzWndEx
 	SayWnd(MainWnd&);
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
-
+	
 	protected:
 	UiToolbar_Text m_Toolbar;
 	UiEdit* m_pEdit;
