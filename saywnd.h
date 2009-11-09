@@ -20,17 +20,17 @@
 #define  SAYWND_FILE_HEADER_INC
 
 #include <mzfc_inc.h>
-#define MZ_IDC_TOOLBAR3 101
-#define MZ_IDC_CAPTION 107
-#define MZ_IDC_EDIT 108
+#define MZ_IDC_TOOLBAR4 141
+#define MZ_IDC_CAPTION4 147
+#define MZ_IDC_EDIT 148
 
 
-class MainWnd;
+//class MainWnd;
 class SayWnd:public CMzWndEx
 {
 	MZ_DECLARE_DYNAMIC(SayWnd);
 	public:
-	SayWnd(MainWnd&);
+	//SayWnd(MainWnd&);
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	
@@ -39,7 +39,7 @@ class SayWnd:public CMzWndEx
 	UiEdit* m_pEdit;
 	UiCaption m_Caption;
 	private:
-	MainWnd& m_pwnd;
+	//MainWnd& m_pwnd;
 	
 };
 

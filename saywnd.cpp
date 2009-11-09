@@ -18,12 +18,13 @@
 
 #include "saywnd.h"
 //#include "gmitter.h"
+#if 0
 #include "mainwnd.h"
 
 SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
 {
 }
-
+#endif
 BOOL SayWnd::OnInitDialog()
 {
     if (!CMzWndEx::OnInitDialog())
@@ -31,7 +32,7 @@ BOOL SayWnd::OnInitDialog()
       return FALSE;
     }
 
-    m_Caption.SetID(MZ_IDC_CAPTION);
+    m_Caption.SetID(MZ_IDC_CAPTION4);
     m_Caption.SetPos(0,0,GetWidth(),100);
     m_Caption.SetText(L"GMitter");
     AddUiWin(&m_Caption);
@@ -52,7 +53,7 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit->SetMaxChar(140);
     AddUiWin(m_pEdit);
 
-    m_Toolbar.SetID(MZ_IDC_TOOLBAR3);
+    m_Toolbar.SetID(MZ_IDC_TOOLBAR4);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0,true,true,L"Exit");
     m_Toolbar.SetButton(2,true,true,L"Send");
@@ -68,7 +69,7 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
     UINT_PTR id = LOWORD(wParam);
     switch(id)
     {
-	    case MZ_IDC_TOOLBAR3:
+	    case MZ_IDC_TOOLBAR4:
 	    {
 		    int nIndex=lParam;
 		    if(nIndex==0){
@@ -83,11 +84,11 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    wsprintf(str.C_Str(),L"%s",m_pEdit->GetText().C_Str());
 				char buf[512];
 				sprintf(buf,"%s",str.C_Str());
-				m_pwnd.SendStatus(str.C_Str());
+				//m_pwnd.SendStatus(str.C_Str());
 			    //GMitter m_itter;
 			//	m_itter.SetStatus(buf);
 			//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
-			m_pwnd.AddMsg(L"lerosua",str.C_Str());
+			//m_pwnd.AddMsg(L"lerosua",str.C_Str());
 			this->EndModal(ID_OK);
 
 		    }

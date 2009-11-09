@@ -33,7 +33,7 @@ BOOL MainWnd::OnInitDialog()
     m_ScrollWin.EnableScrollBarV(true);
     AddUiWin(&m_ScrollWin);
 
-    m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
+    m_List.SetPos(0,5,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR-5);
     m_List.SetID(MZ_IDC_LIST);
     m_List.EnableScrollBarV(true);
     m_List.EnableNotifyMessage(true);
@@ -122,20 +122,21 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    }
 		    if(1== nIndex){
 			    /* ·¢ÍÆ*/
-#if 0
+#if 1
 			SayWnd m_Saywnd;
 			RECT rcWork = MzGetWorkArea();
 			m_Saywnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
 			m_Saywnd.SetAnimateType_Show(5);
 			m_Saywnd.SetAnimateType_Hide(6);
 			m_Saywnd.DoModal();
-#endif
+#else
 			SayWnd *m_Saywnd=new SayWnd(*this);
 			RECT rcWork = MzGetWorkArea();
 			m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
 			m_Saywnd->SetAnimateType_Show(5);
 			m_Saywnd->SetAnimateType_Hide(6);
 			m_Saywnd->DoModal();
+#endif
 		return;
 		
 

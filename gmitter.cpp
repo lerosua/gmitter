@@ -115,7 +115,7 @@ void GMitter::SetStatus(std::string mes)
     conn.putheader("User-Agent", "_gmitter_");
 	conn.putheader("X-Twitter-Client", "_gmitter_");
 	conn.putheader("X-Twitter-Client-Version", tw_version);
-	conn.putheader("X-Twitter-Client-URL", "http://tlerosua.org/gmitter");
+	conn.putheader("X-Twitter-Client-URL", "http://lerosua.org/gmitter");
 	conn.putheader("Connection", "close");
 	conn.putheader("Content-Length", len);
 	conn.putheader("Content-Type", "application/x-www-form-urlencoded");
