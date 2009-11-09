@@ -29,7 +29,7 @@ BOOL MainWnd::OnInitDialog()
     }
 
     m_ScrollWin.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
-    m_ScrollWin.SetID(MZ_IDC_SCROLLWIN);
+    m_ScrollWin.SetID(MZ_IDC_SCROLLWIN2);
     m_ScrollWin.EnableScrollBarV(true);
     AddUiWin(&m_ScrollWin);
 

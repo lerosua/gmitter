@@ -22,7 +22,7 @@
 #include <mzfc_inc.h>
 #define MZ_IDC_TOOLBAR4 141
 #define MZ_IDC_CAPTION4 147
-#define MZ_IDC_EDIT 148
+#define MZ_IDC_EDIT4 148
 
 
 //class MainWnd;
@@ -36,7 +36,7 @@ class SayWnd:public CMzWndEx
 	
 	protected:
 	UiToolbar_Text m_Toolbar;
-	UiEdit* m_pEdit;
+	UiEdit m_pEdit;
 	UiCaption m_Caption;
 	private:
 	//MainWnd& m_pwnd;

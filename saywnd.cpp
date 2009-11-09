@@ -37,21 +37,21 @@ BOOL SayWnd::OnInitDialog()
     m_Caption.SetText(L"GMitter");
     AddUiWin(&m_Caption);
 
-    m_pEdit = new UiEdit;
-    m_pEdit->SetPos(5,120,470,170);
-    m_pEdit->SetID(MZ_IDC_EDIT);
-    m_pEdit->EnableZoomIn(true);
-    m_pEdit->SetReadOnly(false);
-    m_pEdit->SetRightInvalid(10);
-    //m_pEdit->EnableGridlines(true);
-    //m_pEdit->EnableInsideScroll(true);
+    //m_pEdit = new UiEdit;
+    m_pEdit.SetPos(5,120,470,170);
+    m_pEdit.SetID(MZ_IDC_EDIT4);
+    m_pEdit.EnableZoomIn(true);
+    m_pEdit.SetReadOnly(false);
+    m_pEdit.SetRightInvalid(10);
+    //m_pEdit.EnableGridlines(true);
+    //m_pEdit.EnableInsideScroll(true);
     
-    m_pEdit->SetLineSpace(10);
-    m_pEdit->SetFontColor(RGB(155,155,2));
-    m_pEdit->SetEditBgType(UI_EDIT_BGTYPE_FILL_WHITE);
-    m_pEdit->EnableUndo(true);
-    m_pEdit->SetMaxChar(140);
-    AddUiWin(m_pEdit);
+    m_pEdit.SetLineSpace(10);
+    m_pEdit.SetFontColor(RGB(155,155,2));
+    m_pEdit.SetEditBgType(UI_EDIT_BGTYPE_FILL_WHITE);
+    m_pEdit.EnableUndo(true);
+    m_pEdit.SetMaxChar(140);
+    AddUiWin(&m_pEdit);
 
     m_Toolbar.SetID(MZ_IDC_TOOLBAR4);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
@@ -81,7 +81,7 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    /*·¢ËÍ´¦Àí*/
 
 			    CMzString str(256);
-			    wsprintf(str.C_Str(),L"%s",m_pEdit->GetText().C_Str());
+			    wsprintf(str.C_Str(),L"%s",m_pEdit.GetText().C_Str());
 				char buf[512];
 				sprintf(buf,"%s",str.C_Str());
 				//m_pwnd.SendStatus(str.C_Str());

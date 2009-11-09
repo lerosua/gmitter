@@ -23,7 +23,7 @@
 #include "gmitter.h"
 
 #define MZ_IDC_TOOLBAR2 102
-#define MZ_IDC_SCROLLWIN 105
+#define MZ_IDC_SCROLLWIN2 105
 #define MZ_IDC_LIST      120
 //class GMitter;
 class MsgListItemData
