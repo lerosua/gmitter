@@ -25,12 +25,12 @@
 #define MZ_IDC_EDIT4 148
 
 
-//class MainWnd;
+class MainWnd;
 class SayWnd:public CMzWndEx
 {
 	MZ_DECLARE_DYNAMIC(SayWnd);
 	public:
-	//SayWnd(MainWnd&);
+	SayWnd(MainWnd&);
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	
@@ -39,7 +39,7 @@ class SayWnd:public CMzWndEx
 	UiEdit m_pEdit;
 	UiCaption m_Caption;
 	private:
-	//MainWnd& m_pwnd;
+	MainWnd& m_pwnd;
 	
 };
 

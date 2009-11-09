@@ -122,7 +122,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    }
 		    if(1== nIndex){
 			    /* ·¢ÍÆ*/
-#if 1
+#if 0
 			SayWnd m_Saywnd;
 			RECT rcWork = MzGetWorkArea();
 			m_Saywnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);

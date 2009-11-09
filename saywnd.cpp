@@ -17,8 +17,8 @@
  */
 
 #include "saywnd.h"
-//#include "gmitter.h"
-#if 0
+#include "gmitter.h"
+#if 1
 #include "mainwnd.h"
 
 SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
@@ -84,11 +84,11 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    wsprintf(str.C_Str(),L"%s",m_pEdit.GetText().C_Str());
 				char buf[512];
 				sprintf(buf,"%s",str.C_Str());
-				//m_pwnd.SendStatus(str.C_Str());
-			    //GMitter m_itter;
-			//	m_itter.SetStatus(buf);
-			//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
-			//m_pwnd.AddMsg(L"lerosua",str.C_Str());
+				m_pwnd.SendStatus(str.C_Str());
+			    GMitter m_itter;
+				m_itter.SetStatus(buf);
+			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+			m_pwnd.AddMsg(L"lerosua",str.C_Str());
 			this->EndModal(ID_OK);
 
 		    }
