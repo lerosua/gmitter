@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <ReadWriteIni.h>
 #include "settings.h"
 
 using namespace std;
@@ -25,59 +26,35 @@ using namespace std;
 Setting::Setting()
 {
 	//rcFilePath="/program files/gmitter/gmitter.ini";
-	rcFilePath="\\Disk\\Program Files\\gmitter\\gmitter.ini";
+	//rcFilePath="\\Disk\\Program Files\\gmitter\\gmitter.ini";
+	rcFilePath=L"\\Disk\\Program Files\\gmitter\\gmitter.ini";
 	
 }
-void Setting::applySettings(string uname, std::string pass,std::string api,bool is) {
+void Setting::applySettings(wstring uname, std::wstring pass,std::wstring api,bool is) {
     tw_uname = uname;
     tw_pass = pass;
 }
 
-void Setting::parseString(string str) {
-    size_t pos;
-    pos = str.find(' ');
-    pos = str.find(' ', pos + 1);
-    if (str.find("Username") == 0)
-        tw_uname = base64_decode(str.substr(pos + 1, str.length() - pos));
-    if (str.find("Password") == 0)
-        tw_pass = base64_decode(str.substr(pos + 1, str.length() - pos));
-    if (str.find("SavePass") == 0)
-	    m_save_pass ;
-    if (str.find("ApiUrl") == 0)
-	    tw_api_url = str.substr(pos+1,str.length()-pos);
+void Setting::parseString(wstring str) {
 }
 
 void Setting::loadSettings() {
-    ifstream rcFile;
-    rcFile.open(rcFilePath.c_str(), ifstream::in);
-    if (rcFile.is_open()) {
-        while (!rcFile.eof()) {
-            string str;
-            getline(rcFile, str);
-            if (!str.empty())
-                parseString(str);
-        }
-        rcFile.close();
-    } else
-        cout << "Unable to open twinyrc";
+
+	TCHAR* sAccount;
+	TCHAR* sPass;
+	IniReadString(L"config",L"Account",&sAccount,rcFilePath.c_str());
+	wsprintf(tw_uname.c_str(),L"%s",sAccount);
+	IniReadString(L"config",L"Pass",&sPass,rcFilePath.c_str());
+	wsprintf(tw_pass.c_str(),L"%s",sPass);
+
 }
 
-void Setting::saveSettings() {
-    ofstream rcFile;
-    rcFile.open(rcFilePath.c_str(), ifstream::out);
-    if (rcFile.is_open()) {
-        rcFile << "Username = " << base64_encode(tw_uname) << endl;
-	if(m_save_pass){
-		rcFile << "Password = " << base64_encode(tw_pass) << endl;
-		rcFile << "SavePass = " << string("1")<<endl;
-	}
-	else
-		rcFile << "SavePass = " << string("0")<<endl;
-	rcFile<<"ApiUrl = "<<tw_api_url<<endl;
+void Setting::saveSettings(std::wstring uname, std::wstring pass) {
+    tw_uname = uname;
+    tw_pass = pass;
 
-        rcFile.close();
-    } else
-        cout << "Error: Unable to open .twinyrc" << endl;
+	IniReadString(L"config",L"Account",tw_uname.c_str(),rcFilePath.c_str());
+	IniReadString(L"config",L"Pass",    tw_pass.c_str(),rcFilePath.c_str());
 }
 
 

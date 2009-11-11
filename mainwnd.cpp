@@ -20,8 +20,9 @@
 #include "mainwnd.h"
 #include "saywnd.h"
 #include "Resource.h"
-#include "settings.h"
+#include "base64.h"
 #include <CallNotifyApi.h>
+#include <ReadWriteIni.h>
 
 BOOL MainWnd::OnInitDialog()
 {
@@ -221,10 +222,18 @@ void MainWnd::Login(const wchar_t*  account,const wchar_t* password)
 	std::wstring p_pass(password);
 	std::string s_account=ws2s(p_account);
 	std::string s_pass=ws2s(p_pass);
-	Setting conf;
-	conf.applySettings(s_account,s_pass);
-	conf.saveSettings();
 	m_twitter.Login(s_account,s_pass);
+
+	CMzString c_account;
+	CMzString c_pass;
+	wprintf(c_account.C_Str(),L"%s",account);
+	wprintf(c_pass.C_Str(),L"%s",password);
+
+    if(!FileExists(rcFile)){
+	    IniCreateFile(rcFile);
+    }
+	IniWriteString(L"config",L"account",c_account,rcFile);
+	IniWriteString(L"config",L"password",c_pass,rcFile);
 }
 	
 void MainWnd::SendStatus(const wchar_t* msg)

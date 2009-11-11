@@ -27,7 +27,7 @@
 #include <fstream>
 #include <sstream>
 //#define UNICODE
-//#define _UNICODE
+#define _UNICODE
 
 using namespace std;
 
@@ -35,20 +35,20 @@ class Setting
 {
 public:
 	Setting();
-	void applySettings(string uname, string pass,string api="http://li2z.cn/t",bool is=true);
+	void applySettings(wstring uname, wstring pass,wstring api=L"http://li2z.cn/t",bool is=true);
 	void loadSettings();
-	void saveSettings();
-	void parseString(string str);
-	const std::string& GetAccount(){return tw_uname;}
-	const std::string& GetPass(){return tw_pass;}
-	const std::string& GetAPI() {return tw_api_url;}
+	void saveSettings(wstring uname, wstring pass);
+	void parseString(wstring str);
+	const std::wstring& GetAccount(){return tw_uname;}
+	const std::wstring& GetPass(){return tw_pass;}
+	const std::wstring& GetAPI() {return tw_api_url;}
 	bool IsSavePass(){return m_save_pass;}
 private:
-	std::string  tw_uname;
-	std::string  tw_pass;
+	std::wstring  tw_uname;
+	std::wstring  tw_pass;
 	bool		m_save_pass;
-	std::string  tw_api_url;
-	std::string  rcFilePath;
+	std::wstring  tw_api_url;
+	std::wstring  rcFilePath;
 
 };
 

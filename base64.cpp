@@ -189,3 +189,21 @@ std::string WChar2UTF8(LPCWSTR pwszSrc)
  
          return strTemp;
 }
+
+
+bool FileExists(TCHAR* filename)
+{
+  WIN32_FIND_DATA FindFileData;
+  HANDLE hFind;
+
+  hFind = FindFirstFile(filename, &FindFileData);
+  if (hFind == INVALID_HANDLE_VALUE) 
+  {
+    return false;
+  } 
+  else 
+  {
+    FindClose(hFind);
+    return true;
+  }
+}

@@ -20,12 +20,15 @@
 #include "mainwnd.h"
 #include "saywnd.h"
 #include "settingwnd.h"
-#include "settings.h"
+#include "base64.h"
+#include <ReadWriteIni.h>
+//#include "settings.h"
 
 MZ_IMPLEMENT_DYNAMIC(LoginWnd)
 MZ_IMPLEMENT_DYNAMIC(MainWnd)
 MZ_IMPLEMENT_DYNAMIC(SayWnd)
 MZ_IMPLEMENT_DYNAMIC(SettingWnd)
+
 
 
 /* 从 CMzApp 派生的应用程序类*/
@@ -46,14 +49,25 @@ public:
     m_LoginWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
     if(MzGetParam(MZGP_APP_START_ANIMATION)==TRUE){
 	    m_LoginWnd.AnimateWindow(MZ_ANIMTYPE_ZOOM_IN,true);
-	    Setting conf;
-	    conf.loadSettings();
-		const std::string& name=conf.GetAccount();
-		const std::string& pass=conf.GetPass();
-		if(!name.empty()&&!pass.empty()){
 
-				m_LoginWnd.SetDefault(s2ws(name),s2ws(pass));
+	    if(FileExists(rcFile)){
+	    CMzString name;
+	    CMzString pass;
+	    TCHAR* s_name;
+	    TCHAR* s_pass;
+	    IniReadString(L"config",L"account",&s_name,rcFile);
+	    wprintf(name.C_Str(),L"%s",s_name);
+	    IniReadString(L"config",L"password",&s_pass,rcFile);
+	    free(s_name);
+	    free(s_pass);
+	    wprintf(pass.C_Str(),L"%s",s_pass);
+
+		if(!name.IsEmpty()&&!pass.IsEmpty()){
+
+				//m_LoginWnd.SetDefault(s2ws(name),s2ws(pass));
+				m_LoginWnd.SetDefault(name.C_Str(),pass.C_Str());
 		}
+	    }
 	    //m_LoginWnd.SetBgColor(RGB(0,0,0));
 	    m_LoginWnd.SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
 	    m_LoginWnd.Show();

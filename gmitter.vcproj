@@ -217,10 +217,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\settings.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\settingwnd.cpp"
 				>
 			</File>
@@ -276,10 +272,6 @@
 			</File>
 			<File
 				RelativePath=".\saywnd.h"
-				>
-			</File>
-			<File
-				RelativePath=".\settings.h"
 				>
 			</File>
 			<File
