@@ -16,10 +16,12 @@
  * =====================================================================================
  */
 
+
 #include "mainwnd.h"
 #include "saywnd.h"
 #include "Resource.h"
 #include "settings.h"
+#include <CallNotifyApi.h>
 
 BOOL MainWnd::OnInitDialog()
 {
@@ -227,7 +229,33 @@ void MainWnd::Login(const wchar_t*  account,const wchar_t* password)
 	
 void MainWnd::SendStatus(const wchar_t* msg)
 {
-	std::string status_ = ws2s(wstring(msg));
+	AutoDialNet();
+	std::string status_ = ws2s_utf8(wstring(msg));
 	m_twitter.SetStatus(status_);
+	CloseDialNet();
 
+}
+
+BOOL MainWnd::AutoDialNet()
+{
+	DWORD dwSize, dwNetWorkStatus;
+	
+	m_isDialConnect=FALSE;
+	dwNetWorkStatus = QueryNetWorkStatus();
+	if(dwNetWorkStatus == NETWORK_NONE){
+		if(RESULT_OK == Dial_StartGprsConnect2(m_hWnd,GPRS_FORCE_APP_TYPE)){ //connect to EDGE
+			m_isDialConnect = TRUE;
+			return TRUE;
+		}else
+			return FALSE;
+	}
+	else
+		return TRUE; //maybe has wifi
+}
+
+void MainWnd::CloseDialNet()
+{
+	if(m_isDialConnect)
+		Dial_StopGprsConnect2(m_hWnd);
+	m_isDialConnect=FALSE;
 }

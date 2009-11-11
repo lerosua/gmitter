@@ -24,7 +24,8 @@ using namespace std;
 
 Setting::Setting()
 {
-	rcFilePath="/program files/gmitter/gmitter.ini";
+	//rcFilePath="/program files/gmitter/gmitter.ini";
+	rcFilePath="\\Disk\\Program Files\\gmitter\\gmitter.ini";
 	
 }
 void Setting::applySettings(string uname, std::string pass,std::string api,bool is) {

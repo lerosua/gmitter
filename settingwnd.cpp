@@ -83,7 +83,8 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    CMzString str(256);
 			    wsprintf(str.C_Str(),L"The system Save the configure");
 
-			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+			//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			    EndModal(ID_OK);
 
 		    }

@@ -92,8 +92,16 @@ string GMitter::toPercent(std::string str) {
 
     return ret;
 }
-void GMitter::SetStatus(std::string mes)
+void GMitter::SetStatus(const std::wstring& wmes)
 {
+	std::string mes=ws2s_utf8(wmes);
+	SetStatus(mes);
+
+
+}
+void GMitter::SetStatus(const std::string& mes)
+{
+
 
     string params = "status=" + toPercent(mes)+ "&source=_gmitter_";
     int len = params.length();

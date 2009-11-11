@@ -17,6 +17,7 @@
 #define  GMITTER_FILE_HEADER_INC
 
 #include <string>
+#include <windows.h>
 #include "happyhttp.h"
 
 using namespace std;
@@ -25,7 +26,8 @@ class GMitter
 public:
 	GMitter();
 	void Login(const std::string& account,const std::string& password);
-	void SetStatus(std::string msg);
+	void SetStatus(const std::string& msg);
+	void SetStatus(const std::wstring& wmsg);
 	std::string toPercent(std::string str);
 	void OnBegin(const happyhttp::Response* r, void* userdata);
 	void OnComplete(const happyhttp::Response* r, void* userdata) ;

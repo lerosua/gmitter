@@ -55,6 +55,7 @@ public:
 				m_LoginWnd.SetDefault(s2ws(name),s2ws(pass));
 		}
 	    //m_LoginWnd.SetBgColor(RGB(0,0,0));
+	    m_LoginWnd.SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
 	    m_LoginWnd.Show();
     }
 

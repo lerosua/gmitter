@@ -52,11 +52,14 @@ class MainWnd:public CMzWndEx
 	void AddMsg(wchar_t* author,wchar_t* msg);
 	void Login(const wchar_t*  account,const wchar_t* password);
 	void SendStatus(const wchar_t* msg);
+	BOOL AutoDialNet();
+	void CloseDialNet();
 	protected:
 	UiScrollWin m_ScrollWin;
 	UiToolbar_Text m_Toolbar;
 	GMList		m_List;
 	GMitter		m_twitter;
+	BOOL		m_isDialConnect;
 
 private:
 	//wstring m_account;

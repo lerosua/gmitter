@@ -109,6 +109,11 @@ std::string ws2s(const wstring& inputws)
         return WChar2Ansi(inputws.c_str()); 
 }
 
+std::string ws2s_utf8(const wstring& inputws)
+{ 
+        return WChar2UTF8(inputws.c_str()); 
+}
+
 std::wstring s2ws(const string& s)
 {
      return Ansi2WChar(s.c_str(),s.size());
@@ -152,4 +157,35 @@ std::wstring Ansi2WChar(LPCSTR pszSrc, int nLen)
          delete pwszDst;
  
     return wcharString;
+}
+
+
+BOOL WCharToMByte_UTF8(LPCWSTR lpcwszStr, LPSTR lpszStr, DWORD dwMaxSize)
+{
+	size_t dwSize = WideCharToMultiByte(CP_UTF8,NULL,lpcwszStr,-1,NULL,0,NULL,FALSE);
+	if(dwSize > dwMaxSize)
+	{
+		return FALSE;
+	}
+	WideCharToMultiByte(CP_UTF8,NULL,lpcwszStr,-1,lpszStr,dwSize,NULL,FALSE);
+	return TRUE;
+}
+
+
+std::string WChar2UTF8(LPCWSTR pwszSrc)
+{
+         int nLen = WideCharToMultiByte(CP_UTF8, 0, pwszSrc, -1, NULL, 0, NULL, NULL);
+ 
+         if (nLen<= 0) return std::string("");
+ 
+         char* pszDst = new char[nLen];
+         if (NULL == pszDst) return std::string("");
+ 
+         WideCharToMultiByte(CP_UTF8, 0, pwszSrc, -1, pszDst, nLen, NULL, NULL);
+         pszDst[nLen -1] = 0;
+ 
+         std::string strTemp(pszDst);
+         delete [] pszDst;
+ 
+         return strTemp;
 }

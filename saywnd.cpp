@@ -18,13 +18,13 @@
 
 #include "saywnd.h"
 #include "gmitter.h"
-#if 1
+#include <iostream>
 #include "mainwnd.h"
 
 SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
 {
 }
-#endif
+
 BOOL SayWnd::OnInitDialog()
 {
     if (!CMzWndEx::OnInitDialog())
@@ -46,7 +46,7 @@ BOOL SayWnd::OnInitDialog()
     //m_pEdit.EnableGridlines(true);
     //m_pEdit.EnableInsideScroll(true);
     
-    m_pEdit.SetLineSpace(10);
+    m_pEdit.SetLineSpace(4);
     m_pEdit.SetFontColor(RGB(155,155,2));
     m_pEdit.SetEditBgType(UI_EDIT_BGTYPE_FILL_WHITE);
     m_pEdit.EnableUndo(true);
@@ -82,12 +82,18 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 
 			    CMzString str(256);
 			    wsprintf(str.C_Str(),L"%s",m_pEdit.GetText().C_Str());
-				char buf[512];
-				sprintf(buf,"%s",str.C_Str());
+
+				MzBeginWaitDlg(m_hWnd);
+
+				
 				m_pwnd.SendStatus(str.C_Str());
-			    GMitter m_itter;
-				m_itter.SetStatus(buf);
-			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+				//GMitter m_itter;
+				//m_itter.SetStatus(std::wstring(str.C_Str()));
+
+				MzEndWaitDlg();
+
+			//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			m_pwnd.AddMsg(L"lerosua",str.C_Str());
 			this->EndModal(ID_OK);
 

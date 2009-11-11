@@ -102,7 +102,8 @@ BOOL LoginWnd::OnInitDialog()
         // 格式化字符串
         wsprintf(str.C_Str(), L"You'd input:\n%s", m_Account.GetText().C_Str());
         // 弹出消息框
-        MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+        //MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+	MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
       }
       break;
     case MZ_IDC_TESTBTN2:
@@ -110,7 +111,8 @@ BOOL LoginWnd::OnInitDialog()
         CMzString str(64+m_Pass.GetTextLen());
         wsprintf(str.C_Str(), L"You'd input:\n%s", m_Pass.GetText().C_Str());
         // 弹出消息框
-        MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+        //MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+	MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 
       }
       break;
@@ -140,14 +142,16 @@ BOOL LoginWnd::OnInitDialog()
         {
         CMzString str(128);
         wsprintf(str.C_Str(), L"twitter loging test");
-        MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+        //MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
+	MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 
           return;
         }
         if (nIndex==2)
         {
 		if(m_Account.GetText().IsEmpty()||m_Pass.GetText().IsEmpty()){
-			MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, false);
+			//MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, false);
+			MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			return;
 		}
 
