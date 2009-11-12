@@ -31,11 +31,14 @@ public:
 	std::string toPercent(std::string str);
 	void OnBegin(const happyhttp::Response* r, void* userdata);
 	void OnComplete(const happyhttp::Response* r, void* userdata) ;
+	bool GetNetStatus();
 private:
 	std::string tw_uname;
 	std::string tw_pass;
 	std::string tw_version;
 	int status;
+	/** net status,0 is ok,~0 is fail*/
+	bool netstat;
 
 
 

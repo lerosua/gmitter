@@ -23,6 +23,9 @@
 #include "base64.h"
 #include <CallNotifyApi.h>
 #include <ReadWriteIni.h>
+#include <sstream>
+#include <string>
+#include <fstream>
 
 BOOL MainWnd::OnInitDialog()
 {
@@ -42,6 +45,7 @@ BOOL MainWnd::OnInitDialog()
     m_List.EnableNotifyMessage(true);
     m_List.SetItemHeight(90);
     m_List.SetTextColor(RGB(255,0,0));
+    m_List.EnableVaryItemHeight(true);
     AddUiWin(&m_List);
     
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
@@ -200,7 +204,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	// for author
 	RECT rcText=*prcItem;
 	rcText.left=MZM_MARGIN_MAX*2;
-	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/4;
+	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 	MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
@@ -208,32 +212,42 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	rcText.top=rcText.bottom;
 	rcText.bottom=prcItem->bottom;
 	::SetTextColor(hdcDst,RGB(200,200,200));
-	HFONT hf=FontHelper::GetFont(16);
+	HFONT hf=FontHelper::GetFont(24);
 	SelectObject(hdcDst,hf);
 	//MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
-	MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,DT_LEFT|DT_WORDBREAK|DT_END_ELLIPSIS);
+	MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,DT_LEFT|DT_WORDBREAK);
 
 }
-
-
-void MainWnd::Login(const wchar_t*  account,const wchar_t* password)
+#if 0
+int GMList::CalcItemHeight(int index)
 {
-	std::wstring p_account(account);
-	std::wstring p_pass(password);
-	std::string s_account=ws2s(p_account);
-	std::string s_pass=ws2s(p_pass);
+        ListItem* pItem = GetItem(index);
+        //SmsListItemData_Details *p = (SmsListItemData_Details *)pItem->Data;
+MsgListItemData* p = (MsgListItemData*)pItem->Data;
+        HDC hdc = GetDC(NULL);
+        ::SetTextColor(hdc, RGB(0,255,255));
+        SelectObject(hdc, FontHelper::GetFont(24));
+        RECT rcContent={32,35,GetWidth()-50,480};
+        DrawText(hdc,p->StringText,wcslen(p->StringText),&rcContent,DT_LEFT|DT_TOP);
+	ReleaseDC(NULL, hdc);
+	return rcContent.bottom-rcContent.top+10;
+
+}
+#endif
+
+void MainWnd::Login(const CMzString& account,const CMzString& password)
+{
+	std::string s_account=ws2s(account.C_Str());
+	std::string s_pass=ws2s(password.C_Str());
+
 	m_twitter.Login(s_account,s_pass);
 
-	CMzString c_account;
-	CMzString c_pass;
-	wprintf(c_account.C_Str(),L"%s",account);
-	wprintf(c_pass.C_Str(),L"%s",password);
 
     if(!FileExists(rcFile)){
 	    IniCreateFile(rcFile);
     }
-	IniWriteString(L"config",L"account",c_account,rcFile);
-	IniWriteString(L"config",L"password",c_pass,rcFile);
+	IniWriteString(L"config",L"account",account,rcFile);
+	IniWriteString(L"config",L"password",password,rcFile);
 }
 	
 void MainWnd::SendStatus(const wchar_t* msg)
@@ -267,4 +281,71 @@ void MainWnd::CloseDialNet()
 	if(m_isDialConnect)
 		Dial_StopGprsConnect2(m_hWnd);
 	m_isDialConnect=FALSE;
+}
+
+bool MainWnd::GetNetStatus()
+{
+	return m_twitter.GetNetStatus();
+
+}
+
+void MainWnd::Parser(const std::string& input)
+{
+
+	std::string str1;
+	std::string str2;
+	str1=getStatusText(input);
+	str2=getScreenName(input);
+	std::wstring wstr1;
+	std::wstring wstr2;
+	wstr1=s2ws_unicode(str1.c_str());
+	wstr2=s2ws_unicode(str2.c_str());
+
+	AddMsg((wchar_t*)wstr2.c_str(),(wchar_t*)wstr1.c_str());
+}
+
+
+void MainWnd::LoadCache()
+{
+	using namespace std;
+
+	string filename="\\Disk\\Program Files\\gmitter\\test.json";
+	ifstream infile;
+	string str_content;
+	infile.open(filename.c_str());
+	if(!infile){
+		//MzMessageBoxEx(m_hWnd, L"Load Cache Error", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+		return;
+	}
+
+	getline(infile,str_content);
+
+		
+	string strp;
+	string tmp;
+	size_t begin_pos=0;
+	size_t pos;
+	int count=0;
+do{
+	pos= str_content.find(",{");
+	if(pos==std::string::npos)
+		break;
+
+	if(0==count)
+		strp=str_content.substr(1,pos-1);
+	else
+		strp=str_content.substr(begin_pos,pos);
+	tmp=str_content.substr(pos+1,std::string::npos);
+
+	Parser(strp);
+	
+	count++;
+
+	str_content=tmp;
+	
+
+}while(true);
+   Parser(tmp);
+   infile.close();
+
 }

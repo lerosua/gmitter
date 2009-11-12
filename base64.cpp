@@ -13,6 +13,7 @@
 
 
 #include "base64.h"
+#include <stdlib.h>
 
 using namespace std;
 
@@ -118,6 +119,36 @@ std::wstring s2ws(const string& s)
 {
      return Ansi2WChar(s.c_str(),s.size());
 }
+std::wstring s2ws_unicode(const char* ins)
+{
+	const char* p=ins;
+
+	wstring out;
+	char buf[5];
+
+	while(*p){
+		if(*p=='\\' && *(p+1)=='u'){
+			p=p+2;
+			for(int i=0;i<4;i++)
+				buf[i]=*(p+i);
+			buf[4] = 0;
+			wchar_t x = (wchar_t)strtol(buf, NULL, 16);
+			out.push_back(x);
+
+			p=p+4;
+		}
+		else{
+			wchar_t c = *p;
+			out.push_back(c);
+			p++;
+		}
+	}
+	out.push_back(0);
+	return out;
+
+
+
+}
 
 std::string WChar2Ansi(LPCWSTR pwszSrc)
 {
@@ -206,4 +237,85 @@ bool FileExists(TCHAR* filename)
     FindClose(hFind);
     return true;
   }
+}
+
+
+std::string getImageUrl(  const std::string& input)
+{
+	string text_str;
+	string tmp;
+	size_t pos = input.find(",\"profile_image_url\":\"");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+22,std::string::npos);	
+		
+		t_pos = tmp.find("\",\"");
+		text_str=tmp.substr(0,t_pos);
+		return text_str;
+	}
+	return "";
+
+}
+std::string getStatusText(const std::string& input)
+{
+	string text_str;
+	string tmp;
+	size_t pos = input.find(",\"text\":");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+9,std::string::npos);	
+		
+		t_pos = tmp.find("\"}");
+		text_str=tmp.substr(0,t_pos);
+		return text_str;
+	}
+	return "";
+}
+std::string getScreenName(const std::string& input)
+{
+	string text_str;
+	string tmp;
+	size_t pos = input.find(",\"screen_name\":\"");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+16,std::string::npos);	
+		
+		t_pos = tmp.find("\",\"");
+		text_str=tmp.substr(0,t_pos);
+		return text_str;
+	}
+	return "";
+}
+
+std::string getTimeZone(const std::string& input)
+{
+	string time_str;
+	string tmp;
+	size_t pos = input.find("\"time_zone\":\"");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+13,std::string::npos);	
+		
+		t_pos = tmp.find("\",\"");
+		time_str=tmp.substr(0,t_pos);
+		return time_str;
+	}
+	return "";
+}
+
+
+std::string getCreateTime(const std::string& input)
+{
+	string time_str;
+	string tmp;
+	size_t pos = input.find("\"created_at\":");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+14,std::string::npos);	
+		
+		t_pos = tmp.find("\",\"");
+		time_str=tmp.substr(0,t_pos);
+		return time_str;
+	}
+	return "";
 }

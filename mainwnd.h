@@ -39,6 +39,7 @@ class GMList: public UiList
 		virtual void OnRemoveItem(int nIndex);
 		void MultiSelectItem(int nIndex,bool bSelect);
 		virtual void DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prcUpdate);
+		//virtual int CalcItemHeight(int index);
 };
 
 //main window , it is list
@@ -50,10 +51,13 @@ class MainWnd:public CMzWndEx
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
 	void AddMsg(wchar_t* author,wchar_t* msg);
-	void Login(const wchar_t*  account,const wchar_t* password);
+	void Login(const CMzString& account,const CMzString& password);
 	void SendStatus(const wchar_t* msg);
 	BOOL AutoDialNet();
 	void CloseDialNet();
+	bool GetNetStatus();
+	void LoadCache();
+	void Parser(const std::string& input);
 	protected:
 	UiScrollWin m_ScrollWin;
 	UiToolbar_Text m_Toolbar;

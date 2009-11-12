@@ -25,6 +25,7 @@ GMitter::GMitter()
 	tw_pass="bones7456";
 	tw_version="0.1";
 	status = 0;
+	netstat=false;
 }
 
 void GMitter::Login(const std::string& account,const std::string& password)
@@ -37,9 +38,17 @@ void GMitter::OnBegin(const happyhttp::Response* r, void* userdata) {
     status = r->getstatus();
 }
 
+bool GMitter::GetNetStatus()
+{
+	bool net = netstat;
+	netstat=false;
+	
+	return net;
+}
 void GMitter::OnComplete(const happyhttp::Response* r, void* userdata) {
     switch (status) {
         case 200:
+		netstat=true;
             
             //cout << "OK" << endl;
             //saveSettings();
@@ -48,6 +57,7 @@ void GMitter::OnComplete(const happyhttp::Response* r, void* userdata) {
         {
             //cout << "Error: Wrong username or password." << endl;
         
+		netstat=false;
             break;
         }
         case 403:
@@ -56,13 +66,15 @@ void GMitter::OnComplete(const happyhttp::Response* r, void* userdata) {
             break;
         case 500:
             //cout << "Internal Server Error" << endl;
-            exit(0);
+		netstat=false;
+            //exit(0);
             break;
 
         default:
             //cout << "Twiny didn't found description of error" << endl;
             //cout << "Please send this to author: " << endl;
             //cout << r->getstatus() << " " << r->getreason() << endl;
+		netstat=false;
 			break;
     }
 

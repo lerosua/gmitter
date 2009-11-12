@@ -149,16 +149,20 @@ BOOL LoginWnd::OnInitDialog()
         }
         if (nIndex==2)
         {
+		    /** 关闭键盘*/
+		    if(MzIsSipOpen())
+			    MzCloseSip();
+
 		if(m_Account.GetText().IsEmpty()||m_Pass.GetText().IsEmpty()){
 			//MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, false);
 			MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			return;
 		}
 
-		wchar_t str_name[128];
-		wchar_t str_pass[128];
-		wsprintf(str_name,m_Account.GetText().C_Str());
-		wsprintf(str_pass,m_Pass.GetText().C_Str());
+		//wchar_t str_name[128];
+		//wchar_t str_pass[128];
+		//wsprintf(str_name,m_Account.GetText().C_Str());
+		//wsprintf(str_pass,m_Pass.GetText().C_Str());
 
 		MainWnd m_wnd;
 		RECT rcWork = MzGetWorkArea();
@@ -167,18 +171,14 @@ BOOL LoginWnd::OnInitDialog()
 		m_wnd.SetAnimateType_Hide(m_count+1);
 
 		
-		m_wnd.Login(str_name,str_pass);
+		//m_wnd.Login(str_name,str_pass);
+		m_wnd.Login(m_Account.GetText(),m_Pass.GetText());
 		//delete me
 		m_wnd.AddMsg(L"lerosua",L"initial twitter");
+		m_wnd.LoadCache();
 		m_wnd.DoModal();
-		/*
-		m_count++;
-		if (m_count>15)
-		{
-		  m_count = 0;
-		}
-		*/
-		          return;
+		
+		  return;
         }
       }
       break;

@@ -50,27 +50,33 @@ public:
     if(MzGetParam(MZGP_APP_START_ANIMATION)==TRUE){
 	    m_LoginWnd.AnimateWindow(MZ_ANIMTYPE_ZOOM_IN,true);
 
-	    if(FileExists(rcFile)){
+		 m_LoginWnd.SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
+	    m_LoginWnd.Show();
+
+    if(FileExists(rcFile)){
 	    CMzString name;
 	    CMzString pass;
 	    TCHAR* s_name;
 	    TCHAR* s_pass;
 	    IniReadString(L"config",L"account",&s_name,rcFile);
-	    wprintf(name.C_Str(),L"%s",s_name);
+	    //wprintf(name.C_Str(),L"%s",s_name);
+	    name=s_name;
 	    IniReadString(L"config",L"password",&s_pass,rcFile);
-	    free(s_name);
-	    free(s_pass);
-	    wprintf(pass.C_Str(),L"%s",s_pass);
+	    //wprintf(pass.C_Str(),L"%s",s_pass);
+	    pass=s_pass;
+		//free(s_name);
+	    //free(s_pass);
 
 		if(!name.IsEmpty()&&!pass.IsEmpty()){
 
-				//m_LoginWnd.SetDefault(s2ws(name),s2ws(pass));
 				m_LoginWnd.SetDefault(name.C_Str(),pass.C_Str());
+				
 		}
+;
 	    }
 	    //m_LoginWnd.SetBgColor(RGB(0,0,0));
-	    m_LoginWnd.SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
-	    m_LoginWnd.Show();
+
+		//m_LoginWnd.SetDefault(name.C_Str(),pass.C_Str());
     }
 
 	/* 成功则返回TRUE*/

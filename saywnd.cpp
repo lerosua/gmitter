@@ -80,6 +80,11 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    if(2==nIndex){
 			    /*发送处理*/
 
+			    /** 关闭键盘*/
+			    if(MzIsSipOpen()){
+				    MzCloseSip();
+			    }
+
 			    CMzString str(256);
 			    wsprintf(str.C_Str(),L"%s",m_pEdit.GetText().C_Str());
 
@@ -89,15 +94,16 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 
 				
 				m_pwnd.SendStatus(str.C_Str());
-				//GMitter m_itter;
-				//m_itter.SetStatus(std::wstring(str.C_Str()));
 
 				MzEndWaitDlg();
+				if(m_pwnd.GetNetStatus()){
 
-			//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
-			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
-			m_pwnd.AddMsg(L"lerosua",str.C_Str());
-			this->EndModal(ID_OK);
+					MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+					m_pwnd.AddMsg(L"lerosua",str.C_Str());
+					this->EndModal(ID_OK);
+				}
+				else
+					MzMessageBoxEx(m_hWnd, L"发送失败", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 
 		    }
 	    }
