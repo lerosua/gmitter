@@ -22,10 +22,13 @@
 #include <mzfc_inc.h>
 #include "gmitter.h"
 
-#define MZ_IDC_TOOLBAR2 102
-#define MZ_IDC_SCROLLWIN2 105
-#define MZ_IDC_LIST      120
-#define MZ_IDC_TIMER     177
+#define MZ_IDC_CAPTION_TOP 130
+#define MZ_IDC_TOOLBAR2 131
+#define MZ_IDC_SCROLLWIN2 132
+#define MZ_IDC_LIST      133
+#define MZ_IDC_TIMER     134
+#define MZ_IDC_UPDATE    135
+#define MZ_IDC_WRITE     136
 //class GMitter;
 class MsgListItemData
 {
@@ -66,10 +69,17 @@ class MainWnd:public CMzWndEx
 	virtual void OnTimer(UINT_PTR nIDEvent);
 	protected:
 	UiScrollWin m_ScrollWin;
-	UiToolbar_Text m_Toolbar;
+	//UiToolbar_Text m_Toolbar;
+	UiToolbar_Icon m_Toolbar;
+	UiCaption      m_Top;
 	GMList		m_List;
 	GMitter		m_twitter;
 	BOOL		m_isDialConnect;
+
+	UiButton_Image m_btn_update;
+	UiButton_Image m_btn_write;
+	ImagingHelper  m_imgUpdate;
+	ImagingHelper  m_imgWrite;
 
 private:
 	std::string m_id;

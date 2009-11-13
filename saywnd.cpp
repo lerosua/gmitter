@@ -42,7 +42,7 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit.SetID(MZ_IDC_EDIT4);
     m_pEdit.EnableZoomIn(true);
     m_pEdit.SetReadOnly(false);
-    m_pEdit.SetRightInvalid(10);
+    m_pEdit.SetRightInvalid(20);
     //m_pEdit.EnableGridlines(true);
     //m_pEdit.EnableInsideScroll(true);
     
@@ -59,6 +59,7 @@ BOOL SayWnd::OnInitDialog()
     m_Toolbar.SetButton(2,true,true,L"Send");
     AddUiWin(&m_Toolbar);
     
+    m_pEdit.SetSipMode(IM_SIP_MODE_GEL_LETTER,20);
     return TRUE;
 
 }

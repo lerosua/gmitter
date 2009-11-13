@@ -20,9 +20,9 @@
 #define  SAYWND_FILE_HEADER_INC
 
 #include <mzfc_inc.h>
-#define MZ_IDC_TOOLBAR4 141
-#define MZ_IDC_CAPTION4 147
-#define MZ_IDC_EDIT4 148
+#define MZ_IDC_TOOLBAR4 151
+#define MZ_IDC_CAPTION4 157
+#define MZ_IDC_EDIT4 158
 
 
 class MainWnd;

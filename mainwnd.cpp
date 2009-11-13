@@ -43,12 +43,37 @@ BOOL MainWnd::OnInitDialog()
       return FALSE;
     }
 
-    m_ScrollWin.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
+    m_Top.SetPos(0,0,GetWidth(),MZM_HEIGHT_ICON_TOOLBAR-10);
+    m_Top.SetID(MZ_IDC_CAPTION_TOP);
+    m_Top.SetText(L"推倒世界");
+    AddUiWin(&m_Top);
+
+    //m_imgUpdate.LoadImage(L"\\Disk\\Program Files\\gmitter\\res\\update.png");
+    m_imgUpdate.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE),TRUE,TRUE);
+    m_imgWrite.LoadImageFromRes( MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE) ,TRUE,TRUE);
+
+    m_btn_update.SetID(MZ_IDC_UPDATE);
+    m_btn_update.SetPos(2,2,50,50);
+    m_btn_update.SetImage_Normal(&m_imgUpdate);
+    m_btn_update.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
+    m_btn_update.SetTextColor(RGB(255,255,255));
+	AddUiWin(&m_btn_update);
+
+    m_btn_write.SetID(MZ_IDC_WRITE);
+    m_btn_write.SetPos(GetWidth()-52,2,50,50);
+    m_btn_write.SetImage_Normal(&m_imgWrite);
+    m_btn_write.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
+    m_btn_write.SetTextColor(RGB(255,255,255));
+	AddUiWin(&m_btn_write);
+
+    //m_ScrollWin.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
+    m_ScrollWin.SetPos(0,MZM_HEIGHT_ICON_TOOLBAR-10,GetWidth(),GetHeight()-2*MZM_HEIGHT_TEXT_TOOLBAR);
     m_ScrollWin.SetID(MZ_IDC_SCROLLWIN2);
     m_ScrollWin.EnableScrollBarV(true);
     AddUiWin(&m_ScrollWin);
 
-    m_List.SetPos(0,5,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR-5);
+    m_List.SetPos(0,MZM_HEIGHT_ICON_TOOLBAR-15,GetWidth(),GetHeight()-2*MZM_HEIGHT_TEXT_TOOLBAR-5);
+    //m_List.SetPos(0,5,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR-5);
     m_List.SetID(MZ_IDC_LIST);
     m_List.EnableScrollBarV(true);
     m_List.EnableNotifyMessage(true);
@@ -57,6 +82,7 @@ BOOL MainWnd::OnInitDialog()
     m_List.EnableVaryItemHeight(true);
     AddUiWin(&m_List);
     
+    /*
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0,true,true,L"Exit");
     m_Toolbar.EnableLeftArrow(true);
@@ -64,7 +90,17 @@ BOOL MainWnd::OnInitDialog()
     m_Toolbar.SetButton(2,true,true,L"Update");
     m_Toolbar.SetID(MZ_IDC_TOOLBAR2);
     AddUiWin(&m_Toolbar);
+    */
 
+    m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_ICON_TOOLBAR,GetWidth(),MZM_HEIGHT_ICON_TOOLBAR);
+    m_Toolbar.SetID(MZ_IDC_TOOLBAR2);
+    m_Toolbar.SetButtonCount(5);
+    m_Toolbar.LoadButtonIcon(0, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_FRI));
+    m_Toolbar.LoadButtonIcon(1, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_METION));
+    m_Toolbar.LoadButtonIcon(2, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_SEARCH));
+    m_Toolbar.LoadButtonIcon(3, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_FAV));
+    m_Toolbar.LoadButtonIcon(4, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_EXIT));
+    AddUiWin(&m_Toolbar);
     return TRUE;
 }
 
@@ -127,37 +163,8 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
     UINT_PTR id = LOWORD(wParam);
     switch(id)
     {
-	    case MZ_IDC_TOOLBAR2:
-	    {
-		    int nIndex=lParam;
-		    if(nIndex==0){
-			    /* 退出程序*/
-			   PostQuitMessage(0);
-        
-			    return;
-		    }
-		    if(1== nIndex){
-			    /* 发推*/
-#if 0
-			SayWnd m_Saywnd;
-			RECT rcWork = MzGetWorkArea();
-			m_Saywnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
-			m_Saywnd.SetAnimateType_Show(5);
-			m_Saywnd.SetAnimateType_Hide(6);
-			m_Saywnd.DoModal();
-#else
-			SayWnd *m_Saywnd=new SayWnd(*this);
-			RECT rcWork = MzGetWorkArea();
-			m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
-			m_Saywnd->SetAnimateType_Show(5);
-			m_Saywnd->SetAnimateType_Hide(6);
-			m_Saywnd->DoModal();
-#endif
-		return;
-		
-
-		    }
-		    if(2 == nIndex){
+	    case MZ_IDC_UPDATE:
+		    {
 			    /* 更新*/
 			MzBeginWaitDlg(m_hWnd);
 			   UpdateStatus();
@@ -165,6 +172,38 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				    LoadCache(updateFile);
 			    }
 			MzEndWaitDlg();
+
+			    return;
+		    }
+			    break;
+	    case MZ_IDC_WRITE:
+			    {
+			SayWnd *m_Saywnd=new SayWnd(*this);
+			RECT rcWork = MzGetWorkArea();
+			m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
+			m_Saywnd->SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_TOP_TO_BOTTOM_2);
+			m_Saywnd->SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2);
+			m_Saywnd->DoModal();
+
+			    }
+			    break;
+	    case MZ_IDC_TOOLBAR2:
+	    {
+		    int nIndex=lParam;
+		    if(nIndex==4){
+			    /* 退出程序*/
+			   PostQuitMessage(0);
+        
+			    return;
+		    }
+		    if(1== nIndex){
+			    /* 发推*/
+
+		return;
+		
+
+		    }
+		    if(2 == nIndex){
 
 			
 			    //EndModal(ID_OK);

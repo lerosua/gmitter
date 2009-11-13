@@ -289,6 +289,18 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\exit.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\fav.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\friends_timeline.png"
+				>
+			</File>
+			<File
 				RelativePath=".\gmitter.ico"
 				>
 			</File>
@@ -305,7 +317,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\metion.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\search.png"
+				>
+			</File>
+			<File
 				RelativePath=".\sms.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\update.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\write.png"
 				>
 			</File>
 		</Filter>
