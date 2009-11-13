@@ -316,6 +316,31 @@ std::string getCreateTime(const std::string& input)
 		t_pos = tmp.find("\",\"");
 		time_str=tmp.substr(0,t_pos);
 		return time_str;
+
+
+	}
+	return "";
+}
+
+std::string getStatusId(const std::string& input)
+{
+	string time_str;
+	string tmp;
+	size_t pos = input.find(",\"id\":");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+6,std::string::npos);	
+		
+		t_pos = tmp.find(",\"text\"");
+		time_str=tmp.substr(0,t_pos);
+		//return time_str;
+		string stmp;
+		size_t spos = time_str.find(",\"id\":");
+		size_t st_pos;
+		if(spos!=std::string::npos){
+			stmp=time_str.substr(spos+6,std::string::npos);	
+		return stmp;
+	}
 	}
 	return "";
 }

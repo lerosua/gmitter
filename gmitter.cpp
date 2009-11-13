@@ -17,15 +17,16 @@
 
 #include "gmitter.h"
 #include "base64.h"
+#include <fstream>
 
-
+bool GMitter::netstat=false;
+int GMitter::status = 0;
 GMitter::GMitter()
 {
 	tw_uname="pytw";
 	tw_pass="bones7456";
-	tw_version="0.1";
-	status = 0;
-	netstat=false;
+	tw_version="1.0";
+	tw_request=0;
 }
 
 void GMitter::Login(const std::string& account,const std::string& password)
@@ -36,6 +37,11 @@ void GMitter::Login(const std::string& account,const std::string& password)
 
 void GMitter::OnBegin(const happyhttp::Response* r, void* userdata) {
     status = r->getstatus();
+    //if(0x2 == userdata->tw_request ){
+	    fstream outfile;
+	    outfile.open(updateFile,ios::out);
+	    outfile.close();
+    //}
 }
 
 bool GMitter::GetNetStatus()
@@ -48,7 +54,10 @@ bool GMitter::GetNetStatus()
 void GMitter::OnComplete(const happyhttp::Response* r, void* userdata) {
     switch (status) {
         case 200:
-		netstat=true;
+	netstat=true;
+	    //if(0x2 == userdata->tw_request ){
+
+	    //}
             
             //cout << "OK" << endl;
             //saveSettings();
@@ -82,7 +91,7 @@ void GMitter::OnComplete(const happyhttp::Response* r, void* userdata) {
     /*
     # 1,000 total updates per day, on any and all devices (web, mobile web, phone, API, etc. )
     # 250 total direct messages per day, on any and all devices
-    # 150 API requests per hour
+    # 150 API tw_requests per hour
      */
 }
 string GMitter::toPercent(std::string str) {
@@ -111,9 +120,11 @@ void GMitter::SetStatus(const std::wstring& wmes)
 
 
 }
+
 void GMitter::SetStatus(const std::string& mes)
 {
 
+	tw_request = 0x1;
 
     string params = "status=" + toPercent(mes)+ "&source=_gmitter_";
     int len = params.length();
@@ -121,11 +132,11 @@ void GMitter::SetStatus(const std::string& mes)
     string enc;
 	string tmp;
     tmp = tw_uname + ':' + tw_pass;
-    //enc = base64_encode(reinterpret_cast<const unsigned char*> (enc.c_str()), enc.length());
     enc=base64_encode(tmp);
     happyhttp::Connection conn("li2z.cn", 80);
     //happyhttp::Connection conn("lfeng.cn",80);
     //conn.setcallbacks(OnBegin, 0, OnComplete, 0);
+    conn.setcallbacks(&GMitter::OnBegin,0,&GMitter::OnComplete,this);
 
     conn.putrequest("POST", "/t/statuses/update.xml");
     //conn.putrequest("POST", "/api/statuses/update.xml");
@@ -148,3 +159,90 @@ void GMitter::SetStatus(const std::string& mes)
 		conn.pump();
 }
 
+
+void GMitter::sPost(std::string where,std::string params)
+{
+
+    int len = params.length();
+
+    string enc;
+    string tmp;
+    tmp = tw_uname + ':' + tw_pass;
+    enc=base64_encode(tmp);
+    happyhttp::Connection conn("li2z.cn", 80);
+    //conn.setcallbacks(OnBegin, 0, OnComplete, 0);
+    conn.setcallbacks(&GMitter::OnBegin,0,&GMitter::OnComplete,this);
+
+    conn.putrequest("POST", where.c_str());
+    conn.putheader("Authorization", "Basic " + enc);
+    conn.putheader("Accept", "*/*");
+    conn.putheader("Accept-Charset", "utf-8");
+    conn.putheader("User-Agent", "_gmitter_");
+	conn.putheader("X-Twitter-Client", "_gmitter_");
+	conn.putheader("X-Twitter-Client-Version", tw_version);
+	conn.putheader("X-Twitter-Client-URL", "http://lerosua.org/gmitter");
+	conn.putheader("Connection", "close");
+	conn.putheader("Content-Length", len);
+	conn.putheader("Content-Type", "application/x-www-form-urlencoded");
+
+	conn.endheaders();
+
+	conn.send((const unsigned char*)(params.c_str()), len);
+
+	while (conn.outstanding())
+		conn.pump();
+}
+
+void GMitter::UpdateStatus(const std::string& mid)
+{
+	if(mid.empty()){
+		std::string res="/t/statuses/friends_timeline.json?count=100";
+		sGet(res.c_str());
+		return;
+	}
+	std::string res="/t/statuses/friends_timeline.json?since_id=";
+	res+=mid;
+	sGet(res.c_str());
+	//sGet("/t/statuses/friends_timeline.json?count=5");
+
+}
+void GMitter::sGet(std::string req)
+{
+	tw_request = 0x2;
+
+    happyhttp::Connection conn("li2z.cn", 80);
+    //conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
+    conn.setcallbacks(&GMitter::OnBegin,&GMitter::OnData,&GMitter::OnComplete,this);
+    conn.putrequest("GET", req.c_str());
+
+    string enc;
+    string tmp;
+    tmp = tw_uname + ':' + tw_pass;
+    enc=base64_encode(tmp);
+    conn.putheader("Authorization", "Basic " + enc);
+
+    conn.putheader("Accept", "*/*");
+	conn.putheader("Accept-Charset", "utf-8");
+    conn.putheader("User-Agent", "_gmitter_");
+	conn.putheader("X-Twitter-Client", "_gmitter_");
+	conn.putheader("X-Twitter-Client-Version", tw_version);
+	conn.putheader("X-Twitter-Client-URL", "http://lerosua.org/gmitter");
+	conn.putheader("Connection", "close");
+	conn.putheader("Content-Type", "application/x-www-form-urlencoded");
+	conn.endheaders();
+
+	while (conn.outstanding())
+		conn.pump();
+}
+
+
+
+void GMitter::OnData(const happyhttp::Response* r, void* userdata, const unsigned char* data, int n) {
+//    if(0x2 == userdata->tw_request ){
+	    fstream outfile;
+	    //outfile.open("/tmp/json.txt",ios::out|ios::app);
+	    outfile.open(updateFile,ios::out|ios::app);
+	    outfile.write((char*)data,n);
+	    outfile.close();
+    //}
+}

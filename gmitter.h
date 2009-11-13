@@ -29,16 +29,21 @@ public:
 	void SetStatus(const std::string& msg);
 	void SetStatus(const std::wstring& wmsg);
 	std::string toPercent(std::string str);
-	void OnBegin(const happyhttp::Response* r, void* userdata);
-	void OnComplete(const happyhttp::Response* r, void* userdata) ;
+	static void OnBegin(const happyhttp::Response* r, void* userdata);
+	static void OnComplete(const happyhttp::Response* r, void* userdata) ;
+	static void OnData(const happyhttp::Response* r, void* userdata, const unsigned char* data, int n) ;
 	bool GetNetStatus();
+	void sGet(std::string req="");
+	void sPost(std::string where="",std::string params="");
+	void UpdateStatus(const std::string& mid="");
 private:
 	std::string tw_uname;
 	std::string tw_pass;
 	std::string tw_version;
-	int status;
+	int tw_request; // set get/post request
+	static int status;
 	/** net status,0 is ok,~0 is fail*/
-	bool netstat;
+	static bool netstat;
 
 
 

@@ -27,6 +27,15 @@
 #include <string>
 #include <fstream>
 
+MainWnd::MainWnd():m_id("")
+{
+
+}
+void MainWnd::StartTimer()
+{
+	SetTimer(m_hWnd,MZ_IDC_TIMER,180*1000,NULL);
+
+}
 BOOL MainWnd::OnInitDialog()
 {
     if (!CMzWndEx::OnInitDialog())
@@ -59,7 +68,7 @@ BOOL MainWnd::OnInitDialog()
     return TRUE;
 }
 
-void MainWnd::AddMsg(wchar_t* author,wchar_t* msg)
+void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,int num)
 {
 	ListItem li;
 	CMzString strAuthor(256);
@@ -72,7 +81,7 @@ void MainWnd::AddMsg(wchar_t* author,wchar_t* msg)
 
 	li.Data = pmlid;
 	//m_List.AddItem(li);
-	m_List.InsertItem(li,0);
+	m_List.InsertItem(li,num);
 }
 
 
@@ -150,7 +159,15 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    }
 		    if(2 == nIndex){
 			    /* ¸üÐÂ*/
-			    EndModal(ID_OK);
+			MzBeginWaitDlg(m_hWnd);
+			   UpdateStatus();
+			    if(GetNetStatus()){
+				    LoadCache(updateFile);
+			    }
+			MzEndWaitDlg();
+
+			
+			    //EndModal(ID_OK);
 			    return;
 		    }
 
@@ -259,6 +276,14 @@ void MainWnd::SendStatus(const wchar_t* msg)
 
 }
 
+void MainWnd::UpdateStatus()
+{
+	AutoDialNet();
+    m_twitter.UpdateStatus(m_id);
+	CloseDialNet();
+
+}
+
 BOOL MainWnd::AutoDialNet()
 {
 	DWORD dwSize, dwNetWorkStatus;
@@ -289,7 +314,7 @@ bool MainWnd::GetNetStatus()
 
 }
 
-void MainWnd::Parser(const std::string& input)
+void MainWnd::Parser(const std::string& input,int big)
 {
 
 	std::string str1;
@@ -301,15 +326,17 @@ void MainWnd::Parser(const std::string& input)
 	wstr1=s2ws_unicode(str1.c_str());
 	wstr2=s2ws_unicode(str2.c_str());
 
-	AddMsg((wchar_t*)wstr2.c_str(),(wchar_t*)wstr1.c_str());
+	AddMsg((wchar_t*)wstr2.c_str(),(wchar_t*)wstr1.c_str(),big);
+	//std::string sid=getStatusId();
+	if(0==big)
+		m_id=getStatusId(input);
 }
 
 
-void MainWnd::LoadCache()
+void MainWnd::LoadCache(const std::string& filename)
 {
 	using namespace std;
 
-	string filename="\\Disk\\Program Files\\gmitter\\test.json";
 	ifstream infile;
 	string str_content;
 	infile.open(filename.c_str());
@@ -337,7 +364,7 @@ do{
 		strp=str_content.substr(begin_pos,pos);
 	tmp=str_content.substr(pos+1,std::string::npos);
 
-	Parser(strp);
+	Parser(strp,count);
 	
 	count++;
 
@@ -345,7 +372,19 @@ do{
 	
 
 }while(true);
-   Parser(tmp);
+   Parser(tmp,count);
    infile.close();
+
+}
+
+ void MainWnd::OnTimer(UINT_PTR nIDEvent)
+{
+
+	if(MZ_IDC_TIMER == nIDEvent){
+   UpdateStatus();
+    if(GetNetStatus()){
+	    LoadCache(updateFile);
+    }
+	}
 
 }

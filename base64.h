@@ -6,6 +6,7 @@
 #include <mzfc_inc.h>
 
 #define rcFile L"\\Disk\\Program Files\\gmitter\\gmitter.ini"
+#define updateFile "\\Disk\\Program Files\\gmitter\\update.json"
 //#define _UNICODE
 using namespace std;
 
@@ -26,6 +27,7 @@ std::string getStatusText(const std::string& input);
 std::string getScreenName(const std::string& input);
 std::string getImageUrl(const std::string& input);
 std::string getTimeZone(const std::string& input);
+std::string getStatusId(const std::string& input);
 
 bool FileExists(TCHAR* filename);
 #endif

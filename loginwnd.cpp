@@ -174,8 +174,8 @@ BOOL LoginWnd::OnInitDialog()
 		//m_wnd.Login(str_name,str_pass);
 		m_wnd.Login(m_Account.GetText(),m_Pass.GetText());
 		//delete me
-		m_wnd.AddMsg(L"lerosua",L"initial twitter");
-		m_wnd.LoadCache();
+		//m_wnd.AddMsg(L"lerosua",L"initial twitter");
+		m_wnd.LoadCache("\\Disk\\Program Files\\gmitter\\test.json");
 		m_wnd.DoModal();
 		
 		  return;

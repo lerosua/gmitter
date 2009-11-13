@@ -25,6 +25,7 @@
 #define MZ_IDC_TOOLBAR2 102
 #define MZ_IDC_SCROLLWIN2 105
 #define MZ_IDC_LIST      120
+#define MZ_IDC_TIMER     177
 //class GMitter;
 class MsgListItemData
 {
@@ -47,17 +48,22 @@ class MainWnd:public CMzWndEx
 {
 	MZ_DECLARE_DYNAMIC(MainWnd);
 	public:
+	MainWnd();
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
-	void AddMsg(wchar_t* author,wchar_t* msg);
+	void AddMsg(wchar_t* author,wchar_t* msg,int num=0);
 	void Login(const CMzString& account,const CMzString& password);
 	void SendStatus(const wchar_t* msg);
 	BOOL AutoDialNet();
 	void CloseDialNet();
 	bool GetNetStatus();
-	void LoadCache();
-	void Parser(const std::string& input);
+	//void LoadCache();
+	void LoadCache(const std::string& filename="\\Disk\\Program Files\\gmitter\\test.json");
+	void Parser(const std::string& input,int big);
+	void UpdateStatus();
+	void StartTimer();
+	virtual void OnTimer(UINT_PTR nIDEvent);
 	protected:
 	UiScrollWin m_ScrollWin;
 	UiToolbar_Text m_Toolbar;
@@ -66,6 +72,7 @@ class MainWnd:public CMzWndEx
 	BOOL		m_isDialConnect;
 
 private:
+	std::string m_id;
 	//wstring m_account;
 	//wstring m_pass;
 
