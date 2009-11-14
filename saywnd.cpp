@@ -59,7 +59,7 @@ BOOL SayWnd::OnInitDialog()
     m_Toolbar.SetButton(2,true,true,L"Send");
     AddUiWin(&m_Toolbar);
     
-    m_pEdit.SetSipMode(IM_SIP_MODE_GEL_LETTER,20);
+    //m_pEdit.SetSipMode(IM_SIP_MODE_GEL_LETTER,20);
     return TRUE;
 
 }

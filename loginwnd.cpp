@@ -155,7 +155,7 @@ BOOL LoginWnd::OnInitDialog()
 
 		if(m_Account.GetText().IsEmpty()||m_Pass.GetText().IsEmpty()){
 			//MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, false);
-			MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+			MzMessageBoxEx(m_hWnd, L"        警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			return;
 		}
 
@@ -175,7 +175,7 @@ BOOL LoginWnd::OnInitDialog()
 		m_wnd.Login(m_Account.GetText(),m_Pass.GetText());
 		//delete me
 		m_wnd.AddMsg(L"lerosua",L"initial twitter");
-		m_wnd.LoadCache("\\Disk\\Program Files\\gmitter\\test.json");
+		//m_wnd.LoadCache(cacheFile);
 		m_wnd.DoModal();
 		
 		  return;

@@ -170,6 +170,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			   UpdateStatus();
 			    if(GetNetStatus()){
 				    LoadCache(updateFile);
+				    SaveCache(updateFile);
 			    }
 			MzEndWaitDlg();
 
@@ -304,6 +305,8 @@ void MainWnd::Login(const CMzString& account,const CMzString& password)
     }
 	IniWriteString(L"config",L"account",account,rcFile);
 	IniWriteString(L"config",L"password",password,rcFile);
+
+	LoadCache(cacheFile);
 }
 	
 void MainWnd::SendStatus(const wchar_t* msg)
@@ -384,7 +387,8 @@ void MainWnd::LoadCache(const std::string& filename)
 		return;
 	}
 
-	getline(infile,str_content);
+	//getline(infile,str_content);
+	while(getline(infile,str_content)){
 
 		
 	string strp;
@@ -412,17 +416,39 @@ do{
 
 }while(true);
    Parser(tmp,count);
+   }
    infile.close();
 
 }
+
+void MainWnd::SaveCache(const std::string& filename)
+{
+	    fstream infile;
+	    infile.open(filename.c_str(),ios::in);
+	if(!infile)
+		return;
+
+	    fstream outfile;
+	    outfile.open(cacheFile,ios::out|ios::app);
+	    outfile<<endl;
+		string strline;
+	    while(getline(infile,strline)){
+		    outfile<<strline<<endl;
+	    }
+	    outfile.close();
+	    infile.close();
+
+}
+
 
  void MainWnd::OnTimer(UINT_PTR nIDEvent)
 {
 
 	if(MZ_IDC_TIMER == nIDEvent){
-   UpdateStatus();
+	   UpdateStatus();
     if(GetNetStatus()){
 	    LoadCache(updateFile);
+	    SaveCache(updateFile);
     }
 	}
 

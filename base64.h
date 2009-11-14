@@ -7,6 +7,7 @@
 
 #define rcFile L"\\Disk\\Program Files\\gmitter\\gmitter.ini"
 #define updateFile "\\Disk\\Program Files\\gmitter\\update.json"
+#define cacheFile "\\Disk\\Program Files\\gmitter\\cache.json"
 //#define _UNICODE
 using namespace std;
 

@@ -62,7 +62,9 @@ class MainWnd:public CMzWndEx
 	void CloseDialNet();
 	bool GetNetStatus();
 	//void LoadCache();
-	void LoadCache(const std::string& filename="\\Disk\\Program Files\\gmitter\\test.json");
+	//void LoadCache(const std::string& filename="\\Disk\\Program Files\\gmitter\\test.json");
+	void LoadCache(const std::string& filename);
+	void SaveCache(const std::string& filename);
 	void Parser(const std::string& input,int big);
 	void UpdateStatus();
 	void StartTimer();
