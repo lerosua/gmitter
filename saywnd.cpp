@@ -100,7 +100,7 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				if(m_pwnd.GetNetStatus()){
 
 					MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
-					m_pwnd.AddMsg(L"lerosua",str.C_Str());
+					//m_pwnd.AddMsg(L"lerosua",str.C_Str());
 					this->EndModal(ID_OK);
 				}
 				else

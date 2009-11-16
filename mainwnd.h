@@ -35,6 +35,7 @@ class MsgListItemData
 public:
 	CMzString StringAuthor;
 	CMzString StringText;
+	CMzString StringTime;
 };
 
 class GMList: public UiList
@@ -55,7 +56,8 @@ class MainWnd:public CMzWndEx
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
-	void AddMsg(wchar_t* author,wchar_t* msg,int num=0);
+	//void AddMsg(wchar_t* author,wchar_t* msg,int num=0);
+	void AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num=0);
 	void Login(const CMzString& account,const CMzString& password);
 	void SendStatus(const wchar_t* msg);
 	BOOL AutoDialNet();

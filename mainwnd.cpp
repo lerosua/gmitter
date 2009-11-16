@@ -82,15 +82,6 @@ BOOL MainWnd::OnInitDialog()
     m_List.EnableVaryItemHeight(true);
     AddUiWin(&m_List);
     
-    /*
-    m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
-    m_Toolbar.SetButton(0,true,true,L"Exit");
-    m_Toolbar.EnableLeftArrow(true);
-    m_Toolbar.SetButton(1,true,true,L"I Say");
-    m_Toolbar.SetButton(2,true,true,L"Update");
-    m_Toolbar.SetID(MZ_IDC_TOOLBAR2);
-    AddUiWin(&m_Toolbar);
-    */
 
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_ICON_TOOLBAR,GetWidth(),MZM_HEIGHT_ICON_TOOLBAR);
     m_Toolbar.SetID(MZ_IDC_TOOLBAR2);
@@ -104,19 +95,22 @@ BOOL MainWnd::OnInitDialog()
     return TRUE;
 }
 
-void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,int num)
+void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 {
 	ListItem li;
 	CMzString strAuthor(256);
 	CMzString strMsg(256);
+	CMzString strTime(256);
 	wsprintf(strAuthor.C_Str(),author);
 	wsprintf(strMsg.C_Str(), msg);
+	wsprintf(strTime.C_Str(),time_);
+
 	MsgListItemData* pmlid=new MsgListItemData;
 	pmlid->StringAuthor = strAuthor;
 	pmlid->StringText = strMsg;
+	pmlid->StringTime = strTime;
 
 	li.Data = pmlid;
-	//m_List.AddItem(li);
 	m_List.InsertItem(li,num);
 }
 
@@ -247,6 +241,31 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 		return;
 	MsgListItemData* pmlid = (MsgListItemData*)pItem->Data;
 
+	// 背景色
+	RECT bgRect = *prcItem;
+	bgRect.top = bgRect.top + 1;
+	bgRect.bottom = bgRect.bottom - 1;
+
+	HBRUSH bgBrush = (0 == nIndex % 2) ? CreateSolidBrush(RGB(230, 230, 250)) : CreateSolidBrush(RGB(240, 248, 255));
+	::FillRect(hdcDst, &bgRect, bgBrush);
+
+	// 如果被选中
+	if (nIndex == GetSelectedIndex())
+	{
+		RECT selectdRect = *prcItem;
+
+		selectdRect.top = bgRect.top + 7;
+		selectdRect.left = bgRect.left + 7;
+		selectdRect.right = bgRect.right - 7;
+		selectdRect.bottom = bgRect.bottom - 7;
+
+	//	MzDrawSelectedBg(hdcDst, &bgRect);	// 背景高亮
+		DrawRoundRect(hdcDst, &selectdRect, 16, 0x808080, 0x808080);
+	}
+
+
+//	if(GetSelectedIndex() == nIndex )
+//		MzDrawSelectedBg(hdcDst,prcItem);
 
     // 绘制左边的小图像
     //ImagingHelper *pimg = ImagingHelper::GetImageObject(MzGetInstanceHandle(), IDR_PNG_LOGO, true);
@@ -261,14 +280,26 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	// for author
 	RECT rcText=*prcItem;
 	rcText.left=MZM_MARGIN_MAX*2;
+	rcText.right=rcText.right - 280;
 	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 	MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
+	//for timetrim
+	rcText.left = rcText.right;
+	rcText.right = rcText.left+280;
+	::SetTextColor(hdcDst,RGB(200,200,200));
+	HFONT hf_=FontHelper::GetFont(16);
+	SelectObject(hdcDst,hf_);
+	//MzDrawText(hdcDst,pmlid->StringTime.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
+	MzDrawText(hdcDst,pmlid->StringTime.C_Str(), &rcText,DT_RIGHT|DT_TOP  |DT_SINGLELINE|DT_END_ELLIPSIS);
+
 	// for message
 	rcText.top=rcText.bottom;
 	rcText.bottom=prcItem->bottom;
-	::SetTextColor(hdcDst,RGB(200,200,200));
+	rcText.left=MZM_MARGIN_MAX*2;
+	::SetTextColor(hdcDst,RGB(0,100,0));
+	//::SetTextColor(hdcDst,RGB(200,200,200));
 	HFONT hf=FontHelper::GetFont(24);
 	SelectObject(hdcDst,hf);
 	//MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
@@ -278,9 +309,10 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 #if 0
 int GMList::CalcItemHeight(int index)
 {
+
         ListItem* pItem = GetItem(index);
         //SmsListItemData_Details *p = (SmsListItemData_Details *)pItem->Data;
-MsgListItemData* p = (MsgListItemData*)pItem->Data;
+	MsgListItemData* p = (MsgListItemData*)pItem->Data;
         HDC hdc = GetDC(NULL);
         ::SetTextColor(hdc, RGB(0,255,255));
         SelectObject(hdc, FontHelper::GetFont(24));
@@ -289,9 +321,9 @@ MsgListItemData* p = (MsgListItemData*)pItem->Data;
 	ReleaseDC(NULL, hdc);
 	return rcContent.bottom-rcContent.top+10;
 
+
 }
 #endif
-
 void MainWnd::Login(const CMzString& account,const CMzString& password)
 {
 	std::string s_account=ws2s(account.C_Str());
@@ -361,15 +393,18 @@ void MainWnd::Parser(const std::string& input,int big)
 
 	std::string str1;
 	std::string str2;
-	str1=getStatusText(input);
+	std::string str3;
 	str2=getScreenName(input);
+	str1=getStatusText(input);
+	str3 = getCreateTime(input);
 	std::wstring wstr1;
 	std::wstring wstr2;
+	std::wstring wstr3;
 	wstr1=s2ws_unicode(str1.c_str());
 	wstr2=s2ws_unicode(str2.c_str());
+	wstr3=s2ws_unicode(str3.c_str());
 
-	AddMsg((wchar_t*)wstr2.c_str(),(wchar_t*)wstr1.c_str(),big);
-	//std::string sid=getStatusId();
+	AddMsg((wchar_t*)wstr2.c_str(),(wchar_t*)wstr1.c_str(),(wchar_t*)wstr3.c_str(),big);
 	if(0==big)
 		m_id=getStatusId(input);
 }
@@ -389,6 +424,8 @@ void MainWnd::LoadCache(const std::string& filename)
 
 	//getline(infile,str_content);
 	while(getline(infile,str_content)){
+		if(str_content.empty())
+			continue;
 
 		
 	string strp;
@@ -416,6 +453,7 @@ do{
 
 }while(true);
    Parser(tmp,count);
+   str_content.clear();
    }
    infile.close();
 
