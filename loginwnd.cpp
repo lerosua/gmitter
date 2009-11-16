@@ -52,15 +52,19 @@ BOOL LoginWnd::OnInitDialog()
     //m_Account.SetPos(MZM_MARGIN_MAX,MZM_MARGIN_MAX,GetWidth()-MZM_MARGIN_MAX*2,70);
     m_Account.SetPos(MZM_MARGIN_MAX*2,120,     GetWidth()-MZM_MARGIN_MAX*4,60);
     m_Account.SetID(MZ_IDC_TESTBTN1); //you must set an unique ID for a edit control
-    m_Account.SetTip(L"Account:");	// set the tips text
+    m_Account.SetLeftInvalid(80);
+    m_Account.SetTip2(L"账户:");	// set the tips text
     m_Account.SetTextColor(RGB(0,200,0)); // you could also set the color of text
+    m_Account.SetSipMode(IM_SIP_MODE_GEL_LETTER);
     m_ScrollWin.AddChild(&m_Account);
     //m_Pass.SetPos(MZM_MARGIN_MAX,MZM_MARGIN_MAX-280,GetWidth()-MZM_MARGIN_MAX*2,140);
     m_Pass.SetPos(MZM_MARGIN_MAX*2,190,GetWidth()-MZM_MARGIN_MAX*4,60);
     m_Pass.SetID(MZ_IDC_TESTBTN2);
-    m_Pass.SetTip(L"Password:");
+    m_Pass.SetLeftInvalid(80);
+    m_Pass.SetTip2(L"密码:");
     m_Pass.SetTextColor(RGB(0,200,0));
-    m_Pass.SetEditStyle(SINGLELINE_EDIT_STYLE_PASSWORD);
+    m_Pass.SetSipMode(IM_SIP_MODE_GEL_LETTER);
+    //m_Pass.SetEditStyle(SINGLELINE_EDIT_STYLE_PASSWORD);
     m_Pass.EnablePassWord();
     //m_Pass.SetText(SINGLELINE_EDIT_STYLE_PASSWORD);
     m_ScrollWin.AddChild(&m_Pass);
@@ -174,7 +178,8 @@ BOOL LoginWnd::OnInitDialog()
 		//m_wnd.Login(str_name,str_pass);
 		m_wnd.Login(m_Account.GetText(),m_Pass.GetText());
 		//delete me
-		m_wnd.AddMsg(L"lerosua",L"initial twitter",L"time Nov 2009 19:90");
+		//m_wnd.AddMsg(L"lerosua",L"initial twitter",L"time Nov 2009 19:90");
+		//m_wnd.AddMsg(L"lerosua",L"1234567890qwertyuioplkjahdgfgzvxbbcvmfjeuyw",L"1分钟之前");
 		//m_wnd.LoadCache(cacheFile);
 		m_wnd.DoModal();
 		

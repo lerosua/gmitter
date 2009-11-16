@@ -44,7 +44,7 @@ class GMList: public UiList
 		virtual void OnRemoveItem(int nIndex);
 		void MultiSelectItem(int nIndex,bool bSelect);
 		virtual void DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prcUpdate);
-		//virtual int CalcItemHeight(int index);
+		virtual int CalcItemHeight(int index);
 };
 
 //main window , it is list

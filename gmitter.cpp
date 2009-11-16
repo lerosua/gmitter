@@ -196,7 +196,7 @@ void GMitter::sPost(std::string where,std::string params)
 void GMitter::UpdateStatus(const std::string& mid)
 {
 	if(mid.empty()){
-		std::string res="/t/statuses/friends_timeline.json?count=100";
+		std::string res="/t/statuses/friends_timeline.json?count=10";
 		sGet(res.c_str());
 		return;
 	}

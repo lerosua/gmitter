@@ -159,6 +159,9 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
     {
 	    case MZ_IDC_UPDATE:
 		    {
+			    wstring testmsg=L"mid = ";
+			    testmsg+=s2ws(m_id);
+		MzMessageBoxEx(m_hWnd, testmsg.c_str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			    /* 更新*/
 			MzBeginWaitDlg(m_hWnd);
 			   UpdateStatus();
@@ -246,26 +249,15 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	bgRect.top = bgRect.top + 1;
 	bgRect.bottom = bgRect.bottom - 1;
 
-	HBRUSH bgBrush = (0 == nIndex % 2) ? CreateSolidBrush(RGB(230, 230, 250)) : CreateSolidBrush(RGB(240, 248, 255));
+	if(0 == nIndex % 2) {  
+	HBRUSH bgBrush = CreateSolidBrush(RGB(230, 230, 250));
 	::FillRect(hdcDst, &bgRect, bgBrush);
-
-	// 如果被选中
-	if (nIndex == GetSelectedIndex())
-	{
-		RECT selectdRect = *prcItem;
-
-		selectdRect.top = bgRect.top + 7;
-		selectdRect.left = bgRect.left + 7;
-		selectdRect.right = bgRect.right - 7;
-		selectdRect.bottom = bgRect.bottom - 7;
-
-	//	MzDrawSelectedBg(hdcDst, &bgRect);	// 背景高亮
-		DrawRoundRect(hdcDst, &selectdRect, 16, 0x808080, 0x808080);
 	}
 
 
-//	if(GetSelectedIndex() == nIndex )
-//		MzDrawSelectedBg(hdcDst,prcItem);
+
+	if(GetSelectedIndex() == nIndex )
+		MzDrawSelectedBg(hdcDst,prcItem);
 
     // 绘制左边的小图像
     //ImagingHelper *pimg = ImagingHelper::GetImageObject(MzGetInstanceHandle(), IDR_PNG_LOGO, true);
@@ -280,14 +272,14 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	// for author
 	RECT rcText=*prcItem;
 	rcText.left=MZM_MARGIN_MAX*2;
-	rcText.right=rcText.right - 280;
+	rcText.right=rcText.right - 200;
 	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 	MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
 	//for timetrim
 	rcText.left = rcText.right;
-	rcText.right = rcText.left+280;
+	rcText.right = rcText.left+200;
 	::SetTextColor(hdcDst,RGB(200,200,200));
 	HFONT hf_=FontHelper::GetFont(16);
 	SelectObject(hdcDst,hf_);
@@ -298,32 +290,34 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	rcText.top=rcText.bottom;
 	rcText.bottom=prcItem->bottom;
 	rcText.left=MZM_MARGIN_MAX*2;
+	rcText.right=rcText.right-MZM_MARGIN_MAX;
 	::SetTextColor(hdcDst,RGB(0,100,0));
 	//::SetTextColor(hdcDst,RGB(200,200,200));
 	HFONT hf=FontHelper::GetFont(24);
 	SelectObject(hdcDst,hf);
 	//MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
-	MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,DT_LEFT|DT_WORDBREAK);
+	MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,   DT_LEFT | DT_WORDBREAK | DT_EDITCONTROL | DT_END_ELLIPSIS | DT_NOPREFIX);
 
 }
-#if 0
 int GMList::CalcItemHeight(int index)
 {
 
+//	if(GetSelectedIndex() == nIndex )
+#if 1
+	int height=0;
+	int lines=0;
         ListItem* pItem = GetItem(index);
         //SmsListItemData_Details *p = (SmsListItemData_Details *)pItem->Data;
-	MsgListItemData* p = (MsgListItemData*)pItem->Data;
-        HDC hdc = GetDC(NULL);
-        ::SetTextColor(hdc, RGB(0,255,255));
-        SelectObject(hdc, FontHelper::GetFont(24));
-        RECT rcContent={32,35,GetWidth()-50,480};
-        DrawText(hdc,p->StringText,wcslen(p->StringText),&rcContent,DT_LEFT|DT_TOP);
-	ReleaseDC(NULL, hdc);
-	return rcContent.bottom-rcContent.top+10;
+	MsgListItemData* pmlid = (MsgListItemData*)pItem->Data;
 
+	lines = pmlid->StringText.Length()/16+1;
+	height = 40+lines*24;
+	height = height<100?100:height;
+	return height;
+
+#endif
 
 }
-#endif
 void MainWnd::Login(const CMzString& account,const CMzString& password)
 {
 	std::string s_account=ws2s(account.C_Str());
