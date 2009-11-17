@@ -21,6 +21,7 @@
 #include "mainwnd.h"
 #include "settingwnd.h"
 #include "resource.h"
+#include "confini.h"
 
 
 BOOL LoginWnd::OnInitDialog()
@@ -91,6 +92,10 @@ BOOL LoginWnd::OnInitDialog()
     m_Toolbar.SetID(MZ_IDC_TOOLBAR1);
     AddUiWin(&m_Toolbar);
     
+	 SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
+	 ConfIni::init();
+	 m_Account.SetText(ConfIni::getAccount().c_str());
+	 m_Pass.SetText(ConfIni::getPassword().c_str());
     return TRUE;
   }
 
@@ -175,13 +180,19 @@ BOOL LoginWnd::OnInitDialog()
 		m_wnd.SetAnimateType_Hide(m_count+1);
 
 		
-		//m_wnd.Login(str_name,str_pass);
-		m_wnd.Login(m_Account.GetText(),m_Pass.GetText());
+		MzBeginWaitDlg(m_hWnd);
+		bool success = m_wnd.Login(m_Account.GetText(),m_Pass.GetText());
+		MzEndWaitDlg();
 		//delete me
 		//m_wnd.AddMsg(L"lerosua",L"initial twitter",L"time Nov 2009 19:90");
 		//m_wnd.AddMsg(L"lerosua",L"1234567890qwertyuioplkjahdgfgzvxbbcvmfjeuyw",L"1分钟之前");
 		//m_wnd.LoadCache(cacheFile);
-		m_wnd.DoModal();
+		if(success)
+			m_wnd.DoModal();
+		else{
+
+			MzMessageBoxEx(m_hWnd, L"        警告\n用户名或密码 error ", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+		}
 		
 		  return;
         }

@@ -20,11 +20,14 @@
 #define  SETTINGWND_FILE_HEADER_INC
 
 #include <mzfc_inc.h>
-#define MZ_IDC_TOOLBAR3 101
-#define MZ_IDC_CAPTION 107
-#define MZ_IDC_API_EDIT 108
-#define MZ_IDC_BTN_SAVE 109
-#define MZ_IDC_BTN_TEXT 110
+#define MZ_IDC_SCROLLWIN 900
+#define MZ_IDC_TOOLBAR3 901
+#define MZ_IDC_CAPTION 907
+#define MZ_IDC_API_EDIT 908
+#define MZ_IDC_BTN_SAVE 909
+#define MZ_IDC_BTN_TEXT 910
+#define MZ_IDC_BTN_API  911
+#define MZ_IDC_CAPTION_API 912
 
 
 class SettingWnd:public CMzWndEx
@@ -35,12 +38,17 @@ class SettingWnd:public CMzWndEx
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 
 	protected:
+	UiScrollWin m_ScrollWin;
 	UiToolbar_Text m_Toolbar;
 	UiEdit* m_pEdit;
+	// login setting
 	UiCaption m_Caption;
 	UiButton	m_BtnSP;
 	UiStatic	m_BSP_Text;
+	UiCaption m_CaptionApi;
 	UiSingleLineEdit m_Api;
+	UiCaption m_CaptionInterval;
+	Ui
 	
 };
 

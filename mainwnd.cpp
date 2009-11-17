@@ -21,6 +21,7 @@
 #include "saywnd.h"
 #include "Resource.h"
 #include "base64.h"
+#include "confini.h"
 #include <CallNotifyApi.h>
 #include <ReadWriteIni.h>
 #include <sstream>
@@ -318,21 +319,34 @@ int GMList::CalcItemHeight(int index)
 #endif
 
 }
-void MainWnd::Login(const CMzString& account,const CMzString& password)
+bool MainWnd::Login(const CMzString& account,const CMzString& password)
 {
 	std::string s_account=ws2s(account.C_Str());
 	std::string s_pass=ws2s(password.C_Str());
 
-	m_twitter.Login(s_account,s_pass);
+	ConfIni::setAccount(account.C_Str());
 
 
+	if(m_twitter.Login(s_account,s_pass))
+		NULL;
+	else{
+		return false;
+	}
+
+	if(ConfIni::isRememberPassword()){
+		ConfIni::setPassword(account.C_Str(),password.C_Str());
+	}
+
+#if 0
     if(!FileExists(rcFile)){
 	    IniCreateFile(rcFile);
     }
 	IniWriteString(L"config",L"account",account,rcFile);
 	IniWriteString(L"config",L"password",password,rcFile);
+#endif
 
 	LoadCache(cacheFile);
+	return true;
 }
 	
 void MainWnd::SendStatus(const wchar_t* msg)

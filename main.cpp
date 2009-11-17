@@ -50,9 +50,10 @@ public:
     if(MzGetParam(MZGP_APP_START_ANIMATION)==TRUE){
 	    m_LoginWnd.AnimateWindow(MZ_ANIMTYPE_ZOOM_IN,true);
 
-		 m_LoginWnd.SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
+	// m_LoginWnd.SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
 	    m_LoginWnd.Show();
 
+#if 0
     if(FileExists(rcFile)){
 	    CMzString name;
 	    CMzString pass;
@@ -74,6 +75,7 @@ public:
 		}
 ;
 	    }
+#endif
 	    //m_LoginWnd.SetBgColor(RGB(0,0,0));
 
 		//m_LoginWnd.SetDefault(name.C_Str(),pass.C_Str());

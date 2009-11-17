@@ -17,6 +17,7 @@
  */
 
 #include "settingwnd.h"
+#include "confini.h"
 
 
 BOOL SettingWnd::OnInitDialog()
@@ -26,40 +27,62 @@ BOOL SettingWnd::OnInitDialog()
       return FALSE;
     }
 
+    m_ScrollWin.SetID(MZ_IDC_SCROLLWIN);
+    m_ScrollWin.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
+    m_ScrollWin.EnableScrollBarV(true);
+    AddUiWin(&m_ScrollWin);
+
+
+    int y =0;
     m_Caption.SetID(MZ_IDC_CAPTION);
-    m_Caption.SetPos(0,0,GetWidth(),100);
+    m_Caption.SetPos(0,y,GetWidth(),MZM_HEIGHT_CAPTION);
     //m_Caption.SetText(L"Setting");
     m_Caption.SetText(L"设置");
-    AddUiWin(&m_Caption);
+    m_ScrollWin.AddChild(&m_Caption);
 
+    y+= MZM_HEIGHT_CAPTION;
+    
     m_BSP_Text.SetID(MZ_IDC_BTN_TEXT);
-    m_BSP_Text.SetPos(MZM_MARGIN_MAX,100,100,80);
+    m_BSP_Text.SetPos(MZM_MARGIN_BIG,y,GetWidth()/2-MZM_MARGIN_BIG,MZM_HEIGHT_BUTTONEX);
     m_BSP_Text.SetDrawTextFormat(DT_LEFT|DT_VCENTER);
     m_BSP_Text.SetText(L"保存密码");
-    AddUiWin(&m_BSP_Text);
+    m_ScrollWin.AddChild(&m_BSP_Text);
 
     m_BtnSP.SetID(MZ_IDC_BTN_SAVE);
-    m_BtnSP.SetPos(GetWidth()-150,100,120, 80);
+    m_BtnSP.SetPos(GetWidth()-150,y,150, MZM_HEIGHT_BUTTONEX);
     m_BtnSP.SetButtonType(MZC_BUTTON_SWITCH);
     m_BtnSP.SetButtonMode(MZC_BUTTON_MODE_HOLD);
-    AddUiWin(&m_BtnSP);
+    m_BtnSP.EnableNotifyMessage(true);
+    m_ScrollWin.AddChild(&m_BtnSP);
 
-    m_Api.SetPos(MZM_MARGIN_MAX,190,     GetWidth()-MZM_MARGIN_MAX*4,50);
+    y+=MZM_HEIGHT_BUTTONEX;
+    
+    m_CaptionApi.SetID(MZ_IDC_CAPTION_API);
+    m_CaptionApi.SetPos(0,y,GetWidth(),MZM_HEIGHT_CAPTION);
+    m_ScrollWin.AddChild(&m_CaptionApi);
+
+    y+=MZM_HEIGHT_CAPTION;
+
+    m_Api.SetPos(MZM_MARGIN_MAX,y, GetWidth()-MZM_MARGIN_MAX*4,MZM_HEIGHT_BUTTONEX);
     m_Api.SetID(MZ_IDC_API_EDIT); //you must set an unique ID for a edit control
     //m_Api.SetTip(L"Account:");	// set the tips text
     m_Api.SetTip(L"API地址");	// set the tips text
     m_Api.SetTextColor(RGB(255,0,0)); // you could also set the color of text
-    AddUiWin(&m_Api);
+    m_Api.EnableNotifyMessage(true);
+    m_ScrollWin.AddChild(&m_Api);
 
 
     m_Toolbar.SetID(MZ_IDC_TOOLBAR3);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
-    m_Toolbar.SetButton(0,true,true,L"Cannel");
+    //m_Toolbar.SetButton(0,true,true,L"Cannel");
     m_Toolbar.SetButton(0,true,true,L"取消");
     //m_Toolbar.SetButton(2,true,true,L"Save");
     m_Toolbar.SetButton(2,true,true,L"保存");
     AddUiWin(&m_Toolbar);
     
+    if(ConfIni::isRememberPassword())
+	    m_BtnSP.SetState(MZCS_BUTTON_PRESSED);
+    m_Api.SetText(ConfIni::getTwitterApi().c_str());
     return TRUE;
 
 }
@@ -79,11 +102,12 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    return;
 		    }
 		    if(2==nIndex){
-			    /*发送处理*/
+			    ConfIni::setRememberPassword(MZCS_BUTTON_NORMAL != m_BtnSP.GetState());
+			    ConfIni::setTwitterApi(m_Api.GetText().C_Str());
+			    ConfIni::save();
+			    
 			    CMzString str(256);
 			    wsprintf(str.C_Str(),L"The system Save the configure");
-
-			//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
 			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			    EndModal(ID_OK);
 

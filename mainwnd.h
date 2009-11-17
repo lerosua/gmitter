@@ -58,7 +58,7 @@ class MainWnd:public CMzWndEx
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
 	//void AddMsg(wchar_t* author,wchar_t* msg,int num=0);
 	void AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num=0);
-	void Login(const CMzString& account,const CMzString& password);
+	bool Login(const CMzString& account,const CMzString& password);
 	void SendStatus(const wchar_t* msg);
 	BOOL AutoDialNet();
 	void CloseDialNet();

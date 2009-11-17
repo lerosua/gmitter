@@ -29,10 +29,12 @@ GMitter::GMitter()
 	tw_request=0;
 }
 
-void GMitter::Login(const std::string& account,const std::string& password)
+bool GMitter::Login(const std::string& account,const std::string& password)
 {
 	tw_uname=account;
 	tw_pass = password;
+
+	return true;
 }
 
 void GMitter::OnBegin(const happyhttp::Response* r, void* userdata) {
