@@ -51,7 +51,7 @@ BOOL LoginWnd::OnInitDialog()
     m_ScrollWin.AddChild(&m_Logo);
  	/* 初始化单行编辑控件，并添加到窗口中*/
     //m_Account.SetPos(MZM_MARGIN_MAX,MZM_MARGIN_MAX,GetWidth()-MZM_MARGIN_MAX*2,70);
-    m_Account.SetPos(MZM_MARGIN_MAX*2,120,     GetWidth()-MZM_MARGIN_MAX*4,60);
+    m_Account.SetPos(MZM_MARGIN_MAX,120,     GetWidth()-MZM_MARGIN_MAX*2,60);
     m_Account.SetID(MZ_IDC_TESTBTN1); //you must set an unique ID for a edit control
     m_Account.SetLeftInvalid(80);
     m_Account.SetTip2(L"账户:");	// set the tips text
@@ -59,7 +59,7 @@ BOOL LoginWnd::OnInitDialog()
     m_Account.SetSipMode(IM_SIP_MODE_GEL_LETTER);
     m_ScrollWin.AddChild(&m_Account);
     //m_Pass.SetPos(MZM_MARGIN_MAX,MZM_MARGIN_MAX-280,GetWidth()-MZM_MARGIN_MAX*2,140);
-    m_Pass.SetPos(MZM_MARGIN_MAX*2,190,GetWidth()-MZM_MARGIN_MAX*4,60);
+    m_Pass.SetPos(MZM_MARGIN_MAX,190,GetWidth()-MZM_MARGIN_MAX*2,60);
     m_Pass.SetID(MZ_IDC_TESTBTN2);
     m_Pass.SetLeftInvalid(80);
     m_Pass.SetTip2(L"密码:");
@@ -169,15 +169,10 @@ BOOL LoginWnd::OnInitDialog()
 			    MzCloseSip();
 
 		if(m_Account.GetText().IsEmpty()||m_Pass.GetText().IsEmpty()){
-			//MzMessageBoxEx(m_hWnd, L"警告\n用户名或密码不能为空", L"", MB_OK, false);
-			MzMessageBoxEx(m_hWnd, L"        警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+			MzMessageBoxEx(m_hWnd, L"                警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			return;
 		}
 
-		//wchar_t str_name[128];
-		//wchar_t str_pass[128];
-		//wsprintf(str_name,m_Account.GetText().C_Str());
-		//wsprintf(str_pass,m_Pass.GetText().C_Str());
 
 		MainWnd m_wnd;
 		RECT rcWork = MzGetWorkArea();
@@ -196,7 +191,7 @@ BOOL LoginWnd::OnInitDialog()
 			m_wnd.DoModal();
 		else{
 
-			MzMessageBoxEx(m_hWnd, L"        警告\n用户名或密码 error ", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+			MzMessageBoxEx(m_hWnd, L"               警告\n用户名或密码错误", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 		}
 		
 		  return;
@@ -207,9 +202,4 @@ BOOL LoginWnd::OnInitDialog()
   }
 
 
-void LoginWnd::SetDefault(const std::wstring& name,const std::wstring& pass)
-{
-	m_Account.SetText(name.c_str());
-   m_Pass.SetText(pass.c_str());
 
-}

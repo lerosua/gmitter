@@ -48,7 +48,7 @@ class SettingWnd:public CMzWndEx
 	UiCaption m_CaptionApi;
 	UiSingleLineEdit m_Api;
 	UiCaption m_CaptionInterval;
-	Ui
+	
 	
 };
 

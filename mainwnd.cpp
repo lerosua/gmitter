@@ -24,7 +24,7 @@
 #include "confini.h"
 #include "gmutils.h"
 #include <CallNotifyApi.h>
-#include <ReadWriteIni.h>
+
 #include <sstream>
 #include <string>
 #include <fstream>
@@ -140,7 +140,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					m_List.Update();
 					if(nIndex >= ConfIni::getPageCount()){
 						_status_page++;
-						MzBeginWaitDlg();
+						MzBeginWaitDlg(m_hWnd);
 						LoadCache(cacheFile,_status_page);
 						MzEndWaitDlg();
 					}
@@ -237,7 +237,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    if(0==nIndex){
 			    if(_status_page>1){
 				    _status_page=1;
-				    MzBeginWaitDlg();
+				    MzBeginWaitDlg(m_hWnd);
 				    LoadCache(cacheFile,_status_page);
 				    MzEndWaitDlg();
 			    }
@@ -376,7 +376,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 	}
 
 	if(ConfIni::isRememberPassword()){
-		ConfIni::setPassword(account.C_Str(),password.C_Str());
+		ConfIni::setPassword(password.C_Str());
 	}
 
 
@@ -494,9 +494,9 @@ do{
 		strp=str_content.substr(begin_pos,pos);
 	tmp=str_content.substr(pos+1,std::string::npos);
 
-	if(global_count_=<end_){
+	if(global_count_<=end_){
 		Parser(strp,count);
-		global_count++;
+		global_count_++;
 	
 		count++;
 
@@ -534,7 +534,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	    }
 	    outfile.close();
 	    infile.close();
-	    rename(updateFile,cacheFile);
+	//rename(updateFile,cacheFile);
 
 }
 

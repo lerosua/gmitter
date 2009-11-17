@@ -35,7 +35,7 @@ class SayWnd:public CMzWndEx
 	SayWnd(MainWnd&);
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
-	virtual void OnChar(TCHAR chCharCOde, LPARM lKeyData);
+	virtual void OnChar(TCHAR chCharCOde, LPARAM lKeyData);
 	
 	protected:
 	UiToolbar_Text m_Toolbar;

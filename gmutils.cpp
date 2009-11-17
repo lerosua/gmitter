@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  2009å¹´11æœˆ17æ—¥ 13æ—¶37åˆ†58ç§’
+ *        Created:  2009Äê11ÔÂ17ÈÕ 13Ê±37·Ö58Ãë
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -28,14 +28,14 @@ GMUtils::~GMUtils()
 
 }
 
-int GMUtils::popup_menu_status(HWND hparentwnd,const wstring& user_id)
+int GMUtils::popup_menu_status(HWND hParentWnd,const wstring& user_id)
 {
 	CPopupMenu popup_menu;
 	struct PopupMenuItemProp menu_item;
 
 	menu_item.itemCr = MZC_BUTTON_PELLUCID;
 	menu_item.itemRetID = MZ_IDC_POPMENU_RETURN;
-	menu_item.str = L"è¿”å›ž";
+	menu_item.str = L"·µ»Ø";
 	popup_menu.AddItem(menu_item);
 
 	menu_item.itemCr = MZC_BUTTON_PELLUCID;

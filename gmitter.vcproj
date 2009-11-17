@@ -194,7 +194,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\confini.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\gmitter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\gmutils.cpp"
 				>
 			</File>
 			<File
@@ -252,7 +260,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\confini.h"
+				>
+			</File>
+			<File
 				RelativePath=".\gmitter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\gmutils.h"
 				>
 			</File>
 			<File

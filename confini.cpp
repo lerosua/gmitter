@@ -17,6 +17,8 @@
  */
 
 #include "confini.h"
+#include "base64.h"
+#include <ReadWriteIni.h>
 
 ConfIni::ConfIni()
 {
@@ -91,7 +93,7 @@ void ConfIni::save()
 	wchar_t *twitter_api = new wchar_t[_twitter_api.length() + 1];
 	memset(twitter_api, 0, sizeof(wchar_t) * (_twitter_api.length() + 1));
 	_twitter_api.copy(twitter_api, _twitter_api.length());
-	IniWriteString(L"Setting", L"twitter_api",_twitter_api,rcFile);
+	IniWriteString(L"Setting", L"twitter_api",twitter_api,rcFile);
 	delete [] twitter_api;
 
 

@@ -50,7 +50,7 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit.EnableZoomIn(true);
     m_pEdit.SetReadOnly(false);
     m_pEdit.SetRightInvalid(20);
-    m_pEdit.EnableGridlines(true);
+    //m_pEdit.EnableGridlines(true);
     m_pEdit.EnableInsideScroll(true);
     
     m_pEdit.SetLineSpace(4);
@@ -64,7 +64,7 @@ BOOL SayWnd::OnInitDialog()
     y+=170;
 
     m_CaptionBottom.SetID(MZ_IDC_CAPTION_BOTTOM);
-    m_CaptionBottom.SetPos(0,y,GetWidth(),100);
+    m_CaptionBottom.SetPos(0,y,GetWidth(),60);
     m_CaptionBottom.SetText(L"140");
     m_ScrollWin.AddChild(&m_CaptionBottom);
 
@@ -131,12 +131,14 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 }
 
 
-void SayWnd::OnChar(TCHAR chCharCOde, LPARM lKeyData)
+void SayWnd::OnChar(TCHAR chCharCOde, LPARAM lKeyData)
 {
 	size_t num=140-m_pEdit.GetText().Length();
 
-	CMxString count_(num);
-	m_CaptionBottom.SetText(count_.C_Str());
-	m_CaptionBottom.UpdateWindow();
+	CMzString count_(num);
+	//m_CaptionBottom.SetText(count_.C_Str());
+ 
+	m_CaptionBottom.SetText(L"edit");
+	m_CaptionBottom.Update();
 
 }
