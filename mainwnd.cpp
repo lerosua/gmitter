@@ -79,12 +79,13 @@ BOOL MainWnd::OnInitDialog()
 
     m_List.SetPos(0,MZM_HEIGHT_ICON_TOOLBAR-15,GetWidth(),GetHeight()-2*MZM_HEIGHT_TEXT_TOOLBAR-5);
     //m_List.SetPos(0,5,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR-5);
-    m_List.SetID(MZ_IDC_LIST);
+    m_List.SetID(MZ_IDC_STATUS_LIST);
     m_List.EnableScrollBarV(true);
     m_List.EnableNotifyMessage(true);
     m_List.SetItemHeight(90);
     m_List.SetTextColor(RGB(255,0,0));
     m_List.EnableVaryItemHeight(true);
+    m_List.EnableDragModeH(true);
     AddUiWin(&m_List);
     
 
@@ -131,7 +132,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 			int x=LOWORD(lParam);
 			int y=HIWORD(lParam);
 
-			if(nID== MZ_IDC_LIST && nNotify == MZ_MN_LBUTTONDOWN){
+			if(nID== MZ_IDC_STATUS_LIST && nNotify == MZ_MN_LBUTTONDOWN){
 				if(!m_List.IsMouseDownAtScrolling()& !m_List.IsMouseMoved()){
 					int nIndex=m_List.CalcIndexOfPos(x,y);
 					m_List.SetSelectedIndex(nIndex);
@@ -148,7 +149,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 			}
 
 			//double click
-			if(nID== MZ_IDC_LIST && nNotify == MZ_MN_LBUTTONDBLCLK){
+			if(nID== MZ_IDC_STATUS_LIST && nNotify == MZ_MN_LBUTTONDBLCLK){
 
 				int id_ = GMUtils::popup_menu_status(m_hWnd,L"lerosua");
 				switch(id_){
@@ -167,12 +168,17 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 				return 0;
 			}
 			//处理列表控件的鼠标移动通知 
-			if(nID== MZ_IDC_LIST && nNotify == MZ_MN_MOUSEMOVE){
+			if(nID== MZ_IDC_STATUS_LIST && nNotify == MZ_MN_MOUSEMOVE){
 				if(m_List.GetSelectedIndex()!=-1){
 					m_List.SetSelectedIndex(-1);
 					m_List.Invalidate();
 					m_List.Update();
 				}
+				return 0;
+			}
+			if(nID == MZ_IDC_STATUS_LIST && nNotify == MZ_WM_LIST_ITEM_DRAG_H){
+
+				MzMessageBoxEx(m_hWnd, L"Just test dragH", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 				return 0;
 			}
 		}

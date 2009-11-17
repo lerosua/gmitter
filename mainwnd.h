@@ -25,7 +25,7 @@
 #define MZ_IDC_CAPTION_TOP 130
 #define MZ_IDC_TOOLBAR2 131
 #define MZ_IDC_SCROLLWIN2 132
-#define MZ_IDC_LIST      133
+#define MZ_IDC_STATUS_LIST      133
 #define MZ_IDC_TIMER     134
 #define MZ_IDC_UPDATE    135
 #define MZ_IDC_WRITE     136
