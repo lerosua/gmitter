@@ -28,9 +28,11 @@
 #include <sstream>
 #include <string>
 #include <fstream>
+#include <stdio.h>
 
 MainWnd::MainWnd():m_id("")
 		   ,_locked(false)
+		   ,_status_page(1)
 {
 
 }
@@ -114,7 +116,8 @@ void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 	pmlid->StringTime = strTime;
 
 	li.Data = pmlid;
-	m_List.InsertItem(li,num);
+	//m_List.InsertItem(li,num);
+	m_List.InsertItem(li,-1);
 }
 
 
@@ -134,6 +137,12 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					m_List.SetSelectedIndex(nIndex);
 					m_List.Invalidate();
 					m_List.Update();
+					if(nIndex >= ConfIni::getPageCount()){
+						_status_page++;
+						MzBeginWaitDlg();
+						LoadCache(cacheFile,_status_page);
+						MzEndWaitDlg();
+					}
 				}
 				return 0;
 			}
@@ -189,8 +198,8 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			if(getLocked()){
 			   UpdateStatus();
 			    if(GetNetStatus()){
-				    LoadCache(updateFile);
 				    SaveCache(updateFile);
+				    LoadCache(cacheFile,_status_page);
 			    }
 			    freeLocked();
 			}
@@ -219,10 +228,18 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
         
 			    return;
 		    }
+		    if(0==nIndex){
+			    if(_status_page>1){
+				    _status_page=1;
+				    MzBeginWaitDlg();
+				    LoadCache(cacheFile,_status_page);
+				    MzEndWaitDlg();
+			    }
+		    }
 		    if(1== nIndex){
 			    /* ·¢ÍÆ*/
 
-		return;
+			return;
 		
 
 		    }
@@ -308,7 +325,6 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	::SetTextColor(hdcDst,RGB(200,200,200));
 	HFONT hf_=FontHelper::GetFont(16);
 	SelectObject(hdcDst,hf_);
-	//MzDrawText(hdcDst,pmlid->StringTime.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 	MzDrawText(hdcDst,pmlid->StringTime.C_Str(), &rcText,DT_RIGHT|DT_TOP  |DT_SINGLELINE|DT_END_ELLIPSIS);
 
 	// for message
@@ -320,7 +336,6 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	//::SetTextColor(hdcDst,RGB(200,200,200));
 	HFONT hf=FontHelper::GetFont(24);
 	SelectObject(hdcDst,hf);
-	//MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
 	MzDrawText(hdcDst,pmlid->StringText.C_Str(), &rcText,   DT_LEFT | DT_WORDBREAK | DT_EDITCONTROL | DT_END_ELLIPSIS | DT_NOPREFIX);
 
 }
@@ -328,11 +343,9 @@ int GMList::CalcItemHeight(int index)
 {
 
 //	if(GetSelectedIndex() == nIndex )
-#if 1
 	int height=0;
 	int lines=0;
         ListItem* pItem = GetItem(index);
-        //SmsListItemData_Details *p = (SmsListItemData_Details *)pItem->Data;
 	MsgListItemData* pmlid = (MsgListItemData*)pItem->Data;
 
 	lines = pmlid->StringText.Length()/16+1;
@@ -340,9 +353,8 @@ int GMList::CalcItemHeight(int index)
 	height = height<100?100:height;
 	return height;
 
-#endif
-
 }
+
 bool MainWnd::Login(const CMzString& account,const CMzString& password)
 {
 	std::string s_account=ws2s(account.C_Str());
@@ -361,15 +373,8 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 		ConfIni::setPassword(account.C_Str(),password.C_Str());
 	}
 
-#if 0
-    if(!FileExists(rcFile)){
-	    IniCreateFile(rcFile);
-    }
-	IniWriteString(L"config",L"account",account,rcFile);
-	IniWriteString(L"config",L"password",password,rcFile);
-#endif
 
-	LoadCache(cacheFile);
+	LoadCache(cacheFile,_status_page);
 	return true;
 }
 	
@@ -422,7 +427,10 @@ bool MainWnd::GetNetStatus()
 
 void MainWnd::Parser(const std::string& input,int big)
 {
+	if(0==big)
+		m_id=getStatusId(input);
 
+if(big>= (_status_page-1)*ConfIni::getPageCount()){
 	std::string str1;
 	std::string str2;
 	std::string str3;
@@ -437,12 +445,11 @@ void MainWnd::Parser(const std::string& input,int big)
 	wstr3=s2ws_unicode(str3.c_str());
 
 	AddMsg((wchar_t*)wstr2.c_str(),(wchar_t*)wstr1.c_str(),(wchar_t*)wstr3.c_str(),big);
-	if(0==big)
-		m_id=getStatusId(input);
+	}
 }
 
 
-void MainWnd::LoadCache(const std::string& filename)
+void MainWnd::LoadCache(const std::string& filename,int page_)
 {
 	using namespace std;
 
@@ -450,15 +457,20 @@ void MainWnd::LoadCache(const std::string& filename)
 	string str_content;
 	infile.open(filename.c_str());
 	if(!infile){
-		//MzMessageBoxEx(m_hWnd, L"Load Cache Error", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 		return;
 	}
 
-	//getline(infile,str_content);
+	m_List.RemoveAll();
+
+	int end_=page_*ConfIni::getPageCount();
+	int global_count_=0;
+
 	while(getline(infile,str_content)){
 		if(str_content.empty())
 			continue;
 
+	if(global_count_>end_)
+		break;
 		
 	string strp;
 	string tmp;
@@ -476,16 +488,21 @@ do{
 		strp=str_content.substr(begin_pos,pos);
 	tmp=str_content.substr(pos+1,std::string::npos);
 
-	Parser(strp,count);
+	if(global_count_=<end_){
+		Parser(strp,count);
+		global_count++;
 	
-	count++;
+		count++;
 
-	str_content=tmp;
+		str_content=tmp;
+	}else
+		break;
 	
 
 }while(true);
-   Parser(tmp,count);
-   str_content.clear();
+	  if(global_count_<end_)
+		   Parser(tmp,count);
+	   str_content.clear();
    }
    infile.close();
 
@@ -496,12 +513,14 @@ do{
 void MainWnd::SaveCache(const std::string& filename)
 {
 	    fstream infile;
-	    infile.open(filename.c_str(),ios::in);
+	    //infile.open(filename.c_str(),ios::in);
+	    infile.open(cacheFile,ios::in);
 	if(!infile)
 		return;
 
 	    fstream outfile;
-	    outfile.open(cacheFile,ios::out|ios::app);
+	    //outfile.open(cacheFile,ios::out|ios::app);
+	    outfile.open(filename.c_str(),ios::out|ios::app);
 	    outfile<<endl;
 		string strline;
 	    while(getline(infile,strline)){
@@ -509,6 +528,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	    }
 	    outfile.close();
 	    infile.close();
+	    rename(updateFile,cacheFile);
 
 }
 
@@ -520,8 +540,9 @@ void MainWnd::SaveCache(const std::string& filename)
 		if(getLocked()){
 	   UpdateStatus();
     if(GetNetStatus()){
-	    LoadCache(updateFile);
 	    SaveCache(updateFile);
+	    if(1 == _status_page)
+		    LoadCache(cacheFile,_status_page);
     }
 		freeLocked();
 		}

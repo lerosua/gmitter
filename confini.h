@@ -51,12 +51,15 @@ class ConfIni
 		static unsigned long getUpdateInterval(){return _update_interval;};
 		static void setUpdateInterval(unsigned long inter_){ _update_interval = inter_;};
 
+		static unsigned long getPageCount() { return _page_count; }
+		static void setPageCount(unsigned long count_){ _page_count = count_ ; }
 	private:
 		static wstring _account;
 		static wstring _password;
 		static wstring _twitter_api;
 		static unsigned long _remember_password;
 		static unsigned long _update_interval;
+		static unsigned long _page_count;
 
 
 

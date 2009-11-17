@@ -192,7 +192,6 @@ BOOL LoginWnd::OnInitDialog()
 		//delete me
 		//m_wnd.AddMsg(L"lerosua",L"initial twitter",L"time Nov 2009 19:90");
 		//m_wnd.AddMsg(L"lerosua",L"1234567890qwertyuioplkjahdgfgzvxbbcvmfjeuyw",L"1∑÷÷”÷Æ«∞");
-		//m_wnd.LoadCache(cacheFile);
 		if(success)
 			m_wnd.DoModal();
 		else{

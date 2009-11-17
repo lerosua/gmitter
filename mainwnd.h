@@ -63,10 +63,9 @@ class MainWnd:public CMzWndEx
 	BOOL AutoDialNet();
 	void CloseDialNet();
 	bool GetNetStatus();
-	//void LoadCache();
-	//void LoadCache(const std::string& filename="\\Disk\\Program Files\\gmitter\\test.json");
-	void LoadCache(const std::string& filename);
-	void SaveCache(const std::string& filename);
+	//void LoadCache(const std::string& filename);
+	void LoadCache(const std::string& filename_,int page_);
+	void SaveCache(const std::string& filename_);
 	void Parser(const std::string& input,int big);
 	void UpdateStatus();
 	void StartTimer();
@@ -90,6 +89,7 @@ class MainWnd:public CMzWndEx
 private:
 	std::string m_id;
 	bool _locked;
+	int _status_page;
 	//wstring m_account;
 	//wstring m_pass;
 

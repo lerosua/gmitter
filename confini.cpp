@@ -104,4 +104,5 @@ wstring ConfIni::_password;
 wstring ConfIni::_twitter_api;
 unsigned long ConfIni::_remember_password=1;
 unsigned long ConfIni::_update_interval=3;  //3 mintue;
+unsigned long ConfIni::_page_count=30;
 
