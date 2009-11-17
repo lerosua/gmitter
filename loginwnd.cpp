@@ -157,7 +157,6 @@ BOOL LoginWnd::OnInitDialog()
         {
         CMzString str(128);
         wsprintf(str.C_Str(), L"twitter loging test");
-        //MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, false);
 	MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 
           return;
@@ -167,6 +166,9 @@ BOOL LoginWnd::OnInitDialog()
 		    /** 关闭键盘*/
 		    if(MzIsSipOpen())
 			    MzCloseSip();
+
+				this->Invalidate();
+				this->UpdateWindow();
 
 		if(m_Account.GetText().IsEmpty()||m_Pass.GetText().IsEmpty()){
 			MzMessageBoxEx(m_hWnd, L"                警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);

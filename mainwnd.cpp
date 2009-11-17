@@ -135,6 +135,8 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 			if(nID== MZ_IDC_STATUS_LIST && nNotify == MZ_MN_LBUTTONDOWN){
 				if(!m_List.IsMouseDownAtScrolling()& !m_List.IsMouseMoved()){
 					int nIndex=m_List.CalcIndexOfPos(x,y);
+					if(nIndex<0)
+						break;
 					m_List.SetSelectedIndex(nIndex);
 					m_List.Invalidate();
 					m_List.Update();
@@ -379,6 +381,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 		ConfIni::setPassword(password.C_Str());
 	}
 
+	ConfIni::save();
 
 	LoadCache(cacheFile,_status_page);
 	return true;
