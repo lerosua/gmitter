@@ -36,7 +36,10 @@
 #define MZ_IDC_STATIC_START1 111
 #define MZ_IDC_CAPTION1 112
 #define MZ_IDC_PIC	113
+#define MZ_IDC_COPYWIRTE 114
 #define MZM_HEIGHT_BUTTON 80
+
+#define COPYWRITE L"GMitter @2009 lerosua"
 
 class LoginWnd: public CMzWndEx
 {
@@ -54,6 +57,7 @@ public:
   UiStatic	   m_text;
   UiCaption	   m_Title;
   UiPicture	   m_Logo;
+  UiStatic	   m_copywrite;
   int m_count;
 
 protected:
@@ -62,8 +66,6 @@ protected:
 
   /* 重载命令消息的处理函数*/
   virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
-public:
-void SetDefault(const std::wstring& name,const std::wstring& pass);
 
 };
 

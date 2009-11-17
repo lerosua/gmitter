@@ -84,6 +84,12 @@ BOOL LoginWnd::OnInitDialog()
     m_text.SetDrawTextFormat(DT_RIGHT|DT_VCENTER);
     m_ScrollWin.AddChild(&m_text);
 
+    m_copywrite.SetID(MZ_IDC_COPYWIRTE);
+    m_copywrite.SetPos(100,560,370,40);
+    m_copywrite.SetText(COPYWRITE);
+    m_copywrite.SetDrawTextFormat(DT_RIGHT|DT_VCENTER);
+    m_ScrollWin.AddChild(&m_copywrite);
+
 	// 初始化文字工具条，并添加到窗口中
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0, true, true, L"Exit");

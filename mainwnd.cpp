@@ -22,6 +22,7 @@
 #include "Resource.h"
 #include "base64.h"
 #include "confini.h"
+#include "gmutils.h"
 #include <CallNotifyApi.h>
 #include <ReadWriteIni.h>
 #include <sstream>
@@ -137,6 +138,25 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 				return 0;
 			}
 
+			//double click
+			if(nID== MZ_IDC_LIST && nNotify == MZ_MN_LBUTTONDBLCLK){
+
+				int id_ = GMUtils::popup_menu_status(m_hWnd,L"lerosua");
+				switch(id_){
+					case MZ_IDC_POPMENU_RETURN:
+						break;
+					case MZ_IDC_POPMENU_REPLY:
+						break;
+					case MZ_IDC_POPMENU_RT:
+						break;
+					case MZ_IDC_POPMENU_DM:
+						break;
+					default:
+						break;
+				}
+
+				return 0;
+			}
 			//处理列表控件的鼠标移动通知 
 			if(nID== MZ_IDC_LIST && nNotify == MZ_MN_MOUSEMOVE){
 				if(m_List.GetSelectedIndex()!=-1){
@@ -470,7 +490,7 @@ do{
    infile.close();
 
    m_List.Invalidate();
-   m_List.UpdateWindow();
+   m_List.Update();
 }
 
 void MainWnd::SaveCache(const std::string& filename)
