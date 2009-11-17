@@ -29,6 +29,7 @@
 #include <fstream>
 
 MainWnd::MainWnd():m_id("")
+		   ,_locked(false)
 {
 
 }
@@ -165,11 +166,14 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		MzMessageBoxEx(m_hWnd, testmsg.c_str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			    /* ¸üÐÂ*/
 			MzBeginWaitDlg(m_hWnd);
+			if(getLocked()){
 			   UpdateStatus();
 			    if(GetNetStatus()){
 				    LoadCache(updateFile);
 				    SaveCache(updateFile);
 			    }
+			    freeLocked();
+			}
 			MzEndWaitDlg();
 
 			    return;
@@ -465,6 +469,8 @@ do{
    }
    infile.close();
 
+   m_List.Invalidate();
+   m_List.UpdateWindow();
 }
 
 void MainWnd::SaveCache(const std::string& filename)
@@ -491,11 +497,26 @@ void MainWnd::SaveCache(const std::string& filename)
 {
 
 	if(MZ_IDC_TIMER == nIDEvent){
+		if(getLocked()){
 	   UpdateStatus();
     if(GetNetStatus()){
 	    LoadCache(updateFile);
 	    SaveCache(updateFile);
     }
+		freeLocked();
+		}
 	}
 
+}
+bool MainWnd::getLocked()
+{
+	if(_locked)
+		return false;
+	_locked = true;
+	return _locked;
+}
+
+void MainWnd::freeLocked()
+{
+	_locked = false;
 }

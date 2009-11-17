@@ -70,6 +70,8 @@ class MainWnd:public CMzWndEx
 	void Parser(const std::string& input,int big);
 	void UpdateStatus();
 	void StartTimer();
+	bool getLocked() ;
+	void freeLocked();
 	virtual void OnTimer(UINT_PTR nIDEvent);
 	protected:
 	UiScrollWin m_ScrollWin;
@@ -87,6 +89,7 @@ class MainWnd:public CMzWndEx
 
 private:
 	std::string m_id;
+	bool _locked;
 	//wstring m_account;
 	//wstring m_pass;
 

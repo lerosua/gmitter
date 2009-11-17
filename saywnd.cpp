@@ -89,10 +89,10 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    CMzString str(256);
 			    wsprintf(str.C_Str(),L"%s",m_pEdit.GetText().C_Str());
 
-				MzBeginWaitDlg(m_hWnd);
 				this->Invalidate();
 				this->UpdateWindow();
 
+				MzBeginWaitDlg(m_hWnd);
 				
 				m_pwnd.SendStatus(str.C_Str());
 
