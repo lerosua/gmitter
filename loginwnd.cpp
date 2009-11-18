@@ -167,8 +167,8 @@ BOOL LoginWnd::OnInitDialog()
 		    if(MzIsSipOpen())
 			    MzCloseSip();
 
-				this->Invalidate();
-				this->UpdateWindow();
+		this->Invalidate();
+		this->UpdateWindow();
 
 		if(m_Account.GetText().IsEmpty()||m_Pass.GetText().IsEmpty()){
 			MzMessageBoxEx(m_hWnd, L"                警告\n用户名或密码不能为空", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);

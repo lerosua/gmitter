@@ -350,7 +350,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\update_press.png"
+				>
+			</File>
+			<File
 				RelativePath=".\res\write.png"
+				>
+			</File>
+			<File
+				RelativePath=".\res\write_press.png"
 				>
 			</File>
 		</Filter>

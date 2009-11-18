@@ -33,18 +33,25 @@ BOOL SayWnd::OnInitDialog()
     }
 
     int y=0;
-    m_CaptionTop.SetID(MZ_IDC_CAPTION_TOP);
-    m_CaptionTop.SetPos(0,0,GetWidth(),100);
-    m_CaptionTop.SetText(L"GMitter");
-    AddUiWin(&m_CaptionTop);
-
-    y+=100;
     m_ScrollWin.SetID(MZ_IDC_POST_SCROLLWIN);
     m_ScrollWin.SetPos(0,y,GetWidth(),GetHeight()-y-MZM_HEIGHT_TEXT_TOOLBAR);
     AddUiWin(&m_ScrollWin);
 
-    y=0;
-    //m_pEdit = new UiEdit;
+    m_CaptionTop.SetID(MZ_IDC_CAPTION_TOP);
+    m_CaptionTop.SetPos(0,y,GetWidth(),100);
+    m_CaptionTop.SetText(L"GMitter");
+    m_ScrollWin.AddChild(&m_CaptionTop);
+
+    m_btn_clear.SetID(MZ_IDC_POST_CLEAR);
+    m_btn_clear.SetPos(5,y+10,150,50);
+    //m_btn_clear.SetButtonType(MZC_BUTTON_GREEN);
+    m_btn_clear.SetButtonType(MZC_BUTTON_WHITE_ROUND_BOTH);
+    m_btn_clear.SetText(L"Clear");
+    m_btn_clear.SetTextColor(RGB(200,200,200));
+    m_ScrollWin.AddChild(&m_btn_clear);
+
+    y+=100;
+
     m_pEdit.SetPos(0,y,470,170);
     m_pEdit.SetID(MZ_IDC_POST_EDIT);
     m_pEdit.EnableZoomIn(true);
@@ -58,6 +65,7 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit.SetEditBgType(UI_EDIT_BGTYPE_FILL_WHITE);
     m_pEdit.EnableUndo(true);
     m_pEdit.SetMaxChar(140);
+    m_pEdit.SetSipMode(IM_SIP_MODE_GEL_PY);
     //AddUiWin(&m_pEdit);
     m_ScrollWin.AddChild(&m_pEdit);
 
@@ -68,12 +76,6 @@ BOOL SayWnd::OnInitDialog()
     m_CaptionBottom.SetText(L"140");
     m_ScrollWin.AddChild(&m_CaptionBottom);
 
-    m_btn_clear.SetID(MZ_IDC_POST_CLEAR);
-    m_btn_clear.SetPos(5,y+5,50,50);
-    m_btn_clear.SetButtonType(MZC_BUTTON_GREEN);
-    m_btn_clear.SetText(L"Clear");
-    m_btn_clear.SetTextColor(RGB(255,255,255));
-    m_ScrollWin.AddChild(&m_btn_clear);
 
 
     m_Toolbar.SetID(MZ_IDC_POST_TOOLBAR);
@@ -135,6 +137,7 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    case MZ_IDC_POST_CLEAR:
 	    {
 		    m_pEdit.Clear();
+		    m_pEdit.Invalidate();
 		    m_pEdit.Update();
 
 

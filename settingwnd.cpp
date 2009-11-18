@@ -63,12 +63,13 @@ BOOL SettingWnd::OnInitDialog()
 
     y+=MZM_HEIGHT_CAPTION;
 
-    m_Api.SetPos(MZM_MARGIN_MAX,y, GetWidth()-MZM_MARGIN_MAX*4,MZM_HEIGHT_BUTTONEX);
+    m_Api.SetPos(MZM_MARGIN_MAX,y, GetWidth()-MZM_MARGIN_MAX*2,MZM_HEIGHT_BUTTONEX);
     m_Api.SetID(MZ_IDC_API_EDIT); //you must set an unique ID for a edit control
     //m_Api.SetTip(L"Account:");	// set the tips text
     m_Api.SetTip(L"APIµÿ÷∑");	// set the tips text
     m_Api.SetTextColor(RGB(255,0,0)); // you could also set the color of text
     m_Api.EnableNotifyMessage(true);
+    m_Api.SetSipMode(IM_SIP_MODE_WEB_LETTER);
     m_ScrollWin.AddChild(&m_Api);
 
 

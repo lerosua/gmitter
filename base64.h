@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <mzfc_inc.h>
 
-#define rcFile L"\\Disk\\Program Files\\gmitter\\gmitter.ini"
+#define rcFile     "\\Disk\\Program Files\\gmitter\\gmitter.ini"
 #define updateFile "\\Disk\\Program Files\\gmitter\\update.json"
 #define statusFile "\\Disk\\Program Files\\gmitter\\cache.json"
 #define messageFile  "\\Disk\\Program Files\\gmitter\\message.json"

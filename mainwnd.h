@@ -68,6 +68,7 @@ class MainWnd:public CMzWndEx
 	//void LoadCache(const std::string& filename);
 	void LoadCache(const std::string& filename_,int page_);
 	void LoadCache(page_type type_,int page_);
+	void SaveCache(page_type type_);
 	void SaveCache(const std::string& filename_);
 	void Parser(const std::string& input,int big);
 	void UpdateStatus();
@@ -89,6 +90,7 @@ class MainWnd:public CMzWndEx
 	ImagingHelper  m_imgUpdate_press;
 	ImagingHelper  m_imgWrite_normal;
 	ImagingHelper  m_imgWrite_press;
+	static const wstring MORE;
 
 private:
 	std::string _status_id;
@@ -100,7 +102,7 @@ private:
 	bool _locked;
 	page_type _current_page_type;
 	int _current_page;
-	static const wstring NEXT;
+	
 	//wstring m_account;
 	//wstring m_pass;
 

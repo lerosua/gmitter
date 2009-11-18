@@ -71,4 +71,4 @@ void GMUtils::edit_post_status_wnd(HWND hparentwnd,MainWnd* mwnd,const wstring& 
 			m_Saywnd->DoModal();
 
 }
-#ndif 
+#endif 

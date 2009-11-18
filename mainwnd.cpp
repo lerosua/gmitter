@@ -61,7 +61,7 @@ BOOL MainWnd::OnInitDialog()
 
     //m_imgUpdate_normal.LoadImage(L"\\Disk\\Program Files\\gmitter\\res\\update.png");
     m_imgUpdate_normal.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE),TRUE,TRUE);
-    m_imgUpdate_normal_press.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE_PRESS),TRUE,TRUE);
+    m_imgUpdate_press.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE_PRESS),TRUE,TRUE);
     m_imgWrite_normal.LoadImageFromRes( MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE) ,TRUE,TRUE);
     m_imgWrite_press.LoadImageFromRes(  MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE_PRESS),TRUE,TRUE);
 
@@ -134,8 +134,8 @@ void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 void MainWnd::DrawNextItem()
 {
 	ListItem li;
-	li.Text = NEXT.c_str();
-	AddItem(li);
+	li.Text = MORE.c_str();
+	m_List.AddItem(li);
 }
 
 
@@ -157,7 +157,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					m_List.SetSelectedIndex(nIndex);
 					m_List.Invalidate();
 					m_List.Update();
-					if(nIndex > ConfIni::getPageCount()){
+					if(nIndex >= ConfIni::getPageCount()){
 						_current_page++;
 						MzBeginWaitDlg(m_hWnd);
 						//LoadCache(statusFile,_current_page);
@@ -182,7 +182,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 						ListItem* pItem_ = m_List.GetItem(nIndex);
 						if(pItem_){
 							MsgListItemData* mlid_ = (MsgListItemData*)pItem_->Data;
-							CMzString reply_ = L"@"+mlid_->StringAuthor ;
+							CMzString reply_ = CMzString(L"@")+mlid_->StringAuthor ;
 
 							// try put follow code to GMUtils
 						SayWnd *m_Saywnd=new SayWnd(*this);
@@ -244,7 +244,8 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			if(getLocked()){
 			   UpdateStatus();
 			    if(GetNetStatus()){
-				    SaveCache(updateFile);
+				    //SaveCache(updateFile);
+				    SaveCache(_current_page_type);
 				    LoadCache(_current_page_type,_current_page);
 			    }
 			    freeLocked();
@@ -376,8 +377,8 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	if(GetSelectedIndex() == nIndex )
 		MzDrawSelectedBg(hdcDst,prcItem);
 
-	if(pmlid->Text == NEXT.c_str()){
-		MzDrawText(hdcDst,L"Next", prcItem,DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
+	if(pItem->Text == L"Next"){
+		MzDrawText(hdcDst,L"下一页", prcItem,DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 		return;
 	}
     // 绘制左边的小图像
@@ -599,7 +600,7 @@ void MainWnd::LoadCache(const std::string& filename,int page_)
 			continue;
 
 	if(global_count_>end_){
-		DrawNextItem();
+		//DrawNextItem();
 		break;
 	}
 		
@@ -626,8 +627,10 @@ do{
 		count++;
 
 		str_content=tmp;
-	}else
+	}else{
+		//DrawNextItem();
 		break;
+	}
 	
 
 }while(true);
@@ -642,17 +645,43 @@ do{
    m_List.Update();
 }
 
+void MainWnd::SaveCache(page_type type_)
+{
+	switch(type_){
+		case STATUS_PAGE:
+			SaveCache(statusFile);
+			break;
+		case MESSAGE_PAGE:
+			SaveCache(messageFile);
+			break;
+		case METIONS_PAGE:
+			SaveCache(metionsFile);
+			break;
+		case FRIEDNS_PAGE:
+			SaveCache(friendsFile);
+			break;
+		case FAVORITES_PAGE:
+			SaveCache(favoritsFile);
+			break;
+		case PUBLIC_PAGE:
+			SaveCache(publicFile);
+			break;
+		default:
+			break;
+	}
+
+}
 void MainWnd::SaveCache(const std::string& filename)
 {
 	    fstream infile;
-	    //infile.open(filename.c_str(),ios::in);
-	    infile.open(statusFile,ios::in);
+	    infile.open(filename.c_str(),ios::in);
+	    //infile.open(updateFile,ios::in);
 	if(!infile)
 		return;
 
 	    fstream outfile;
-	    //outfile.open(statusFile,ios::out|ios::app);
-	    outfile.open(filename.c_str(),ios::out|ios::app);
+	    outfile.open(updateFile,ios::out|ios::app);
+	    //outfile.open(filename.c_str(),ios::out|ios::app);
 	    outfile<<endl;
 		string strline;
 	    while(getline(infile,strline)){
@@ -662,6 +691,15 @@ void MainWnd::SaveCache(const std::string& filename)
 	    infile.close();
 	//rename(updateFile,statusFile);
 
+	    //rename updateFile to cacheFile
+	    string strline_;
+	    outfile.open(filename.c_str(),ios::out);
+	    infile.open(updateFile,ios::in);
+	    while(getline(infile,strline)){
+		    outfile<<strline_<<endl;
+	    }
+	    outfile.close();
+	    infile.close();
 }
 
 
@@ -672,7 +710,8 @@ void MainWnd::SaveCache(const std::string& filename)
 		if(getLocked()){
 	   UpdateStatus();
     if(GetNetStatus()){
-	    SaveCache(updateFile);
+	    //SaveCache(updateFile);
+	    SaveCache(_current_page_type);
 	    if(1 == _current_page)
 		    //LoadCache(statusFile,_current_page);
 	    	    LoadCache(_current_page_type,_current_page);
@@ -694,4 +733,4 @@ void MainWnd::freeLocked()
 {
 	_locked = false;
 }
-const wstring NEXT=L"Next";
+const wstring MainWnd::MORE=L"Next";
