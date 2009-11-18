@@ -59,6 +59,7 @@ class MainWnd:public CMzWndEx
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
 	//void AddMsg(wchar_t* author,wchar_t* msg,int num=0);
 	void AddMsg(wchar_t* author_,wchar_t* msg_,wchar_t* time_,int num=0);
+	void DrawNextItem();
 	bool Login(const CMzString& account_,const CMzString& password_);
 	void SendStatus(const wchar_t* msg);
 	BOOL AutoDialNet();
@@ -99,6 +100,7 @@ private:
 	bool _locked;
 	page_type _current_page_type;
 	int _current_page;
+	static const wstring NEXT;
 	//wstring m_account;
 	//wstring m_pass;
 

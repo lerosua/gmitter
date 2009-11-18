@@ -131,6 +131,13 @@ void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 	m_List.InsertItem(li,-1);
 }
 
+void MainWnd::DrawNextItem()
+{
+	ListItem li;
+	li.Text = NEXT.c_str();
+	AddItem(li);
+}
+
 
 LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 {
@@ -150,7 +157,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					m_List.SetSelectedIndex(nIndex);
 					m_List.Invalidate();
 					m_List.Update();
-					if(nIndex >= ConfIni::getPageCount()){
+					if(nIndex > ConfIni::getPageCount()){
 						_current_page++;
 						MzBeginWaitDlg(m_hWnd);
 						//LoadCache(statusFile,_current_page);
@@ -369,6 +376,10 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	if(GetSelectedIndex() == nIndex )
 		MzDrawSelectedBg(hdcDst,prcItem);
 
+	if(pmlid->Text == NEXT.c_str()){
+		MzDrawText(hdcDst,L"Next", prcItem,DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
+		return;
+	}
     // »æÖÆ×ó±ßµÄÐ¡Í¼Ïñ
     //ImagingHelper *pimg = ImagingHelper::GetImageObject(MzGetInstanceHandle(), IDR_PNG_LOGO, true);
     ImagingHelper *pimg = ImagingHelper::GetImageObject(MzGetInstanceHandle(), IDR_PNG_SMS, true);
@@ -587,8 +598,10 @@ void MainWnd::LoadCache(const std::string& filename,int page_)
 		if(str_content.empty())
 			continue;
 
-	if(global_count_>end_)
+	if(global_count_>end_){
+		DrawNextItem();
 		break;
+	}
 		
 	string strp;
 	string tmp;
@@ -681,3 +694,4 @@ void MainWnd::freeLocked()
 {
 	_locked = false;
 }
+const wstring NEXT=L"Next";
