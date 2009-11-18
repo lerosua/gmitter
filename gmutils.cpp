@@ -59,3 +59,16 @@ int GMUtils::popup_menu_status(HWND hParentWnd,const wstring& user_id)
 
 	return popup_menu.DoModal();
 }
+#if 0
+void GMUtils::edit_post_status_wnd(HWND hparentwnd,MainWnd* mwnd,const wstring& str_)
+{
+
+			SayWnd *m_Saywnd=new SayWnd(*mwnd);
+			RECT rcWork = MzGetWorkArea();
+			m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),hparentwnd,0,WS_POPUP);
+			m_Saywnd->SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_TOP_TO_BOTTOM_2);
+			m_Saywnd->SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2);
+			m_Saywnd->DoModal();
+
+}
+#ndif 

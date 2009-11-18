@@ -38,6 +38,7 @@ public:
 
 public:
 	static int popup_menu_status(HWND hparentwnd, const wstring& user_id);
+	//static void edit_post_status_wnd(HWND hparentwnd,MainWnd* mwnd,const wstring& str_);
 
 
 };

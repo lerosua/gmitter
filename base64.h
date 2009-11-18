@@ -7,8 +7,12 @@
 
 #define rcFile L"\\Disk\\Program Files\\gmitter\\gmitter.ini"
 #define updateFile "\\Disk\\Program Files\\gmitter\\update.json"
-#define cacheFile "\\Disk\\Program Files\\gmitter\\cache.json"
-//#define _UNICODE
+#define statusFile "\\Disk\\Program Files\\gmitter\\cache.json"
+#define messageFile  "\\Disk\\Program Files\\gmitter\\message.json"
+#define friendsFile  "\\Disk\\Program Files\\gmitter\\friends.json"
+#define metionsFile  "\\Disk\\Program Files\\gmitter\\metions.json"
+#define favoritsFile "\\Disk\\Program Files\\gmitter\\favorits.json"
+#define publicFile   "\\Disk\\Program Files\\gmitter\\public.json"
 using namespace std;
 
 string base64_encode(const string& input);

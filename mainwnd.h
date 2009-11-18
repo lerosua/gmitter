@@ -52,19 +52,21 @@ class MainWnd:public CMzWndEx
 {
 	MZ_DECLARE_DYNAMIC(MainWnd);
 	public:
+	enum page_type { FRIEDNS_PAGE=0, STATUS_PAGE,METIONS_PAGE,MESSAGE_PAGE,FAVORITES_PAGE,PUBLIC_PAGE };
 	MainWnd();
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
 	//void AddMsg(wchar_t* author,wchar_t* msg,int num=0);
-	void AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num=0);
-	bool Login(const CMzString& account,const CMzString& password);
+	void AddMsg(wchar_t* author_,wchar_t* msg_,wchar_t* time_,int num=0);
+	bool Login(const CMzString& account_,const CMzString& password_);
 	void SendStatus(const wchar_t* msg);
 	BOOL AutoDialNet();
 	void CloseDialNet();
 	bool GetNetStatus();
 	//void LoadCache(const std::string& filename);
 	void LoadCache(const std::string& filename_,int page_);
+	void LoadCache(page_type type_,int page_);
 	void SaveCache(const std::string& filename_);
 	void Parser(const std::string& input,int big);
 	void UpdateStatus();
@@ -74,7 +76,6 @@ class MainWnd:public CMzWndEx
 	virtual void OnTimer(UINT_PTR nIDEvent);
 	protected:
 	UiScrollWin m_ScrollWin;
-	//UiToolbar_Text m_Toolbar;
 	UiToolbar_Icon m_Toolbar;
 	UiCaption      m_Top;
 	GMList		m_List;
@@ -83,13 +84,21 @@ class MainWnd:public CMzWndEx
 
 	UiButton_Image m_btn_update;
 	UiButton_Image m_btn_write;
-	ImagingHelper  m_imgUpdate;
-	ImagingHelper  m_imgWrite;
+	ImagingHelper  m_imgUpdate_normal;
+	ImagingHelper  m_imgUpdate_press;
+	ImagingHelper  m_imgWrite_normal;
+	ImagingHelper  m_imgWrite_press;
 
 private:
-	std::string m_id;
+	std::string _status_id;
+	std::string _message_id;
+	std::string _metions_id;
+	std::string _favorites_id;
+	std::string _friends_id;
+	std::string _public_id;
 	bool _locked;
-	int _status_page;
+	page_type _current_page_type;
+	int _current_page;
 	//wstring m_account;
 	//wstring m_pass;
 

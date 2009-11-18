@@ -46,7 +46,7 @@ BOOL SayWnd::OnInitDialog()
     y=0;
     //m_pEdit = new UiEdit;
     m_pEdit.SetPos(0,y,470,170);
-    m_pEdit.SetID(MZ_IDC_EDIT4);
+    m_pEdit.SetID(MZ_IDC_POST_EDIT);
     m_pEdit.EnableZoomIn(true);
     m_pEdit.SetReadOnly(false);
     m_pEdit.SetRightInvalid(20);
@@ -68,9 +68,15 @@ BOOL SayWnd::OnInitDialog()
     m_CaptionBottom.SetText(L"140");
     m_ScrollWin.AddChild(&m_CaptionBottom);
 
+    m_btn_clear.SetID(MZ_IDC_POST_CLEAR);
+    m_btn_clear.SetPos(5,y+5,50,50);
+    m_btn_clear.SetButtonType(MZC_BUTTON_GREEN);
+    m_btn_clear.SetText(L"Clear");
+    m_btn_clear.SetTextColor(RGB(255,255,255));
+    m_ScrollWin.AddChild(&m_btn_clear);
 
 
-    m_Toolbar.SetID(MZ_IDC_STATUS_TOOLBAR);
+    m_Toolbar.SetID(MZ_IDC_POST_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0,true,true,L"Exit");
     m_Toolbar.SetButton(2,true,true,L"Send");
@@ -87,7 +93,7 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
     UINT_PTR id = LOWORD(wParam);
     switch(id)
     {
-	    case MZ_IDC_STATUS_TOOLBAR:
+	    case MZ_IDC_POST_TOOLBAR:
 	    {
 		    int nIndex=lParam;
 		    if(nIndex==0){
@@ -126,6 +132,14 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    }
 	    }
 	    break;
+	    case MZ_IDC_POST_CLEAR:
+	    {
+		    m_pEdit.Clear();
+		    m_pEdit.Update();
+
+
+	    }
+	    break;
 
 	}
 }
@@ -140,5 +154,10 @@ void SayWnd::OnChar(TCHAR chCharCOde, LPARAM lKeyData)
  
 	m_CaptionBottom.SetText(L"edit");
 	m_CaptionBottom.Update();
+
+}
+void SayWnd::SetText(const wstring& str_)
+{
+	m_pEdit.SetText(str_.c_str());
 
 }

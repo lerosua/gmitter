@@ -30,9 +30,15 @@
 #include <fstream>
 #include <stdio.h>
 
-MainWnd::MainWnd():m_id("")
+MainWnd::MainWnd():_status_id("")
+		   ,_message_id("")
+		   ,_metions_id("")
+		   ,_favorites_id("")
+		   ,_friends_id("")
+		   ,_public_id("")
 		   ,_locked(false)
-		   ,_status_page(1)
+		   ,_current_page(1)
+		   ,_current_page_type(STATUS_PAGE)
 {
 
 }
@@ -53,20 +59,24 @@ BOOL MainWnd::OnInitDialog()
     m_Top.SetText(L"推倒世界");
     AddUiWin(&m_Top);
 
-    //m_imgUpdate.LoadImage(L"\\Disk\\Program Files\\gmitter\\res\\update.png");
-    m_imgUpdate.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE),TRUE,TRUE);
-    m_imgWrite.LoadImageFromRes( MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE) ,TRUE,TRUE);
+    //m_imgUpdate_normal.LoadImage(L"\\Disk\\Program Files\\gmitter\\res\\update.png");
+    m_imgUpdate_normal.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE),TRUE,TRUE);
+    m_imgUpdate_normal_press.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE_PRESS),TRUE,TRUE);
+    m_imgWrite_normal.LoadImageFromRes( MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE) ,TRUE,TRUE);
+    m_imgWrite_press.LoadImageFromRes(  MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE_PRESS),TRUE,TRUE);
 
     m_btn_update.SetID(MZ_IDC_UPDATE);
     m_btn_update.SetPos(2,2,50,50);
-    m_btn_update.SetImage_Normal(&m_imgUpdate);
+    m_btn_update.SetImage_Normal(&m_imgUpdate_normal);
+    m_btn_update.SetImage_Pressed(&m_imgUpdate_press);
     m_btn_update.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
     m_btn_update.SetTextColor(RGB(255,255,255));
-	AddUiWin(&m_btn_update);
+    AddUiWin(&m_btn_update);
 
     m_btn_write.SetID(MZ_IDC_WRITE);
     m_btn_write.SetPos(GetWidth()-52,2,50,50);
-    m_btn_write.SetImage_Normal(&m_imgWrite);
+    m_btn_write.SetImage_Normal(&m_imgWrite_normal);
+    m_btn_write.SetImage_Pressed(&m_imgWrite_press);
     m_btn_write.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
     m_btn_write.SetTextColor(RGB(255,255,255));
 	AddUiWin(&m_btn_write);
@@ -141,9 +151,10 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					m_List.Invalidate();
 					m_List.Update();
 					if(nIndex >= ConfIni::getPageCount()){
-						_status_page++;
+						_current_page++;
 						MzBeginWaitDlg(m_hWnd);
-						LoadCache(cacheFile,_status_page);
+						//LoadCache(statusFile,_current_page);
+						LoadCache(_current_page_type,_current_page);
 						MzEndWaitDlg();
 					}
 				}
@@ -153,11 +164,31 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 			//double click
 			if(nID== MZ_IDC_STATUS_LIST && nNotify == MZ_MN_LBUTTONDBLCLK){
 
+				
+				int nIndex=m_List.CalcIndexOfPos(x,y);
 				int id_ = GMUtils::popup_menu_status(m_hWnd,L"lerosua");
 				switch(id_){
 					case MZ_IDC_POPMENU_RETURN:
 						break;
 					case MZ_IDC_POPMENU_REPLY:
+						{
+						ListItem* pItem_ = m_List.GetItem(nIndex);
+						if(pItem_){
+							MsgListItemData* mlid_ = (MsgListItemData*)pItem_->Data;
+							CMzString reply_ = L"@"+mlid_->StringAuthor ;
+
+							// try put follow code to GMUtils
+						SayWnd *m_Saywnd=new SayWnd(*this);
+						RECT rcWork = MzGetWorkArea();
+						m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
+						m_Saywnd->SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_TOP_TO_BOTTOM_2);
+						m_Saywnd->SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2);
+						m_Saywnd->SetText(reply_.C_Str());
+						m_Saywnd->DoModal();
+						}
+							
+
+						}
 						break;
 					case MZ_IDC_POPMENU_RT:
 						break;
@@ -199,7 +230,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    case MZ_IDC_UPDATE:
 		    {
 			    wstring testmsg=L"mid = ";
-			    testmsg+=s2ws(m_id);
+			    testmsg+=s2ws(_status_id);
 		MzMessageBoxEx(m_hWnd, testmsg.c_str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			    /* 更新*/
 			MzBeginWaitDlg(m_hWnd);
@@ -207,7 +238,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			   UpdateStatus();
 			    if(GetNetStatus()){
 				    SaveCache(updateFile);
-				    LoadCache(cacheFile,_status_page);
+				    LoadCache(_current_page_type,_current_page);
 			    }
 			    freeLocked();
 			}
@@ -237,24 +268,53 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    return;
 		    }
 		    if(0==nIndex){
-			    if(_status_page>1){
-				    _status_page=1;
+			    /** freiends_timeline stauts page*/
+			    if(_current_page>1 || STATUS_PAGE != _current_page_type){
+				    _current_page=1;
+				    _current_page_type= STATUS_PAGE;
 				    MzBeginWaitDlg(m_hWnd);
-				    LoadCache(cacheFile,_status_page);
+				    LoadCache(statusFile,_current_page);
 				    MzEndWaitDlg();
 			    }
 		    }
 		    if(1== nIndex){
-			    /* 发推*/
+			    /** metions page*/
+			    if(_current_page>1 || METIONS_PAGE != _current_page_type){
+				    _current_page =1;
+				    _current_page_type = METIONS_PAGE;
+				    MzBeginWaitDlg(m_hWnd);
+				    LoadCache(metionsFile,_current_page);
+				    MzEndWaitDlg();
+			    }
 
 			return;
 		
 
 		    }
 		    if(2 == nIndex){
+			    /** message page*/
+			    if(_current_page>1 || MESSAGE_PAGE != _current_page_type){
+				    _current_page =1;
+				    _current_page_type = MESSAGE_PAGE;
+				    MzBeginWaitDlg(m_hWnd);
+				    LoadCache(messageFile,_current_page);
+				    MzEndWaitDlg();
+			    }
 
 			
-			    //EndModal(ID_OK);
+			    return;
+		    }
+		    if(3 == nIndex){
+			    /** favorites page*/
+			    if(_current_page > 1 || FAVORITES_PAGE != _current_page_type ){
+				    _current_page = 1;
+				    _current_page_type = FAVORITES_PAGE;
+				    MzBeginWaitDlg(m_hWnd);
+				    LoadCache(favoritsFile,_current_page);
+				    MzEndWaitDlg();
+			    }
+
+
 			    return;
 		    }
 
@@ -383,7 +443,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	ConfIni::save();
 
-	LoadCache(cacheFile,_status_page);
+	LoadCache(statusFile,_current_page);
 	return true;
 }
 	
@@ -398,8 +458,32 @@ void MainWnd::SendStatus(const wchar_t* msg)
 
 void MainWnd::UpdateStatus()
 {
+	std::string id_ ;
+	switch(_current_page_type){
+		case STATUS_PAGE:
+			id_ = _status_id;
+			break;
+		case METIONS_PAGE:
+			id_ = _metions_id;
+			break;
+		case MESSAGE_PAGE:
+			id_ = _message_id;
+			break;
+		case FAVORITES_PAGE:
+			id_ = _favorites_id;
+			break;
+		case FRIEDNS_PAGE:
+			id_ = _friends_id;
+			break;
+		case PUBLIC_PAGE:
+			id_ = _public_id;
+		default:
+			return;
+	}
+
 	AutoDialNet();
-    m_twitter.UpdateStatus(m_id);
+    //m_twitter.UpdateStatus(_status_id);
+    m_twitter.UpdateStatus(id_);
 	CloseDialNet();
 
 }
@@ -437,9 +521,9 @@ bool MainWnd::GetNetStatus()
 void MainWnd::Parser(const std::string& input,int big)
 {
 	if(0==big)
-		m_id=getStatusId(input);
+		_status_id=getStatusId(input);
 
-if(big>= (_status_page-1)*ConfIni::getPageCount()){
+if(big>= (_current_page-1)*ConfIni::getPageCount()){
 	std::string str1;
 	std::string str2;
 	std::string str3;
@@ -457,7 +541,32 @@ if(big>= (_status_page-1)*ConfIni::getPageCount()){
 	}
 }
 
+void MainWnd::LoadCache(page_type type_,int page_)
+{
+	switch(type_){
+		case STATUS_PAGE:
+			LoadCache(statusFile,page_);
+			break;
+		case MESSAGE_PAGE:
+			LoadCache(messageFile,page_);
+			break;
+		case METIONS_PAGE:
+			LoadCache(metionsFile,page_);
+			break;
+		case FRIEDNS_PAGE:
+			LoadCache(friendsFile,page_);
+			break;
+		case FAVORITES_PAGE:
+			LoadCache(favoritsFile,page_);
+			break;
+		case PUBLIC_PAGE:
+			LoadCache(publicFile,page_);
+			break;
+		default:
+			break;
+	}
 
+}
 void MainWnd::LoadCache(const std::string& filename,int page_)
 {
 	using namespace std;
@@ -515,6 +624,7 @@ do{
    }
    infile.close();
 
+   m_List.ScrollTo(UI_SCROLLTO_TOP,0,false);
    m_List.Invalidate();
    m_List.Update();
 }
@@ -523,12 +633,12 @@ void MainWnd::SaveCache(const std::string& filename)
 {
 	    fstream infile;
 	    //infile.open(filename.c_str(),ios::in);
-	    infile.open(cacheFile,ios::in);
+	    infile.open(statusFile,ios::in);
 	if(!infile)
 		return;
 
 	    fstream outfile;
-	    //outfile.open(cacheFile,ios::out|ios::app);
+	    //outfile.open(statusFile,ios::out|ios::app);
 	    outfile.open(filename.c_str(),ios::out|ios::app);
 	    outfile<<endl;
 		string strline;
@@ -537,7 +647,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	    }
 	    outfile.close();
 	    infile.close();
-	//rename(updateFile,cacheFile);
+	//rename(updateFile,statusFile);
 
 }
 
@@ -550,8 +660,9 @@ void MainWnd::SaveCache(const std::string& filename)
 	   UpdateStatus();
     if(GetNetStatus()){
 	    SaveCache(updateFile);
-	    if(1 == _status_page)
-		    LoadCache(cacheFile,_status_page);
+	    if(1 == _current_page)
+		    //LoadCache(statusFile,_current_page);
+	    	    LoadCache(_current_page_type,_current_page);
     }
 		freeLocked();
 		}

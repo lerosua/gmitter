@@ -15,8 +15,10 @@
 #define IDR_PNG_LOGO                    107
 #define IDR_PNG_SMS			108
 #define IDR_PNG_UPDATE			109
+#define IDR_PNG_UPDATE_PRESS		116
 #define IDR_PNG_WRITE			110
-#define IDR_PNG_FRI       	111
+#define IDR_PNG_WRITE_PRESS		117
+#define IDR_PNG_FRI			111
 #define IDR_PNG_METION			112
 #define IDR_PNG_FAV			113
 #define IDR_PNG_SEARCH		     	114
