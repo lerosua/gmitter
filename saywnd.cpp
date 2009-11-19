@@ -66,6 +66,7 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit.EnableUndo(true);
     m_pEdit.SetMaxChar(140);
     m_pEdit.SetSipMode(IM_SIP_MODE_GEL_PY);
+    m_pEdit.SetFocus(true);
     //AddUiWin(&m_pEdit);
     m_ScrollWin.AddChild(&m_pEdit);
 

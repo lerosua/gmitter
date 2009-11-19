@@ -134,7 +134,13 @@ void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 void MainWnd::DrawNextItem()
 {
 	ListItem li;
-	li.Text = MORE.c_str();
+	MsgListItemData* pmlid=new MsgListItemData;
+	pmlid->StringAuthor = L"Next;
+	pmlid->StringText = L"Next;
+	pmlid->StringTime = L"Next;
+
+	li.Data = pmlid;
+	//li.Text = MORE.c_str();
 	m_List.AddItem(li);
 }
 
@@ -182,7 +188,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 						ListItem* pItem_ = m_List.GetItem(nIndex);
 						if(pItem_){
 							MsgListItemData* mlid_ = (MsgListItemData*)pItem_->Data;
-							CMzString reply_ = CMzString(L"@")+mlid_->StringAuthor ;
+							CMzString reply_ = CMzString(L"@")+mlid_->StringAuthor+CMzString(L" ") ;
 
 							// try put follow code to GMUtils
 						SayWnd *m_Saywnd=new SayWnd(*this);
@@ -198,8 +204,46 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 						}
 						break;
 					case MZ_IDC_POPMENU_RT:
+						{
+						ListItem* pItem_ = m_List.GetItem(nIndex);
+						if(pItem_){
+							MsgListItemData* mlid_ = (MsgListItemData*)pItem_->Data;
+							CMzString reply_ = CMzString(L"RT:@")+mlid_->StringAuthor+CMzString(L":")+mlid_->StringText ;
+
+							// try put follow code to GMUtils
+						SayWnd *m_Saywnd=new SayWnd(*this);
+						RECT rcWork = MzGetWorkArea();
+						m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
+						m_Saywnd->SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_TOP_TO_BOTTOM_2);
+						m_Saywnd->SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2);
+						m_Saywnd->SetText(reply_.C_Str());
+						m_Saywnd->DoModal();
+						}
+							
+
+						}
+
 						break;
 					case MZ_IDC_POPMENU_DM:
+						{
+						ListItem* pItem_ = m_List.GetItem(nIndex);
+						if(pItem_){
+							MsgListItemData* mlid_ = (MsgListItemData*)pItem_->Data;
+							CMzString reply_ = CMzString(L"d ")+mlid_->StringAuthor+CMzString(L" ") ;
+
+							// try put follow code to GMUtils
+						SayWnd *m_Saywnd=new SayWnd(*this);
+						RECT rcWork = MzGetWorkArea();
+						m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
+						m_Saywnd->SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_TOP_TO_BOTTOM_2);
+						m_Saywnd->SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2);
+						m_Saywnd->SetText(reply_.C_Str());
+						m_Saywnd->DoModal();
+						}
+							
+
+						}
+
 						break;
 					default:
 						break;
@@ -377,7 +421,8 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	if(GetSelectedIndex() == nIndex )
 		MzDrawSelectedBg(hdcDst,prcItem);
 
-	if(pItem->Text == L"Next"){
+	//if(pItem->Text == L"Next"){
+	if(pmlid->StringAuthor == L"Next" && pmlid->StringText == L"Next")
 		MzDrawText(hdcDst,L"обр╩рЁ", prcItem,DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 		return;
 	}
@@ -628,7 +673,7 @@ do{
 
 		str_content=tmp;
 	}else{
-		//DrawNextItem();
+		DrawNextItem();
 		break;
 	}
 	
@@ -695,8 +740,12 @@ void MainWnd::SaveCache(const std::string& filename)
 	    string strline_;
 	    outfile.open(filename.c_str(),ios::out);
 	    infile.open(updateFile,ios::in);
-	    while(getline(infile,strline)){
+	    int count_ =0;
+	    while(getline(infile,strline_)){
 		    outfile<<strline_<<endl;
+		    count_++;
+		    if(count_>100)
+			    break;
 	    }
 	    outfile.close();
 	    infile.close();
