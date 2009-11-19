@@ -286,7 +286,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    /* ¸üÐÂ*/
 			MzBeginWaitDlg(m_hWnd);
 			if(getLocked()){
-			   UpdateStatus();
+			   UpdateList();
 			    if(GetNetStatus()){
 				    //SaveCache(updateFile);
 				    SaveCache(_current_page_type);
@@ -487,6 +487,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	ConfIni::setAccount(account.C_Str());
 
+	m_twitter.SetApi(ws2s(ConfIni::getTwitterApi()));
 
 	if(m_twitter.Login(s_account,s_pass))
 		NULL;
@@ -512,19 +513,22 @@ void MainWnd::SendStatus(const wchar_t* msg)
 	CloseDialNet();
 
 }
-
-void MainWnd::UpdateStatus()
+void MainWnd::UpdateList()
 {
+	AutoDialNet();
 	std::string id_ ;
 	switch(_current_page_type){
 		case STATUS_PAGE:
 			id_ = _status_id;
+			m_twitter.UpdateStatus(id_);
 			break;
 		case METIONS_PAGE:
 			id_ = _metions_id;
+			m_twitter.UpdateMentions(id_);
 			break;
 		case MESSAGE_PAGE:
 			id_ = _message_id;
+			m_twitter.UpdateDM(_message_id);
 			break;
 		case FAVORITES_PAGE:
 			id_ = _favorites_id;
@@ -534,13 +538,20 @@ void MainWnd::UpdateStatus()
 			break;
 		case PUBLIC_PAGE:
 			id_ = _public_id;
+			m_twitter.UpdatePublic();
+			break;
 		default:
+			CloseDialNet();
 			return;
 	}
 
+	CloseDialNet();
+
+}
+void MainWnd::UpdateStatus()
+{
 	AutoDialNet();
-    //m_twitter.UpdateStatus(_status_id);
-    m_twitter.UpdateStatus(id_);
+        m_twitter.UpdateStatus(_status_id);
 	CloseDialNet();
 
 }

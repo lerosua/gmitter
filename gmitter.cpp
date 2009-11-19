@@ -34,7 +34,12 @@ bool GMitter::Login(const std::string& account,const std::string& password)
 	tw_uname=account;
 	tw_pass = password;
 
-	return true;
+
+	std::string res=tw_api+"/account/verify_credentials.json";
+	sGet(res.c_str());
+	return GetNetStatus();
+
+	//return true;
 }
 
 void GMitter::OnBegin(const happyhttp::Response* r, void* userdata) {
@@ -128,6 +133,7 @@ void GMitter::SetStatus(const std::string& mes)
 
 	tw_request = 0x1;
 
+	std::string url_ = tw_api+"/statuses/update.xml";
     string params = "status=" + toPercent(mes)+ "&source=_gmitter_";
     int len = params.length();
 
@@ -135,13 +141,13 @@ void GMitter::SetStatus(const std::string& mes)
 	string tmp;
     tmp = tw_uname + ':' + tw_pass;
     enc=base64_encode(tmp);
-    happyhttp::Connection conn("li2z.cn", 80);
-    //happyhttp::Connection conn("lfeng.cn",80);
+    happyhttp::Connection conn(tw_host.c_str(),80);
+    //happyhttp::Connection conn("li2z.cn", 80);
     //conn.setcallbacks(OnBegin, 0, OnComplete, 0);
     conn.setcallbacks(&GMitter::OnBegin,0,&GMitter::OnComplete,this);
 
-    conn.putrequest("POST", "/t/statuses/update.xml");
-    //conn.putrequest("POST", "/api/statuses/update.xml");
+    conn.putrequest("POST",url_.c_str());
+    //conn.putrequest("POST", "/t/statuses/update.xml");
     conn.putheader("Authorization", "Basic " + enc);
     conn.putheader("Accept", "*/*");
     conn.putheader("Accept-Charset", "utf-8");
@@ -171,7 +177,7 @@ void GMitter::sPost(std::string where,std::string params)
     string tmp;
     tmp = tw_uname + ':' + tw_pass;
     enc=base64_encode(tmp);
-    happyhttp::Connection conn("li2z.cn", 80);
+    happyhttp::Connection conn(tw_host.c_str(), 80);
     //conn.setcallbacks(OnBegin, 0, OnComplete, 0);
     conn.setcallbacks(&GMitter::OnBegin,0,&GMitter::OnComplete,this);
 
@@ -198,22 +204,55 @@ void GMitter::sPost(std::string where,std::string params)
 void GMitter::UpdateStatus(const std::string& mid)
 {
 	if(mid.empty()){
-		std::string res="/t/statuses/friends_timeline.json?count=10";
+		std::string res=tw_api+"/statuses/friends_timeline.json?count=30";
 		sGet(res.c_str());
 		return;
 	}
-	std::string res="/t/statuses/friends_timeline.json?since_id=";
+	std::string res=tw_api+"/statuses/friends_timeline.json?since_id=";
 	res+=mid;
 	sGet(res.c_str());
-	//sGet("/t/statuses/friends_timeline.json?count=5");
 
 }
+void GMitter::UpdateDM(const std::string& id_)
+{
+
+	if(id_.empty()){
+		std::string res=tw_api+"/direct_messages.json?count=30";
+		sGet(res.c_str());
+		return;
+	}
+	std::string res=tw_api+"/direct_messages.json?since_id=";
+	res+=id_;
+	sGet(res.c_str());
+
+}
+
+void GMitter::UpdatePublic()
+{
+
+	std::string res=tw_api+"/statuses/public_timeline.json";
+	sGet(res.c_str());
+
+}
+void GMitter::UpdateMentions(const std::string& id_)
+{
+
+	if(id_.empty()){
+		std::string res=tw_api+"/statuses/mentions.json?count=30";
+		sGet(res.c_str());
+		return;
+	}
+	std::string res=tw_api+"/statuses/mentions.json?since_id=";
+	res+=id_;
+	sGet(res.c_str());
+
+}
+
 void GMitter::sGet(std::string req)
 {
 	tw_request = 0x2;
 
-    happyhttp::Connection conn("li2z.cn", 80);
-    //conn.setcallbacks(OnBegin, OnData, OnComplete, 0);
+    happyhttp::Connection conn(tw_host.c_str(), 80);
     conn.setcallbacks(&GMitter::OnBegin,&GMitter::OnData,&GMitter::OnComplete,this);
     conn.putrequest("GET", req.c_str());
 
@@ -247,4 +286,22 @@ void GMitter::OnData(const happyhttp::Response* r, void* userdata, const unsigne
 	    outfile.write((char*)data,n);
 	    outfile.close();
     //}
+}
+void GMitter::SetAPi(const std::string& api_)
+{
+	/** http://li2z.cn/t/ */
+    size_t pos;
+    size_t zpos;
+    std::string str_;
+
+    pos = 7;
+    zpos = api_.find("http://");
+    if(zpos==std::string::npos)
+	    pos++;
+    str_ = api_.substr(pos,api_.length()-pos);
+    pos= str_.find("/");
+
+    tw_host= str_.substr(0,pos);
+    tw_api= str_.substr(pos,str_.length()-pos);
+    
 }

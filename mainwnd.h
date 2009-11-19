@@ -72,6 +72,7 @@ class MainWnd:public CMzWndEx
 	void SaveCache(const std::string& filename_);
 	void Parser(const std::string& input,int big);
 	void UpdateStatus();
+	void UpdateList();
 	void StartTimer();
 	bool getLocked() ;
 	void freeLocked();
