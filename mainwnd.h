@@ -52,7 +52,7 @@ class MainWnd:public CMzWndEx
 {
 	MZ_DECLARE_DYNAMIC(MainWnd);
 	public:
-	enum page_type { FRIEDNS_PAGE=0, STATUS_PAGE,METIONS_PAGE,MESSAGE_PAGE,FAVORITES_PAGE,PUBLIC_PAGE };
+	enum page_type { FRIEDNS_PAGE=0, STATUS_PAGE,MENTIONS_PAGE,MESSAGE_PAGE,FAVORITES_PAGE,PUBLIC_PAGE };
 	MainWnd();
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);

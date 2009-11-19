@@ -32,7 +32,7 @@
 
 MainWnd::MainWnd():_status_id("")
 		   ,_message_id("")
-		   ,_metions_id("")
+		   ,_mentions_id("")
 		   ,_favorites_id("")
 		   ,_friends_id("")
 		   ,_public_id("")
@@ -330,12 +330,12 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    }
 		    }
 		    if(1== nIndex){
-			    /** metions page*/
-			    if(_current_page>1 || METIONS_PAGE != _current_page_type){
+			    /** mentions page*/
+			    if(_current_page>1 || MENTIONS_PAGE != _current_page_type){
 				    _current_page =1;
-				    _current_page_type = METIONS_PAGE;
+				    _current_page_type = MENTIONS_PAGE;
 				    MzBeginWaitDlg(m_hWnd);
-				    LoadCache(metionsFile,_current_page);
+				    LoadCache(mentionsFile,_current_page);
 				    MzEndWaitDlg();
 			    }
 
@@ -525,8 +525,8 @@ void MainWnd::UpdateList()
 			id_ = _status_id;
 			m_twitter.UpdateStatus(id_);
 			break;
-		case METIONS_PAGE:
-			id_ = _metions_id;
+		case MENTIONS_PAGE:
+			id_ = _mentions_id;
 			m_twitter.UpdateMentions(id_);
 			break;
 		case MESSAGE_PAGE:
@@ -621,8 +621,8 @@ void MainWnd::LoadCache(page_type type_,int page_)
 		case MESSAGE_PAGE:
 			LoadCache(messageFile,page_);
 			break;
-		case METIONS_PAGE:
-			LoadCache(metionsFile,page_);
+		case MENTIONS_PAGE:
+			LoadCache(mentionsFile,page_);
 			break;
 		case FRIEDNS_PAGE:
 			LoadCache(friendsFile,page_);
@@ -713,8 +713,8 @@ void MainWnd::SaveCache(page_type type_)
 		case MESSAGE_PAGE:
 			SaveCache(messageFile);
 			break;
-		case METIONS_PAGE:
-			SaveCache(metionsFile);
+		case MENTIONS_PAGE:
+			SaveCache(mentionsFile);
 			break;
 		case FRIEDNS_PAGE:
 			SaveCache(friendsFile);
@@ -735,8 +735,13 @@ void MainWnd::SaveCache(const std::string& filename)
 	    fstream infile;
 	    infile.open(filename.c_str(),ios::in);
 	    //infile.open(updateFile,ios::in);
-	if(!infile)
-		return;
+	if(!infile){
+		//infile不存在，要新建
+		fstream pfile_;
+		pfile_.open(filename.c_str(),ios::out);
+		pfile_.close;
+	    infile.open(filename.c_str(),ios::in);
+	}
 
 	    fstream outfile;
 	    outfile.open(updateFile,ios::out|ios::app);

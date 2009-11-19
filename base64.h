@@ -10,7 +10,7 @@
 #define statusFile "\\Disk\\Program Files\\gmitter\\cache.json"
 #define messageFile  "\\Disk\\Program Files\\gmitter\\message.json"
 #define friendsFile  "\\Disk\\Program Files\\gmitter\\friends.json"
-#define metionsFile  "\\Disk\\Program Files\\gmitter\\metions.json"
+#define mentionsFile  "\\Disk\\Program Files\\gmitter\\mentions.json"
 #define favoritsFile "\\Disk\\Program Files\\gmitter\\favorits.json"
 #define publicFile   "\\Disk\\Program Files\\gmitter\\public.json"
 using namespace std;
