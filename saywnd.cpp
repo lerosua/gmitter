@@ -38,19 +38,19 @@ BOOL SayWnd::OnInitDialog()
     AddUiWin(&m_ScrollWin);
 
     m_CaptionTop.SetID(MZ_IDC_CAPTION_TOP);
-    m_CaptionTop.SetPos(0,y,GetWidth(),100);
+    m_CaptionTop.SetPos(0,y,GetWidth(),70);
     m_CaptionTop.SetText(L"GMitter");
     m_ScrollWin.AddChild(&m_CaptionTop);
 
     m_btn_clear.SetID(MZ_IDC_POST_CLEAR);
-    m_btn_clear.SetPos(5,y+10,150,50);
+    m_btn_clear.SetPos(5,y+10,120,50);
     //m_btn_clear.SetButtonType(MZC_BUTTON_GREEN);
     m_btn_clear.SetButtonType(MZC_BUTTON_WHITE_ROUND_BOTH);
     m_btn_clear.SetText(L"Clear");
     m_btn_clear.SetTextColor(RGB(200,200,200));
     m_ScrollWin.AddChild(&m_btn_clear);
 
-    y+=100;
+    y+=70;
 
     m_pEdit.SetPos(0,y,470,170);
     m_pEdit.SetID(MZ_IDC_POST_EDIT);

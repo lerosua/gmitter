@@ -135,9 +135,9 @@ void MainWnd::DrawNextItem()
 {
 	ListItem li;
 	MsgListItemData* pmlid=new MsgListItemData;
-	pmlid->StringAuthor = L"Next;
-	pmlid->StringText = L"Next;
-	pmlid->StringTime = L"Next;
+	pmlid->StringAuthor = L"Next";
+	pmlid->StringText = L"Next";
+	pmlid->StringTime = L"Next";
 
 	li.Data = pmlid;
 	//li.Text = MORE.c_str();
@@ -163,7 +163,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					m_List.SetSelectedIndex(nIndex);
 					m_List.Invalidate();
 					m_List.Update();
-					if(nIndex >= ConfIni::getPageCount()){
+					if(nIndex+1 > ConfIni::getPageCount()){
 						_current_page++;
 						MzBeginWaitDlg(m_hWnd);
 						//LoadCache(statusFile,_current_page);
@@ -422,7 +422,10 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 		MzDrawSelectedBg(hdcDst,prcItem);
 
 	//if(pItem->Text == L"Next"){
-	if(pmlid->StringAuthor == L"Next" && pmlid->StringText == L"Next")
+	if(pmlid->StringAuthor == L"Next" && pmlid->StringText == L"Next"){
+
+		HBRUSH bgBrush = CreateSolidBrush(RGB(220, 220, 220));
+		::FillRect(hdcDst, &bgRect, bgBrush);
 		MzDrawText(hdcDst,L"обр╩рЁ", prcItem,DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 		return;
 	}

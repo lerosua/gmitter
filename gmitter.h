@@ -39,7 +39,7 @@ public:
 	void UpdateMentions(const std::string& id_="");
 	void UpdateDM(const std::string& id_="");
 	void UpdatePublic();
-	void setApi(const std::string& api_);
+	void SetApi(const std::string& api_);
 private:
 	std::string tw_uname;
 	std::string tw_pass;

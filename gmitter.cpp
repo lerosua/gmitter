@@ -34,12 +34,12 @@ bool GMitter::Login(const std::string& account,const std::string& password)
 	tw_uname=account;
 	tw_pass = password;
 
-
+#if 0
 	std::string res=tw_api+"/account/verify_credentials.json";
 	sGet(res.c_str());
 	return GetNetStatus();
-
-	//return true;
+#endif
+	return true;
 }
 
 void GMitter::OnBegin(const happyhttp::Response* r, void* userdata) {
@@ -287,7 +287,7 @@ void GMitter::OnData(const happyhttp::Response* r, void* userdata, const unsigne
 	    outfile.close();
     //}
 }
-void GMitter::SetAPi(const std::string& api_)
+void GMitter::SetApi(const std::string& api_)
 {
 	/** http://li2z.cn/t/ */
     size_t pos;
