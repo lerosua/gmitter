@@ -48,8 +48,8 @@ BOOL AboutWnd::OnInitDialog()
 
     y+=50;
     m_Text.SetID(MZ_IDC_ABOUTWND_TEXT);
-    m_Text.SetPos(GetWidth()/8; y,GetWidth()/4,400);
-    m_Text.SetDrawTextFormat(DT_RIGHT|DT_VCENTER);
+    m_Text.SetPos(GetWidth()/8, y,GetWidth()*7/8,400);
+    m_Text.SetDrawTextFormat(DT_CENTER|DT_VCENTER| DT_WORDBREAK);
     m_Text.SetText(MZ_ABOUT_TEXT);
     AddUiWin(&m_Text);
     

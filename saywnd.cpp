@@ -37,7 +37,7 @@ BOOL SayWnd::OnInitDialog()
     m_ScrollWin.SetPos(0,y,GetWidth(),GetHeight()-y-MZM_HEIGHT_TEXT_TOOLBAR);
     AddUiWin(&m_ScrollWin);
 
-    m_CaptionTop.SetID(MZ_IDC_CAPTION_TOP);
+    m_CaptionTop.SetID(MZ_IDC_POST_CATION_TOP);
     m_CaptionTop.SetPos(0,y,GetWidth(),70);
     m_CaptionTop.SetText(L"GMitter");
     m_ScrollWin.AddChild(&m_CaptionTop);
@@ -72,7 +72,7 @@ BOOL SayWnd::OnInitDialog()
 
     y+=170;
 
-    m_CaptionBottom.SetID(MZ_IDC_CAPTION_BOTTOM);
+    m_CaptionBottom.SetID(MZ_IDC_POST_CAPTION_BOTTOM);
     m_CaptionBottom.SetPos(0,y,GetWidth(),60);
     m_CaptionBottom.SetText(L"140");
     m_ScrollWin.AddChild(&m_CaptionBottom);

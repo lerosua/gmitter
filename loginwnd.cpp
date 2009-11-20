@@ -36,7 +36,7 @@ BOOL LoginWnd::OnInitDialog()
     m_count = MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2;
 
     m_ScrollWin.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
-    m_ScrollWin.SetID(MZ_IDC_SCROLLWIN);
+    m_ScrollWin.SetID(MZ_IDC_LOGINWND_SCROLLWIN);
     m_ScrollWin.EnableScrollBarV(true);
     AddUiWin(&m_ScrollWin);
 
@@ -73,27 +73,35 @@ BOOL LoginWnd::OnInitDialog()
 
     int y = MZM_HEIGHT_BUTTON*3;
     m_BtnArrow.SetID(MZ_IDC_BTNARROW);
-    m_BtnArrow.SetPos(GetWidth()-70,MZM_HEIGHT_BUTTON*3,70,MZM_HEIGHT_BUTTON);
+    m_BtnArrow.SetPos(GetWidth()-70,y,70,MZM_HEIGHT_BUTTON);
     m_BtnArrow.SetButtonType(MZC_BUTTON_ARROW_RIGHT);
     m_ScrollWin.AddChild(&m_BtnArrow);
+
+    
+    m_Setingtext.SetText(L"≈‰÷√");
+    m_Setingtext.SetID(MZ_IDC_LOGINWND_SETTING_TEXT);
+	m_Setingtext.SetTextColor(RGB(200,200,200));
+    //m_Setingtext.SetPos(MZM_MARGIN_MAX-300,420,70,MZM_HEIGHT_BUTTON);
+    m_Setingtext.SetPos(GetWidth()-180,y,100,MZM_HEIGHT_BUTTON);
+    m_Setingtext.SetDrawTextFormat(DT_RIGHT|DT_VCENTER);
+    m_ScrollWin.AddChild(&m_Setingtext);
+
     y+=MZM_HEIGHT_BUTTON;
 
     m_BtnAbout.SetID(MZ_IDC_LOGINWND_ABOUTBTN);
-    m_BtnAbout.SetPos(GetWidth()-170,y,70,MZM_HEIGHT_BUTTON);
+    m_BtnAbout.SetPos(GetWidth()-70,y,70,MZM_HEIGHT_BUTTON);
     m_BtnAbout.SetButtonType(MZC_BUTTON_ARROW_RIGHT);
-    m_BtnAbout.SetText(L"About");
-    m_ScrollWin(&m_BtnAbout);
-    
-    //m_text.SetText(L"Configure");
-    m_text.SetText(L"≈‰÷√");
-    m_text.SetID(MZ_IDC_STATIC_START1);
-	m_text.SetTextColor(RGB(200,200,200));
-    //m_text.SetPos(MZM_MARGIN_MAX-300,420,70,MZM_HEIGHT_BUTTON);
-    m_text.SetPos(GetWidth()-180,MZM_HEIGHT_BUTTON*3,100,MZM_HEIGHT_BUTTON);
-    m_text.SetDrawTextFormat(DT_RIGHT|DT_VCENTER);
-    m_ScrollWin.AddChild(&m_text);
+    //m_BtnAbout.SetText(L"About");
+    m_ScrollWin.AddChild(&m_BtnAbout);
 
-    m_copywrite.SetID(MZ_IDC_COPYWIRTE);
+    m_AboutText.SetText(L"πÿ”⁄");
+    m_AboutText.SetID(MZ_IDC_LOGINWND_ABOUT_TEXT);
+    m_AboutText.SetTextColor(RGB(200,200,200));
+    m_AboutText.SetPos(GetWidth()-180,y,100,MZM_HEIGHT_BUTTON);
+    m_AboutText.SetDrawTextFormat(DT_RIGHT | DT_VCENTER);
+    m_ScrollWin.AddChild(&m_AboutText);
+
+    m_copywrite.SetID(MZ_IDC_LOGINWND_COPYWRITE);
     m_copywrite.SetPos(100,560,370,40);
     m_copywrite.SetText(COPYWRITE);
     m_copywrite.SetDrawTextFormat(DT_RIGHT|DT_VCENTER);

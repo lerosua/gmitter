@@ -51,6 +51,5 @@ class AboutWnd: public CMzWndEx
 
 };
 
-MZ_IMPLEMENT_DYNAMIC(AboutWnd)
 
 #endif

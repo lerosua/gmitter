@@ -20,14 +20,14 @@
 #include "mainwnd.h"
 #include "saywnd.h"
 #include "settingwnd.h"
+#include "aboutwnd.h"
 #include "base64.h"
-#include <ReadWriteIni.h>
-//#include "settings.h"
 
 MZ_IMPLEMENT_DYNAMIC(LoginWnd)
 MZ_IMPLEMENT_DYNAMIC(MainWnd)
 MZ_IMPLEMENT_DYNAMIC(SayWnd)
 MZ_IMPLEMENT_DYNAMIC(SettingWnd)
+MZ_IMPLEMENT_DYNAMIC(AboutWnd)
 
 
 
@@ -53,32 +53,8 @@ public:
 	// m_LoginWnd.SetShellHomekeyReturnValue(SHK_RET_APPNOEXIT_SHELLTOP);
 	    m_LoginWnd.Show();
 
-#if 0
-    if(FileExists(rcFile)){
-	    CMzString name;
-	    CMzString pass;
-	    TCHAR* s_name;
-	    TCHAR* s_pass;
-	    IniReadString(L"config",L"account",&s_name,rcFile);
-	    //wprintf(name.C_Str(),L"%s",s_name);
-	    name=s_name;
-	    IniReadString(L"config",L"password",&s_pass,rcFile);
-	    //wprintf(pass.C_Str(),L"%s",s_pass);
-	    pass=s_pass;
-		//free(s_name);
-	    //free(s_pass);
-
-		if(!name.IsEmpty()&&!pass.IsEmpty()){
-
-				m_LoginWnd.SetDefault(name.C_Str(),pass.C_Str());
-				
-		}
-;
-	    }
-#endif
 	    //m_LoginWnd.SetBgColor(RGB(0,0,0));
 
-		//m_LoginWnd.SetDefault(name.C_Str(),pass.C_Str());
     }
 
 	/* 成功则返回TRUE*/
