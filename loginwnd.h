@@ -38,6 +38,7 @@
 #define MZ_IDC_PIC	113
 #define MZ_IDC_COPYWIRTE 114
 #define MZM_HEIGHT_BUTTON 80
+#define MZ_IDC_LOGINWND_ABOUTBTN 115
 
 #define COPYWRITE L"GMitter @2009 lerosua"
 
@@ -54,6 +55,7 @@ public:
   UiSingleLineEdit m_Account;
   UiSingleLineEdit m_Pass;
   UiButton	   m_BtnArrow;
+  UiButton	   m_BtnAbout;
   UiStatic	   m_text;
   UiCaption	   m_Title;
   UiPicture	   m_Logo;

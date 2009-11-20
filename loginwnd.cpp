@@ -22,6 +22,7 @@
 #include "settingwnd.h"
 #include "resource.h"
 #include "confini.h"
+#include "aboutwnd.h"
 
 
 BOOL LoginWnd::OnInitDialog()
@@ -70,10 +71,18 @@ BOOL LoginWnd::OnInitDialog()
     //m_Pass.SetText(SINGLELINE_EDIT_STYLE_PASSWORD);
     m_ScrollWin.AddChild(&m_Pass);
 
+    int y = MZM_HEIGHT_BUTTON*3;
     m_BtnArrow.SetID(MZ_IDC_BTNARROW);
     m_BtnArrow.SetPos(GetWidth()-70,MZM_HEIGHT_BUTTON*3,70,MZM_HEIGHT_BUTTON);
     m_BtnArrow.SetButtonType(MZC_BUTTON_ARROW_RIGHT);
     m_ScrollWin.AddChild(&m_BtnArrow);
+    y+=MZM_HEIGHT_BUTTON;
+
+    m_BtnAbout.SetID(MZ_IDC_LOGINWND_ABOUTBTN);
+    m_BtnAbout.SetPos(GetWidth()-170,y,70,MZM_HEIGHT_BUTTON);
+    m_BtnAbout.SetButtonType(MZC_BUTTON_ARROW_RIGHT);
+    m_BtnAbout.SetText(L"About");
+    m_ScrollWin(&m_BtnAbout);
     
     //m_text.SetText(L"Configure");
     m_text.SetText(L"≈‰÷√");
@@ -141,7 +150,16 @@ BOOL LoginWnd::OnInitDialog()
 		m_settingwnd.SetAnimateType_Hide(m_count+1);
 		m_settingwnd.DoModal();
 
-
+      }
+      break;
+    case MZ_IDC_LOGINWND_ABOUTBTN:
+      {
+	      AboutWnd m_aboutwnd;
+		RECT rcWork = MzGetWorkArea();
+		m_aboutwnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
+		m_aboutwnd.SetAnimateType_Show(m_count);
+		m_aboutwnd.SetAnimateType_Hide(m_count+1);
+		m_aboutwnd.DoModal();
 
       }
       break;

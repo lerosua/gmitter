@@ -23,6 +23,7 @@
 #define MZ_IDC_ABOUTWND_TOOLBAR 301
 #define MZ_IDC_ABOUTWND_TEXT    302
 
+#define MZ_ABOUT_TEXT  L"GMiterr copyright @lerosua\nsupport us in lerosua@gmail.com\nThanks, we will improve this sofe"
 
 #include <mzfc_inc.h>
 
@@ -39,7 +40,7 @@ class AboutWnd: public CMzWndEx
 	private:
 		  UiPicture	   m_Logo;
 		  UiToolbar_Text m_Toolbar;
-		  UiStatic	   m_text;
+		  UiStatic	   m_Text;
 
 
 
