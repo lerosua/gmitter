@@ -358,11 +358,11 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    }
 		    if(3 == nIndex){
 			    /** favorites page*/
-			    if(_current_page > 1 || FAVORITES_PAGE != _current_page_type ){
+			    if(_current_page > 1 || PUBLIC_PAGE!= _current_page_type ){
 				    _current_page = 1;
-				    _current_page_type = FAVORITES_PAGE;
+				    _current_page_type = PUBLIC_PAGE;
 				    MzBeginWaitDlg(m_hWnd);
-				    LoadCache(favoritsFile,_current_page);
+				    LoadCache(publicFile,_current_page);
 				    MzEndWaitDlg();
 			    }
 
@@ -739,7 +739,7 @@ void MainWnd::SaveCache(const std::string& filename)
 		//infile不存在，要新建
 		fstream pfile_;
 		pfile_.open(filename.c_str(),ios::out);
-		pfile_.close;
+		pfile_.close();
 	    infile.open(filename.c_str(),ios::in);
 	}
 

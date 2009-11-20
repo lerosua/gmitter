@@ -96,7 +96,7 @@ class MainWnd:public CMzWndEx
 private:
 	std::string _status_id;
 	std::string _message_id;
-	std::string _metions_id;
+	std::string _mentions_id;
 	std::string _favorites_id;
 	std::string _friends_id;
 	std::string _public_id;
