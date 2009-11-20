@@ -179,6 +179,8 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 
 				
 				int nIndex=m_List.CalcIndexOfPos(x,y);
+				if(nIndex<0|| (nIndex+1 > ConfIni::getPageCount()))
+					break;
 				int id_ = GMUtils::popup_menu_status(m_hWnd,L"lerosua");
 				switch(id_){
 					case MZ_IDC_POPMENU_RETURN:
@@ -591,8 +593,17 @@ bool MainWnd::GetNetStatus()
 
 void MainWnd::Parser(const std::string& input,int big)
 {
-	if(0==big)
-		_status_id=getStatusId(input);
+	if(0==big){
+		if( STATUS_PAGE == _current_page_type )
+			_status_id=getStatusId(input);
+		else if( FAVORITES_PAGE == _current_page_type)
+			_favorites_id = getStatusId(input);
+		else if( MENTIONS_PAGE == _current_page_type)
+			_mentions_id = getStatusId(input);
+		else if( MESSAGE_PAGE == _current_page_type)
+			_message_id = getStatusId(input);
+		
+	}
 
 if(big>= (_current_page-1)*ConfIni::getPageCount()){
 	std::string str1;
