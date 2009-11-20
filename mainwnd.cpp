@@ -282,9 +282,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
     {
 	    case MZ_IDC_UPDATE:
 		    {
-			    wstring testmsg=L"mid = ";
-			    testmsg+=s2ws(_status_id);
-		MzMessageBoxEx(m_hWnd, testmsg.c_str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+		MzMessageBoxEx(m_hWnd, L"确定更新", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			    /* 更新*/
 			MzBeginWaitDlg(m_hWnd);
 			if(getLocked()){
@@ -768,17 +766,19 @@ void MainWnd::SaveCache(const std::string& filename)
 
 	    //rename updateFile to cacheFile
 	    string strline_;
-	    outfile.open(filename.c_str(),ios::out);
-	    infile.open(updateFile,ios::in);
+	    fstream outfile2;
+	    fstream infile2;
+	    outfile2.open(filename.c_str(),ios::out);
+	    infile2.open(updateFile,ios::in);
 	    int count_ =0;
-	    while(getline(infile,strline_)){
-		    outfile<<strline_<<endl;
+	    while(getline(infile2,strline_)){
+		    outfile2<<strline_<<endl;
 		    count_++;
 		    if(count_>100)
 			    break;
 	    }
-	    outfile.close();
-	    infile.close();
+	    outfile2.close();
+	    infile2.close();
 }
 
 

@@ -34,7 +34,7 @@ bool GMitter::Login(const std::string& account,const std::string& password)
 	tw_uname=account;
 	tw_pass = password;
 
-#if 0
+#if 1
 	std::string res=tw_api+"/account/verify_credentials.json";
 	sGet(res.c_str());
 	return GetNetStatus();
