@@ -54,6 +54,7 @@ class MainWnd:public CMzWndEx
 	public:
 	enum page_type { FRIEDNS_PAGE=0, STATUS_PAGE,MENTIONS_PAGE,MESSAGE_PAGE,FAVORITES_PAGE,PUBLIC_PAGE };
 	MainWnd();
+	~MainWnd();
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);

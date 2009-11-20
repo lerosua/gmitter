@@ -42,6 +42,11 @@ MainWnd::MainWnd():_status_id("")
 {
 
 }
+MainWnd::~MainWnd()
+{
+	CloseDialNet();
+
+}
 void MainWnd::StartTimer()
 {
 	SetTimer(m_hWnd,MZ_IDC_TIMER,180*1000,NULL);
@@ -492,6 +497,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	m_twitter.SetApi(ws2s(ConfIni::getTwitterApi()));
 
+	AutoDialNet();
 	if(m_twitter.Login(s_account,s_pass))
 		NULL;
 	else{
@@ -505,6 +511,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 	ConfIni::save();
 
 	LoadCache(statusFile,_current_page);
+	StartTimer();
 	return true;
 }
 	
@@ -513,7 +520,7 @@ void MainWnd::SendStatus(const wchar_t* msg)
 	AutoDialNet();
 	std::string status_ = ws2s_utf8(wstring(msg));
 	m_twitter.SetStatus(status_);
-	CloseDialNet();
+	//CloseDialNet();
 
 }
 void MainWnd::UpdateList()
@@ -544,18 +551,18 @@ void MainWnd::UpdateList()
 			m_twitter.UpdatePublic();
 			break;
 		default:
-			CloseDialNet();
+			//CloseDialNet();
 			return;
 	}
 
-	CloseDialNet();
+	//CloseDialNet();
 
 }
 void MainWnd::UpdateStatus()
 {
 	AutoDialNet();
         m_twitter.UpdateStatus(_status_id);
-	CloseDialNet();
+	//CloseDialNet();
 
 }
 
