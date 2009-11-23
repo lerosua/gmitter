@@ -72,6 +72,20 @@ BOOL SettingWnd::OnInitDialog()
     m_Api.SetSipMode(IM_SIP_MODE_WEB_LETTER);
     m_ScrollWin.AddChild(&m_Api);
 
+    m_Btn_inter.SetPos(0,y,GetWidth(),MZM_HEIGHT_BUTTONEX);
+    m_Btn_inter.SetID(MZ_IDC_SETTINGWND_BTN_INTER);
+    m_Btn_inter.SetText(L"update time interval");
+	wstringstream temp;
+	temp << ConfIni::getUpdateInterval() << L"Ìõ";
+    m_Btn_inter.SetText2(temp.str().c_str())
+    m_Btn_inter.SetButtonType(MZC_BUTTON_LINE_BOTTOM);
+    m_Btn_inter.EnableNotifyMessage(true);
+    m_ScrollWin.AddChild(&m_Btn_inter);
+
+	ImagingHelper* imgArrow = ImagingHelper::GetImageObject(GetMzResModuleHandle(), MZRES_IDR_PNG_ARROW_RIGHT, true);
+	m_Btn_Inter.SetImage2(imgArrow);
+	m_Btn_Inter.SetImageWidth2(imgArrow->GetImageWidth());
+	m_Btn_Inter.SetShowImage2(true);
 
     m_Toolbar.SetID(MZ_IDC_SETTINGWND_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
@@ -115,8 +129,26 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    }
 	    }
 	    break;
+	    case MZ_IDC_SETTINGWND_BTN_INTER:
+	    {
+
+			int nRet = m_setInterWnd.DoModal();
+			ConfIni::setUpdateInterval(nRet);
+			update_inter_count();
+
+	    }
+	    break;
 
 	}
 }
 
 
+void SettingWnd::update_inter_count()
+{
+	wstringstream temp;
+	temp << ConfIni::getUpdateInterval() << L"Ìõ";
+	m_Btn_Inter.SetText2(temp.str().c_str());
+	m_Btn_Inter.Invalidate();
+	m_Btn_Inter.Update();
+
+}

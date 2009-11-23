@@ -20,6 +20,8 @@
 #define  SETTINGWND_FILE_HEADER_INC
 
 #include <mzfc_inc.h>
+#include "setinterwnd.h"
+
 #define MZ_IDC_SETTINGWND_SCROLLWIN 900
 #define MZ_IDC_SETTINGWND_TOOLBAR 901
 #define MZ_IDC_SETTINGWND_CAPTION 907
@@ -28,6 +30,7 @@
 #define MZ_IDC_SETTINGWND_BTN_TEXT 910
 #define MZ_IDC_SETTINGWND_BTN_API  911
 #define MZ_IDC_SETTINGWND_CAPTION_API 912
+#define MZ_IDC_SETTINGWND_BTN_INTER 913
 
 
 class SettingWnd:public CMzWndEx
@@ -36,6 +39,7 @@ class SettingWnd:public CMzWndEx
 	public:
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
+	void update_inter_count();
 
 	protected:
 	UiScrollWin m_ScrollWin;
@@ -47,7 +51,11 @@ class SettingWnd:public CMzWndEx
 	UiStatic	m_BSP_Text;
 	UiCaption m_CaptionApi;
 	UiSingleLineEdit m_Api;
-	UiCaption m_CaptionInterval;
+	//UiCaption m_CaptionInterval;
+	UiButtonEx m_Btn_inter;
+
+	SetInterWnd  m_setInterWnd;
+	
 	
 	
 };

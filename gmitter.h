@@ -46,6 +46,7 @@ private:
 	std::string tw_version;
 	std::string tw_host;
 	std::string tw_api;
+	std::string tw_source;
 	int tw_request; // set get/post request
 	static int status;
 	/** net status,0 is ok,~0 is fail*/

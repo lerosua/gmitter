@@ -27,6 +27,7 @@ GMitter::GMitter()
 	tw_pass="bones7456";
 	tw_version="1.0";
 	tw_request=0;
+	tw_source="EchoFon";
 }
 
 bool GMitter::Login(const std::string& account,const std::string& password)
@@ -134,7 +135,7 @@ void GMitter::SetStatus(const std::string& mes)
 	tw_request = 0x1;
 
 	std::string url_ = tw_api+"/statuses/update.xml";
-    string params = "status=" + toPercent(mes)+ "&source=_gmitter_";
+    string params = "status=" + toPercent(mes)+ "&source="+tw_source;
     int len = params.length();
 
     string enc;
