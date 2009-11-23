@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  2009å¹´11æœˆ23æ—¥ 13æ—¶11åˆ†27ç§’
+ *        Created:  2009Äê11ÔÂ23ÈÕ 13Ê±11·Ö27Ãë
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -48,7 +48,7 @@ BOOL SetInterWnd::OnInitDialog()
 			num=3;
 		else
 			num=(i-1)*5+5;
-		temp << num << L"tiao";
+		temp << num << L"·ÖÖÓ";
 		m_btnCount[i].SetText(temp.str().c_str());
 		m_btnCount[i].SetButtonType(MZC_BUTTON_LINE_BOTTOM);
 		m_btnCount[i].EnableNotifyMessage(true);
@@ -61,7 +61,7 @@ BOOL SetInterWnd::OnInitDialog()
 
 	m_toolbar.SetID(MZ_IDC_SETINTERWND_TOOLBAR);
 	m_toolbar.SetPos(0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR);
-	m_toolbar.SetButton(0, true, true, L"Back");
+	m_toolbar.SetButton(0, true, true, L"·µ»Ø");
 	m_toolbar.EnableLeftArrow(true);
 	m_toolbar.EnableNotifyMessage(true);
 	AddUiWin(&m_toolbar);
@@ -96,7 +96,7 @@ void SetInterWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case MZ_IDC_SETINTERWND_TOOLBAR:
-		if (0 == index)			// ä¿å­˜è®¾ç½®å¹¶è¿”å›ž
+		if (0 == index)			// ±£´æÉèÖÃ²¢·µ»Ø
 			EndModal(_count);
 		break;
 	}

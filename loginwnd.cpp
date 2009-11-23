@@ -109,9 +109,9 @@ BOOL LoginWnd::OnInitDialog()
 
 	// 初始化文字工具条，并添加到窗口中
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
-    m_Toolbar.SetButton(0, true, true, L"Exit");
+    m_Toolbar.SetButton(0, true, true, L"退出");
     //m_Toolbar.SetButton(1, true, true, L"Menu");
-    m_Toolbar.SetButton(2, true, true, L"Login");
+    m_Toolbar.SetButton(2, true, true, L"登录");
     m_Toolbar.SetID(MZ_IDC_TOOLBAR1);
     AddUiWin(&m_Toolbar);
     

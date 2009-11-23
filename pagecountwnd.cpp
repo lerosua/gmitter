@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  2009å¹´11æœˆ23æ—¥ 13æ—¶11åˆ†27ç§’
+ *        Created:  2009Äê11ÔÂ23ÈÕ 13Ê±11·Ö27Ãë
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -42,7 +42,7 @@ BOOL PageCountWnd::OnInitDialog()
 	    for(int i=0;i < _MAXP; i++){
 		    m_btnCount[i].SetPos(0,MZM_HEIGHT_BUTTONEX*i,GetWidth(),MZM_HEIGHT_BUTTONEX);
 		wstringstream temp;
-		temp << i * 5 + 10 << L"tiao";
+		temp << i * 5 + 10 << L"Ìõ";
 		m_btnCount[i].SetText(temp.str().c_str());
 		m_btnCount[i].SetButtonType(MZC_BUTTON_LINE_BOTTOM);
 		m_btnCount[i].EnableNotifyMessage(true);
@@ -55,7 +55,7 @@ BOOL PageCountWnd::OnInitDialog()
 
 	m_toolbar.SetID(MZ_IDC_PAGECOUNT_TOOLBAR);
 	m_toolbar.SetPos(0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR);
-	m_toolbar.SetButton(0, true, true, L"Back");
+	m_toolbar.SetButton(0, true, true, L"·µ»Ø");
 	m_toolbar.EnableLeftArrow(true);
 	m_toolbar.EnableNotifyMessage(true);
 	AddUiWin(&m_toolbar);
@@ -95,7 +95,7 @@ void PageCountWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case MZ_IDC_PAGECOUNT_TOOLBAR:
-		if (0 == index)			// ä¿å­˜è®¾ç½®å¹¶è¿”å›ž
+		if (0 == index)			// ±£´æÉèÖÃ²¢·µ»Ø
 			EndModal(_count);
 		break;
 	}

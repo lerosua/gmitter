@@ -73,11 +73,13 @@ BOOL SettingWnd::OnInitDialog()
     m_Api.SetSipMode(IM_SIP_MODE_WEB_LETTER);
     m_ScrollWin.AddChild(&m_Api);
 
+    y+=MZM_HEIGHT_BUTTONEX;
+
     m_Btn_inter.SetPos(0,y,GetWidth(),MZM_HEIGHT_BUTTONEX);
     m_Btn_inter.SetID(MZ_IDC_SETTINGWND_BTN_INTER);
-    m_Btn_inter.SetText(L"update time interval");
+    m_Btn_inter.SetText(L"更新间隔");
 	wstringstream temp;
-	temp << ConfIni::getUpdateInterval() << L"条";
+	temp << ConfIni::getUpdateInterval() << L"分钟";
     m_Btn_inter.SetText2(temp.str().c_str());
     m_Btn_inter.SetButtonType(MZC_BUTTON_LINE_BOTTOM);
     m_Btn_inter.EnableNotifyMessage(true);
@@ -92,13 +94,18 @@ BOOL SettingWnd::OnInitDialog()
 
     m_Btn_pagecount.SetPos(0,y,GetWidth(),MZM_HEIGHT_BUTTONEX);
     m_Btn_pagecount.SetID(MZ_IDC_SETTINGWND_BTN_PAGECOUNT);
-    m_Btn_pagecount.SetText(L"Page Count");
+    m_Btn_pagecount.SetText(L"每页消息");
     wstringstream temp_page;
     temp_page<<ConfIni::getPageCount()<<L"条";
     m_Btn_pagecount.SetText2(temp_page.str().c_str());
     m_Btn_pagecount.SetButtonType(MZC_BUTTON_LINE_BOTTOM);
     m_Btn_pagecount.EnableNotifyMessage(true);
     m_ScrollWin.AddChild(&m_Btn_pagecount);
+
+	ImagingHelper* imgArrow_ = ImagingHelper::GetImageObject(GetMzResModuleHandle(), MZRES_IDR_PNG_ARROW_RIGHT, true);
+    m_Btn_pagecount.SetImage2(imgArrow_);
+    m_Btn_pagecount.SetImageWidth2(imgArrow_->GetImageWidth());
+    m_Btn_pagecount.SetShowImage2(true);
 
     m_Toolbar.SetID(MZ_IDC_SETTINGWND_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
@@ -111,6 +118,22 @@ BOOL SettingWnd::OnInitDialog()
     if(ConfIni::isRememberPassword())
 	    m_BtnSP.SetState(MZCS_BUTTON_PRESSED);
     m_Api.SetText(ConfIni::getTwitterApi().c_str());
+
+		RECT rcWork = MzGetWorkArea();
+		m_setInterWnd.set_select(ConfIni::getUpdateInterval());
+		m_setInterWnd.CreateModalDialog(rcWork.left, rcWork.top, GetWidth(), GetHeight(), m_hWnd);
+		m_setInterWnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
+		m_setInterWnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
+		m_setInterWnd.select();
+
+		RECT rcWork_ = MzGetWorkArea();
+		m_pagecountwnd.set_select(ConfIni::getPageCount());
+		m_pagecountwnd.CreateModalDialog(rcWork_.left, rcWork_.top, GetWidth(), GetHeight(), m_hWnd);
+		m_pagecountwnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
+		m_pagecountwnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
+		m_pagecountwnd.select();
+
+
     return TRUE;
 
 }
@@ -144,13 +167,10 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    break;
 	    case MZ_IDC_SETTINGWND_BTN_INTER:
 	    {
-		RECT rcWork = MzGetWorkArea();
-		m_setInterWnd.set_select(ConfIni::getUpdateInterval());
-		m_setInterWnd.CreateModalDialog(rcWork.left, rcWork.top, GetWidth(), GetHeight(), m_hWnd);
-		m_setInterWnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
-		m_setInterWnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
 
 			int nRet = m_setInterWnd.DoModal();
+			if( 0 ==nRet)
+				nRet=3;
 			ConfIni::setUpdateInterval(nRet);
 			update_inter_count();
 
@@ -158,11 +178,6 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    break;
 	    case MZ_IDC_SETTINGWND_BTN_PAGECOUNT:
 	    {
-		RECT rcWork = MzGetWorkArea();
-		m_pagecountwnd.set_select(ConfIni::getPageCount());
-		m_pagecountwnd.CreateModalDialog(rcWork.left, rcWork.top, GetWidth(), GetHeight(), m_hWnd);
-		m_pagecountwnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
-		m_pagecountwnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
 		    int nRet= m_pagecountwnd.DoModal();
 		    ConfIni::setPageCount(nRet);
 		    update_page_count();
