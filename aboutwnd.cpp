@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  2009å¹´11æœˆ20æ—¥ 16æ—¶41åˆ†25ç§’
+ *        Created:  2009Äê11ÔÂ20ÈÕ 16Ê±41·Ö25Ãë
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -55,7 +55,7 @@ BOOL AboutWnd::OnInitDialog()
     
     m_Toolbar.SetID(MZ_IDC_ABOUTWND_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
-    m_Toolbar.SetButton(0,true,true,L"Back");
+    m_Toolbar.SetButton(0,true,true,L"·µ»Ø");
     AddUiWin(&m_Toolbar);
 
     return TRUE;

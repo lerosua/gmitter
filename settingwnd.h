@@ -33,6 +33,7 @@
 #define MZ_IDC_SETTINGWND_CAPTION_API 912
 #define MZ_IDC_SETTINGWND_BTN_INTER 913
 #define MZ_IDC_SETTINGWND_BTN_PAGECOUNT 914
+#define MZ_IDC_SETTINGWND_CAPTION_SHOW 915
 
 class SettingWnd:public CMzWndEx
 {
@@ -53,7 +54,7 @@ class SettingWnd:public CMzWndEx
 	UiStatic	m_BSP_Text;
 	UiCaption m_CaptionApi;
 	UiSingleLineEdit m_Api;
-	//UiCaption m_CaptionInterval;
+	UiCaption m_Captionshow;
 	UiButtonEx m_Btn_inter;
 	UiButtonEx m_Btn_pagecount;
 

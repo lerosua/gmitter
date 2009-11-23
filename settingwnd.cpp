@@ -60,6 +60,7 @@ BOOL SettingWnd::OnInitDialog()
     
     m_CaptionApi.SetID(MZ_IDC_SETTINGWND_CAPTION_API);
     m_CaptionApi.SetPos(0,y,GetWidth(),MZM_HEIGHT_CAPTION);
+    m_CaptionApi.SetText(L"代理地址设置");
     m_ScrollWin.AddChild(&m_CaptionApi);
 
     y+=MZM_HEIGHT_CAPTION;
@@ -75,6 +76,11 @@ BOOL SettingWnd::OnInitDialog()
 
     y+=MZM_HEIGHT_BUTTONEX;
 
+    m_Captionshow.SetID(MZ_IDC_SETTINGWND_CAPTION_SHOW);
+    m_Captionshow.SetPos(0,y,GetWidth(),MZM_HEIGHT_CAPTION);
+    m_Captionshow.SetText(L"常用配置");
+    m_ScrollWin.AddChild(&m_Captionshow);
+    y+=MZM_HEIGHT_CAPTION;
     m_Btn_inter.SetPos(0,y,GetWidth(),MZM_HEIGHT_BUTTONEX);
     m_Btn_inter.SetID(MZ_IDC_SETTINGWND_BTN_INTER);
     m_Btn_inter.SetText(L"更新间隔");

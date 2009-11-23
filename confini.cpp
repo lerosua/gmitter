@@ -16,6 +16,8 @@
  * =====================================================================================
  */
 
+#include <sstream>
+#include <stdlib.h>
 #include "confini.h"
 #include "base64.h"
 
@@ -65,12 +67,19 @@ void ConfIni::save()
     rc_File.open(rcFile, ifstream::out);
     if (rc_File.is_open()) {
         rc_File << "Username = " << base64_encode(ws2s(_account)) << endl;
-	if(_remember_password)
+	if(_remember_password){
 		rc_File << "Password = " << base64_encode(ws2s(_password)) << endl;
-	else
+		rc_File << "remember_password = true"<<endl;
+	}
+	else{
 		rc_File << "Password = " <<endl;
+		rc_File << "remember_password = false"<<endl;
+	}
+	
 
 	rc_File << "Twitter_api = "<<ws2s(_twitter_api)<<endl;
+	rc_File << "update_interval = "<<int2string(_update_interval)<<endl;
+	rc_File << "page_count = "<<int2string(_page_count)<<endl;
         rc_File.close();
     }
 
@@ -90,9 +99,21 @@ void ConfIni::parseString(string str) {
     if (str.find("update_interval") == 0){
 	    std::string str_inter_;
 	    str_inter_ = str.substr(pos+1,str.length()-pos);
+	    _update_interval=atoi(str_inter_.c_str());
+    }
+    if(str.find("page_count") ==0){
+	    std::string str_inter_;
+	    str_inter_ = str.substr(pos+1,str.length()-pos);
+	    _page_count = atoi(str_inter_.c_str());
     }
 }
 
+string ConfIni::int2string(int num_)
+{
+	stringstream ss;
+	ss<<num_;
+	return ss.str();
+}
 
 wstring ConfIni::_account=L"";
 wstring ConfIni::_password=L"";

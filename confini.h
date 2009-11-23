@@ -54,6 +54,7 @@ class ConfIni
 
 		static int getPageCount() { return _page_count; }
 		static void setPageCount(int count_){ _page_count = count_ ; }
+		static string int2string(int num_);
 	private:
 		static wstring _account;
 		static wstring _password;
@@ -61,21 +62,6 @@ class ConfIni
 		static int _remember_password;
 		static int _update_interval;
 		static int _page_count;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 };

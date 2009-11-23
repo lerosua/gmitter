@@ -42,13 +42,6 @@ class AboutWnd: public CMzWndEx
 		  UiToolbar_Text m_Toolbar;
 		  UiStatic	   m_Text;
 
-
-
-
-
-
-
-
 };
 
 
