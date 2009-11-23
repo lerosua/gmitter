@@ -20,6 +20,8 @@
 #include "gmitter.h"
 #include <iostream>
 #include "mainwnd.h"
+#include "Mzfc\ConvertHelper.h"
+
 
 SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
 			     ,m_max_char(140)
@@ -84,9 +86,9 @@ BOOL SayWnd::OnInitDialog()
 
     m_Toolbar.SetID(MZ_IDC_POST_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
-    m_Toolbar.SetButton(0,true,true,L"Exit");
+    m_Toolbar.SetButton(0,true,true,L"ÍË³ö");
     m_Toolbar.SetButton(1,true,true,Int2String(m_max_char));
-    m_Toolbar.SetButton(2,true,true,L"Send");
+    m_Toolbar.SetButton(2,true,true,L"·¢ËÍ");
     AddUiWin(&m_Toolbar);
 
     
@@ -130,12 +132,12 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				if(m_pwnd.GetNetStatus()){
 
 					//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
-					MzAutoMsgBoxEx(m_hWnd, L"Success");
+					MzAutoMsgBoxEx(m_hWnd, L"·¢ËÍ³É¹¦");
 					m_pwnd.AddPostMsg(str.C_Str());
 					this->EndModal(ID_OK);
 				}
 				else
-					MzAutoMsgBoxEx(m_hWnd, L"·¢ËÍÊ§°Ü", L"");
+					MzAutoMsgBoxEx(m_hWnd, L"·¢ËÍÊ§°Ü");
 					//MzMessageBoxEx(m_hWnd, L"·¢ËÍÊ§°Ü", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 					
 
@@ -159,7 +161,7 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 LRESULT SayWnd::MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam)
 {
 	switch(message){
-		case MZ_UIMULTILINEEDIT_TEXT_CHANGE:
+		case MZ_WM_UIMULTILINEEDIT_TEXT_CHANGE:
 			m_Toolbar.SetButton(1,true,true,Int2String(m_max_char - m_pEdit.GetCharCount()));
 			m_Toolbar.Invalidate();
 			m_Toolbar.Update();

@@ -18,7 +18,8 @@
 
 #include "settingwnd.h"
 #include "confini.h"
-
+#include <sstream>
+using namespace std;
 
 BOOL SettingWnd::OnInitDialog()
 {
@@ -77,15 +78,15 @@ BOOL SettingWnd::OnInitDialog()
     m_Btn_inter.SetText(L"update time interval");
 	wstringstream temp;
 	temp << ConfIni::getUpdateInterval() << L"条";
-    m_Btn_inter.SetText2(temp.str().c_str())
+    m_Btn_inter.SetText2(temp.str().c_str());
     m_Btn_inter.SetButtonType(MZC_BUTTON_LINE_BOTTOM);
     m_Btn_inter.EnableNotifyMessage(true);
     m_ScrollWin.AddChild(&m_Btn_inter);
 
 	ImagingHelper* imgArrow = ImagingHelper::GetImageObject(GetMzResModuleHandle(), MZRES_IDR_PNG_ARROW_RIGHT, true);
-	m_Btn_Inter.SetImage2(imgArrow);
-	m_Btn_Inter.SetImageWidth2(imgArrow->GetImageWidth());
-	m_Btn_Inter.SetShowImage2(true);
+	m_Btn_inter.SetImage2(imgArrow);
+	m_Btn_inter.SetImageWidth2(imgArrow->GetImageWidth());
+	m_Btn_inter.SetShowImage2(true);
 
     y+=MZM_HEIGHT_BUTTONEX;
 
@@ -134,7 +135,7 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    ConfIni::save();
 			    
 			    CMzString str(256);
-			    wsprintf(str.C_Str(),L"The system Save the configure");
+			    wsprintf(str.C_Str(),L"配置保存中");
 			MzAutoMsgBoxEx(m_hWnd, str.C_Str());
 			    EndModal(ID_OK);
 
@@ -144,7 +145,7 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    case MZ_IDC_SETTINGWND_BTN_INTER:
 	    {
 		RECT rcWork = MzGetWorkArea();
-		m_setInterWnd.set_selecte(ConfIni::getUpdateInterval());
+		m_setInterWnd.set_select(ConfIni::getUpdateInterval());
 		m_setInterWnd.CreateModalDialog(rcWork.left, rcWork.top, GetWidth(), GetHeight(), m_hWnd);
 		m_setInterWnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
 		m_setInterWnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
@@ -158,7 +159,7 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    case MZ_IDC_SETTINGWND_BTN_PAGECOUNT:
 	    {
 		RECT rcWork = MzGetWorkArea();
-		m_pagecountwnd.set_selecte(ConfIni::getPageCount());
+		m_pagecountwnd.set_select(ConfIni::getPageCount());
 		m_pagecountwnd.CreateModalDialog(rcWork.left, rcWork.top, GetWidth(), GetHeight(), m_hWnd);
 		m_pagecountwnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
 		m_pagecountwnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
@@ -175,10 +176,10 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 void SettingWnd::update_inter_count()
 {
 	wstringstream temp;
-	temp << ConfIni::getUpdateInterval() << L"条";
-	m_Btn_Inter.SetText2(temp.str().c_str());
-	m_Btn_Inter.Invalidate();
-	m_Btn_Inter.Update();
+	temp << ConfIni::getUpdateInterval() << L"分钟";
+	m_Btn_inter.SetText2(temp.str().c_str());
+	m_Btn_inter.Invalidate();
+	m_Btn_inter.Update();
 
 }
 void SettingWnd::update_page_count()

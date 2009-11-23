@@ -23,11 +23,12 @@
 
 #define MZ_IDC_PAGECOUNT_SCROLLWND  930
 #define MZ_IDC_PAGECOUNT_TOOLBAR    931
-#define MZ_IDC_PAGECOUNT_BTN_3      932
-#define MZ_IDC_PAGECOUNT_BTN_5      933
 #define MZ_IDC_PAGECOUNT_BTN_10      934
 #define MZ_IDC_PAGECOUNT_BTN_15      935
-
+#define MZ_IDC_PAGECOUNT_BTN_20      936
+#define MZ_IDC_PAGECOUNT_BTN_25      937
+#define MZ_IDC_PAGECOUNT_BTN_30      938
+#define _MAXP  5
 class PageCountWnd:public CMzWndEx
 {
 
@@ -35,14 +36,14 @@ class PageCountWnd:public CMzWndEx
 	public:
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
-	void set_select(const int count_);
-
+	void set_select(const int count_){ _count = count_; };
+	void select();
 
 	protected:
 	UiScrollWin m_ScrollWin;
-	UiToolbar_Text m_Toolbar;
-	static int _MAX=4;
-	UiButtonEx m_btnCount[_MAX];
+	UiToolbar_Text m_toolbar;
+	
+	UiButtonEx m_btnCount[_MAXP];
 	int	_count;
 
 

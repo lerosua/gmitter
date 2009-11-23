@@ -226,7 +226,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pagecountwnd.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\saywnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\setinterwnd.cpp"
 				>
 			</File>
 			<File
@@ -292,11 +300,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pagecountwnd.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
 				RelativePath=".\saywnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\setinterwnd.h"
 				>
 			</File>
 			<File

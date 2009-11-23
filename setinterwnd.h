@@ -23,10 +23,10 @@
 #define MZ_IDC_SETINTERWND_SCROLLWIN 920
 #define MZ_IDC_SETINTERWND_BTN_10    921
 #define MZ_IDC_SETINTERWND_BTN_15    922
-#define MZ_IDC_SETINTERWND_BTN_20    923
-#define MZ_IDC_SETINTERWND_BTN_30    924
-#define MZ_IDC_SETINTERWND_TOOLBAR   925
-
+#define MZ_IDC_SETINTERWND_BTN_5    924
+#define MZ_IDC_SETINTERWND_BTN_3    925
+#define MZ_IDC_SETINTERWND_TOOLBAR   926
+#define _MAXT  4
 
 class SetInterWnd:public CMzWndEx
 {
@@ -34,13 +34,13 @@ class SetInterWnd:public CMzWndEx
 	public:
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
-	void set_select(const int count_){ _count = count_; }
-
+	void set_select(const int count_);
+	void select();
 	protected:
 	UiScrollWin m_ScrollWin;
-	UiToolbar_Text m_Toolbar;
-	static int _MAX=5;
-	UiButtonEx m_btnCount[_MAX];
+	UiToolbar_Text m_toolbar;
+	
+	UiButtonEx m_btnCount[_MAXT];
 	int	_count;
 
 

@@ -32,7 +32,7 @@
 #define MZ_IDC_SETTINGWND_BTN_API  911
 #define MZ_IDC_SETTINGWND_CAPTION_API 912
 #define MZ_IDC_SETTINGWND_BTN_INTER 913
-
+#define MZ_IDC_SETTINGWND_BTN_PAGECOUNT 914
 
 class SettingWnd:public CMzWndEx
 {
@@ -41,6 +41,7 @@ class SettingWnd:public CMzWndEx
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	void update_inter_count();
+	void update_page_count();
 
 	protected:
 	UiScrollWin m_ScrollWin;
@@ -57,7 +58,7 @@ class SettingWnd:public CMzWndEx
 	UiButtonEx m_Btn_pagecount;
 
 	PageCountWnd  m_pagecountwnd;
-	SettingWnd    m_setInterWnd;
+	SetInterWnd    m_setInterWnd;
 	
 	
 	
