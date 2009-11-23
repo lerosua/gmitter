@@ -36,20 +36,21 @@ class SayWnd:public CMzWndEx
 	SayWnd(MainWnd&);
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
-	virtual void OnChar(TCHAR chCharCOde, LPARAM lKeyData);
+	virtual LRESULT MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam);
 	void SetText(const std::wstring& str_);
 	
 	protected:
 	UiToolbar_Text m_Toolbar;
 	UiEdit m_pEdit;
 	UiCaption m_CaptionTop;
-	UiCaption m_CaptionBottom;
+	//UiCaption m_CaptionBottom;
 	UiScrollWin m_ScrollWin;
 	//UiButton_Image m_btn_clear;
 	UiButton m_btn_clear;
 
 	private:
 	MainWnd& m_pwnd;
+	int m_max_char;
 	
 };
 

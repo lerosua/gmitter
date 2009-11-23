@@ -22,6 +22,7 @@
 #include "mainwnd.h"
 
 SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
+			     ,m_max_char(140)
 {
 }
 
@@ -72,16 +73,19 @@ BOOL SayWnd::OnInitDialog()
 
     y+=170;
 
+    /*
     m_CaptionBottom.SetID(MZ_IDC_POST_CAPTION_BOTTOM);
     m_CaptionBottom.SetPos(0,y,GetWidth(),60);
     m_CaptionBottom.SetText(L"140");
     m_ScrollWin.AddChild(&m_CaptionBottom);
+    */
 
 
 
     m_Toolbar.SetID(MZ_IDC_POST_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0,true,true,L"Exit");
+    m_Toolbar.SetButton(1,true,true,Int2String(m_max_char));
     m_Toolbar.SetButton(2,true,true,L"Send");
     AddUiWin(&m_Toolbar);
 
@@ -125,12 +129,15 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				MzEndWaitDlg();
 				if(m_pwnd.GetNetStatus()){
 
-					MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
-					//m_pwnd.AddMsg(L"lerosua",str.C_Str());
+					//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+					MzAutoMsgBoxEx(m_hWnd, L"Success");
+					m_pwnd.AddPostMsg(str.C_Str());
 					this->EndModal(ID_OK);
 				}
 				else
-					MzMessageBoxEx(m_hWnd, L"∑¢ÀÕ ß∞‹", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+					MzAutoMsgBoxEx(m_hWnd, L"∑¢ÀÕ ß∞‹", L"");
+					//MzMessageBoxEx(m_hWnd, L"∑¢ÀÕ ß∞‹", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+					
 
 		    }
 	    }
@@ -149,17 +156,21 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 }
 
 
-void SayWnd::OnChar(TCHAR chCharCOde, LPARAM lKeyData)
+LRESULT SayWnd::MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam)
 {
-	size_t num=140-m_pEdit.GetText().Length();
+	switch(message){
+		case MZ_UIMULTILINEEDIT_TEXT_CHANGE:
+			m_Toolbar.SetButton(1,true,true,Int2String(m_max_char - m_pEdit.GetCharCount()));
+			m_Toolbar.Invalidate();
+			m_Toolbar.Update();
 
-	CMzString count_(num);
-	//m_CaptionBottom.SetText(count_.C_Str());
- 
-	m_CaptionBottom.SetText(L"edit");
-	m_CaptionBottom.Update();
+			break;
+	}
+
+	return CMzWndEx::MzDefWndProc(message, wParam, lParam);
 
 }
+
 void SayWnd::SetText(const wstring& str_)
 {
 	m_pEdit.SetText(str_.c_str());

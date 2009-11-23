@@ -116,6 +116,12 @@ BOOL MainWnd::OnInitDialog()
     return TRUE;
 }
 
+void MainWnd::AddPostMsg(wchar_t* msg_)
+{
+
+	AddMsg(m_account.C_Str(),msg_,L"Just now");
+}
+
 void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 {
 	ListItem li;
@@ -287,7 +293,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
     {
 	    case MZ_IDC_UPDATE:
 		    {
-		MzMessageBoxEx(m_hWnd, L"确定更新", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+			//MzMessageBoxEx(m_hWnd, L"确定更新", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 			    /* 更新*/
 			MzBeginWaitDlg(m_hWnd);
 			if(getLocked()){
@@ -510,6 +516,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	ConfIni::save();
 
+	m_account = account;
 	LoadCache(statusFile,_current_page);
 	StartTimer();
 	return true;
