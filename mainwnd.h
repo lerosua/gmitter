@@ -58,22 +58,35 @@ class MainWnd:public CMzWndEx
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	LRESULT MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam);
-	//void AddMsg(wchar_t* author,wchar_t* msg,int num=0);
+	/**
+	 * @brief 添加进列表的函数
+	 * @param author_ 发布者
+	 * @param msg_	  发布的消息
+	 * @param time_   发布的时间
+	 * @param num     用于计算最新的消息的id
+	 */
 	void AddMsg(wchar_t* author_,wchar_t* msg_,wchar_t* time_,int num=0);
+	/**
+	 * @brief 用于添加自己发布的消息
+	 */
 	void AddPostMsg(wchar_t* msg_);
+	/** 画下一页的函数*/
 	void DrawNextItem();
 	bool Login(const CMzString& account_,const CMzString& password_);
 	void SendStatus(const wchar_t* msg);
+	/** 自动拨号，打开GPRS */
 	BOOL AutoDialNet();
+	/** 如果拨了号，关闭它*/
 	void CloseDialNet();
+	/** 返回网络状态,用于调用了网络后检测它状态的*/
 	bool GetNetStatus();
-	//void LoadCache(const std::string& filename);
 	void LoadCache(const std::string& filename_,int page_);
 	void LoadCache(page_type type_,int page_);
 	void SaveCache(page_type type_);
 	void SaveCache(const std::string& filename_);
 	void Parser(const std::string& input,int big);
 	void UpdateStatus();
+	/** 更新列表，会根据当前页的类型来更新*/
 	void UpdateList();
 	void StartTimer();
 	bool getLocked() ;
