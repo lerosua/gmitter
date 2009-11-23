@@ -87,6 +87,18 @@ BOOL SettingWnd::OnInitDialog()
 	m_Btn_Inter.SetImageWidth2(imgArrow->GetImageWidth());
 	m_Btn_Inter.SetShowImage2(true);
 
+    y+=MZM_HEIGHT_BUTTONEX;
+
+    m_Btn_pagecount.SetPos(0,y,GetWidth(),MZM_HEIGHT_BUTTONEX);
+    m_Btn_pagecount.SetID(MZ_IDC_SETTINGWND_BTN_PAGECOUNT);
+    m_Btn_pagecount.SetText(L"Page Count");
+    wstringstream temp_page;
+    temp_page<<ConfIni::getPageCount()<<L"Ìõ";
+    m_Btn_pagecount.SetText2(temp_page.str().c_str());
+    m_Btn_pagecount.SetButtonType(MZC_BUTTON_LINE_BOTTOM);
+    m_Btn_pagecount.EnableNotifyMessage(true);
+    m_ScrollWin.AddChild(&m_Btn_pagecount);
+
     m_Toolbar.SetID(MZ_IDC_SETTINGWND_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     //m_Toolbar.SetButton(0,true,true,L"Cannel");
@@ -123,7 +135,7 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 			    
 			    CMzString str(256);
 			    wsprintf(str.C_Str(),L"The system Save the configure");
-			MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+			MzAutoMsgBoxEx(m_hWnd, str.C_Str());
 			    EndModal(ID_OK);
 
 		    }
@@ -131,11 +143,28 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    break;
 	    case MZ_IDC_SETTINGWND_BTN_INTER:
 	    {
+		RECT rcWork = MzGetWorkArea();
+		m_setInterWnd.set_selecte(ConfIni::getUpdateInterval());
+		m_setInterWnd.CreateModalDialog(rcWork.left, rcWork.top, GetWidth(), GetHeight(), m_hWnd);
+		m_setInterWnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
+		m_setInterWnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
 
 			int nRet = m_setInterWnd.DoModal();
 			ConfIni::setUpdateInterval(nRet);
 			update_inter_count();
 
+	    }
+	    break;
+	    case MZ_IDC_SETTINGWND_BTN_PAGECOUNT:
+	    {
+		RECT rcWork = MzGetWorkArea();
+		m_pagecountwnd.set_selecte(ConfIni::getPageCount());
+		m_pagecountwnd.CreateModalDialog(rcWork.left, rcWork.top, GetWidth(), GetHeight(), m_hWnd);
+		m_pagecountwnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
+		m_pagecountwnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
+		    int nRet= m_pagecountwnd.DoModal();
+		    ConfIni::setPageCount(nRet);
+		    update_page_count();
 	    }
 	    break;
 
@@ -151,4 +180,12 @@ void SettingWnd::update_inter_count()
 	m_Btn_Inter.Invalidate();
 	m_Btn_Inter.Update();
 
+}
+void SettingWnd::update_page_count()
+{
+	wstringstream temp;
+	temp <<ConfIni::getPageCount()<<L"Ìõ";
+	m_Btn_pagecount.SetText2(temp.str().c_str());
+	m_Btn_pagecount.Invalidate();
+	m_Btn_pagecount.Update();
 }

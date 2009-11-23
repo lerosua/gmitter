@@ -21,6 +21,7 @@
 
 #include <mzfc_inc.h>
 #include "setinterwnd.h"
+#include "pagecountwnd.h"
 
 #define MZ_IDC_SETTINGWND_SCROLLWIN 900
 #define MZ_IDC_SETTINGWND_TOOLBAR 901
@@ -53,8 +54,10 @@ class SettingWnd:public CMzWndEx
 	UiSingleLineEdit m_Api;
 	//UiCaption m_CaptionInterval;
 	UiButtonEx m_Btn_inter;
+	UiButtonEx m_Btn_pagecount;
 
-	SetInterWnd  m_setInterWnd;
+	PageCountWnd  m_pagecountwnd;
+	SettingWnd    m_setInterWnd;
 	
 	
 	

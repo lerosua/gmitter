@@ -16,10 +16,10 @@
  * =====================================================================================
  */
 
-#include "setinterwnd.h"
+#include "pagecountwnd.h"
 
 
-BOOL SetInterWnd::OnInitDialog()
+BOOL PageCountWnd::OnInitDialog()
 {
 	if (!CMzWndEx::OnInitDialog())
 	{
@@ -31,17 +31,22 @@ BOOL SetInterWnd::OnInitDialog()
 	    m_ScrollWin.EnableScrollBarV(true);
 	    AddUiWin(&m_ScrollWin);
 
-	    m_btnCount[0].SetID(MZ_IDC_SETINTERWND_BTN_10);
-	    m_btnCount[1].SetID(MZ_IDC_SETINTERWND_BTN_15);
-	    m_btnCount[2].SetID(MZ_IDC_SETINTERWND_BTN_20);
-	    m_btnCount[3].SetID(MZ_IDC_SETINTERWND_BTN_25);
-	    m_btnCount[4].SetID(MZ_IDC_SETINTERWND_BTN_30);
+	    m_btnCount[0].SetID(MZ_IDC_PAGECOUNT_BTN_3);
+	    m_btnCount[1].SetID(MZ_IDC_PAGECOUNT_BTN_5);
+	    m_btnCount[2].SetID(MZ_IDC_PAGECOUNT_BTN_10);
+	    m_btnCount[3].SetID(MZ_IDC_PAGECOUNT_BTN_15);
 
 	ImagingHelper *imgSelected = ImagingHelper::GetImageObject(GetMzResModuleHandle(), MZRES_IDR_PNG_SELECTED, true);
 	    for(int i=0;i < _MAX; i++){
 		    m_btnCount[i].SetPos(0,MZM_HEIGHT_BUTTONEX*i,GetWidth(),MZM_HEIGHT_BUTTONEX);
+		    
 		wstringstream temp;
-		temp << i * 5 + 10 << L"tiao";
+		int num;
+		if(0==i)
+			num=3;
+		else
+			num=(i-1)*5+5;
+		temp << num << L"tiao";
 		m_btnCount[i].SetText(temp.str().c_str());
 		m_btnCount[i].SetButtonType(MZC_BUTTON_LINE_BOTTOM);
 		m_btnCount[i].EnableNotifyMessage(true);
@@ -52,7 +57,7 @@ BOOL SetInterWnd::OnInitDialog()
 		m_btnCount[i].SetShowImage2(false);
 	    }
 
-	m_toolbar.SetID(MZ_IDC_SETINTERWND_TOOLBAR);
+	m_toolbar.SetID(MZ_IDC_PAGECOUNT_TOOLBAR);
 	m_toolbar.SetPos(0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR);
 	m_toolbar.SetButton(0, true, true, L"Back");
 	m_toolbar.EnableLeftArrow(true);
@@ -61,39 +66,34 @@ BOOL SetInterWnd::OnInitDialog()
 
 	return TRUE;
 }
-void SetInterWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
+void PageCountWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 {
 	UINT_PTR id = LOWORD(wParam);
 	int index = lParam;
 
 	switch (id)
 	{
-	case MZ_IDC_SETINTERWND_BTN_10:
+	case MZ_IDC_PAGECOUNT_BTN_3:
+		_count = 0;
+		select();
+		break;
+
+	case MZ_IDC_PAGECOUNT_BTN_5:
+		_count = 5;
+		select();
+		break;
+
+	case MZ_IDC_PAGECOUNT_BTN_10:
 		_count = 10;
 		select();
 		break;
 
-	case MZ_IDC_SETINTERWND_BTN_15:
+	case MZ_IDC_PAGECOUNT_BTN_15:
 		_count = 15;
 		select();
 		break;
 
-	case MZ_IDC_SETINTERWND_BTN_20:
-		_count = 20;
-		select();
-		break;
-
-	case MZ_IDC_SETINTERWND_BTN_25:
-		_count = 25;
-		select();
-		break;
-
-	case MZ_IDC_SETINTERWND_BTN_30:
-		_count = 30;
-		select();
-		break;
-
-	case MZ_IDC_SETINTERWND_TOOLBAR:
+	case MZ_IDC_PAGECOUNT_TOOLBAR:
 		if (0 == index)			// 保存设置并返回
 		{
 			EndModal(_count);
@@ -103,11 +103,11 @@ void SetInterWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-void SetInterWnd::select(void)
+void PageCountWnd::select(void)
 {
 	for (int i = 0; i < _MAX; i++)
 	{
-		if ((_count - 10) / 5 == i)
+		if (_count  / 5 == i)
 		{
 			m_btnCount[i].SetShowImage2(true);
 		}
@@ -121,4 +121,12 @@ void SetInterWnd::select(void)
 	UpdateWindow();
 }
 
-MZ_IMPLEMENT_DYNAMIC(SetInterWnd)
+void PageCountWnd::set_select(const int count_)
+{
+	if(3==count_)
+		_count=0;
+	else
+		_count=count_;
+
+}
+MZ_IMPLEMENT_DYNAMIC(PageCountWnd)
