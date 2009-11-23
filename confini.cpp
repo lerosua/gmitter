@@ -18,7 +18,6 @@
 
 #include "confini.h"
 #include "base64.h"
-//#include <ReadWriteIni.h>
 
 ConfIni::ConfIni()
 {
@@ -34,11 +33,6 @@ void ConfIni::init()
 {
 	std::ifstream file(rcFile);
 	if(!file){
-    //if(!FileExists(rcFile)){
-	    //IniCreateFile(rcFile);
-	//std::fstream rc_File;
-	 //   rc_File.open(rcFile, ifstream::out);
-	  //  rc_File.close();
 	    save();
     }
     else{
@@ -62,28 +56,7 @@ void ConfIni::load()
         }
 	rc_File.close();
     }
-#if 0
-	wchar_t *account = new wchar_t[64];
-	IniReadString(L"Setting", L"account", &account, rcFile);
-	_account = wstring(account);
-	delete [] account;
 
-	wchar_t* password = new wchar_t[32];
-	IniReadString(L"Setting",L"passowrd",&password,rcFile);
-	_password = wstring(password);
-	delete [] password;
-
-	/*
-	wchar_t* api = new wchar_t[64];
-	IniReadString(L"Config",L"twitter_api",&api,rcFile);
-	_twitter_api = wstring(api);
-	delete [] api;
-	*/
-
-
-	IniReadInt(L"Config", L"remember_password", &_remember_password, rcFile);
-	IniReadInt(L"Config", L"update_interval", &_update_interval,rcFile);
-#endif
 }
 
 void ConfIni::save()
@@ -92,43 +65,14 @@ void ConfIni::save()
     rc_File.open(rcFile, ifstream::out);
     if (rc_File.is_open()) {
         rc_File << "Username = " << base64_encode(ws2s(_account)) << endl;
-        rc_File << "Password = " << base64_encode(ws2s(_password)) << endl;
+	if(_remember_password)
+		rc_File << "Password = " << base64_encode(ws2s(_password)) << endl;
+	else
+		rc_File << "Password = " <<endl;
+
 	rc_File << "Twitter_api = "<<ws2s(_twitter_api)<<endl;
         rc_File.close();
     }
-#if 0
-
-	wchar_t *account = new wchar_t[_account.length() + 1];
-	memset(account, 0, sizeof(wchar_t) * (_account.length() + 1));
-	_account.copy(account, _account.length());
-	IniWriteString(L"Setting", L"account",account, rcFile);
-	delete [] account;
-
-	if (_remember_password)
-	{
-		wchar_t *password = new wchar_t[_password.length() + 1];
-		memset(password, 0, sizeof(wchar_t) * (_password.length() + 1));
-		_password.copy(password, _password.length());
-		IniWriteString(L"Setting", L"password", password, rcFile);
-		delete [] password;
-	} else
-	{
-		IniWriteString(L"Setting", L"password", L"\n", rcFile);
-	}
-
-
-
-	/*
-	wchar_t *twitter_api = new wchar_t[_twitter_api.length() + 1];
-	memset(twitter_api, 0, sizeof(wchar_t) * (_twitter_api.length() + 1));
-	_twitter_api.copy(twitter_api, _twitter_api.length());
-	IniWriteString(L"Config", L"twitter_api",twitter_api,rcFile);
-	delete [] twitter_api;
-	*/
-
-	IniWriteInt(L"Config", L"remember_password", _remember_password, rcFile);
-	IniWriteInt(L"Config", L"update_interval",_update_interval,rcFile);
-#endif
 
 }
 void ConfIni::parseString(string str) {
