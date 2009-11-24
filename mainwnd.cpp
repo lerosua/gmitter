@@ -39,6 +39,7 @@ MainWnd::MainWnd():_status_id("")
 		   ,_locked(false)
 		   ,_current_page(1)
 		   ,_current_page_type(STATUS_PAGE)
+		   ,_path("\\Disk\\Program Files\\gmitter")
 {
 
 }
@@ -181,7 +182,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					if(nIndex+1 > ConfIni::getPageCount()){
 						_current_page++;
 						MzBeginWaitDlg(m_hWnd);
-						//LoadCache(statusFile,_current_page);
+						//LoadCache(_statusFile,_current_page);
 						LoadCache(_current_page_type,_current_page);
 						MzEndWaitDlg();
 					}
@@ -340,7 +341,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				    _current_page=1;
 				    _current_page_type= STATUS_PAGE;
 				    MzBeginWaitDlg(m_hWnd);
-				    LoadCache(statusFile,_current_page);
+				    LoadCache(_statusFile,_current_page);
 				    MzEndWaitDlg();
 			    }
 		    }
@@ -350,7 +351,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				    _current_page =1;
 				    _current_page_type = MENTIONS_PAGE;
 				    MzBeginWaitDlg(m_hWnd);
-				    LoadCache(mentionsFile,_current_page);
+				    LoadCache(_mentionsFile,_current_page);
 				    MzEndWaitDlg();
 			    }
 
@@ -364,7 +365,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				    _current_page =1;
 				    _current_page_type = MESSAGE_PAGE;
 				    MzBeginWaitDlg(m_hWnd);
-				    LoadCache(messageFile,_current_page);
+				    LoadCache(_messageFile,_current_page);
 				    MzEndWaitDlg();
 			    }
 
@@ -377,7 +378,7 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				    _current_page = 1;
 				    _current_page_type = PUBLIC_PAGE;
 				    MzBeginWaitDlg(m_hWnd);
-				    LoadCache(publicFile,_current_page);
+				    LoadCache(_publicFile,_current_page);
 				    MzEndWaitDlg();
 			    }
 
@@ -498,6 +499,20 @@ int GMList::CalcItemHeight(int index)
 
 }
 
+void MainWnd::SetUserDir(const std::string& user_)
+{
+	wstring wdir_ = s2ws(_path+user_);
+	Mkdirs(wdir_.c_str());
+
+	_statusFile=_path+user_+"\\cache.json";
+	_messageFile=_path+user_+"\\message.json";
+	_favoritsFile=_path+user_+"\\favorites.json";
+	_mentionsFile=_path+user_+"\\mentions.json";
+	_publicFile=_path+user_+"\\public.json";
+	_friendsFile=_path+user_+"\\friends.json";
+	_updateFile=_path+user_+"\\update.json";
+
+}
 bool MainWnd::Login(const CMzString& account,const CMzString& password)
 {
 	std::string s_account=ws2s(account.C_Str());
@@ -509,7 +524,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	AutoDialNet();
 	if(m_twitter.Login(s_account,s_pass))
-		NULL;
+		SetUserDir(s_account);
 	else{
 		return false;
 	}
@@ -521,7 +536,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 	ConfIni::save();
 
 	m_account = account;
-	LoadCache(statusFile,_current_page);
+	LoadCache(_statusFile,_current_page);
 	StartTimer();
 	
 	m_Top.SetButton(1,true,true,m_account.C_Str());
@@ -651,22 +666,22 @@ void MainWnd::LoadCache(page_type type_,int page_)
 {
 	switch(type_){
 		case STATUS_PAGE:
-			LoadCache(statusFile,page_);
+			LoadCache(_statusFile,page_);
 			break;
 		case MESSAGE_PAGE:
-			LoadCache(messageFile,page_);
+			LoadCache(_messageFile,page_);
 			break;
 		case MENTIONS_PAGE:
-			LoadCache(mentionsFile,page_);
+			LoadCache(_mentionsFile,page_);
 			break;
 		case FRIEDNS_PAGE:
-			LoadCache(friendsFile,page_);
+			LoadCache(_friendsFile,page_);
 			break;
 		case FAVORITES_PAGE:
-			LoadCache(favoritsFile,page_);
+			LoadCache(_favoritsFile,page_);
 			break;
 		case PUBLIC_PAGE:
-			LoadCache(publicFile,page_);
+			LoadCache(_publicFile,page_);
 			break;
 		default:
 			break;
@@ -743,22 +758,22 @@ void MainWnd::SaveCache(page_type type_)
 {
 	switch(type_){
 		case STATUS_PAGE:
-			SaveCache(statusFile);
+			SaveCache(_statusFile);
 			break;
 		case MESSAGE_PAGE:
-			SaveCache(messageFile);
+			SaveCache(_messageFile);
 			break;
 		case MENTIONS_PAGE:
-			SaveCache(mentionsFile);
+			SaveCache(_mentionsFile);
 			break;
 		case FRIEDNS_PAGE:
-			SaveCache(friendsFile);
+			SaveCache(_friendsFile);
 			break;
 		case FAVORITES_PAGE:
-			SaveCache(favoritsFile);
+			SaveCache(_favoritsFile);
 			break;
 		case PUBLIC_PAGE:
-			SaveCache(publicFile);
+			SaveCache(_publicFile);
 			break;
 		default:
 			break;
@@ -769,7 +784,7 @@ void MainWnd::SaveCache(const std::string& filename)
 {
 	    fstream infile;
 	    infile.open(filename.c_str(),ios::in);
-	    //infile.open(updateFile,ios::in);
+	    //infile.open(_updateFile,ios::in);
 	if(!infile){
 		//infile不存在，要新建
 		fstream pfile_;
@@ -779,7 +794,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	}
 
 	    fstream outfile;
-	    outfile.open(updateFile,ios::out|ios::app);
+	    outfile.open(_updateFile,ios::out|ios::app);
 	    //outfile.open(filename.c_str(),ios::out|ios::app);
 	    outfile<<endl;
 		string strline;
@@ -788,14 +803,14 @@ void MainWnd::SaveCache(const std::string& filename)
 	    }
 	    outfile.close();
 	    infile.close();
-	//rename(updateFile,statusFile);
+	//rename(_updateFile,_statusFile);
 
-	    //rename updateFile to cacheFile
+	    //rename _updateFile to cacheFile
 	    string strline_;
 	    fstream outfile2;
 	    fstream infile2;
 	    outfile2.open(filename.c_str(),ios::out);
-	    infile2.open(updateFile,ios::in);
+	    infile2.open(_updateFile,ios::in);
 	    int count_ =0;
 	    while(getline(infile2,strline_)){
 		    outfile2<<strline_<<endl;
@@ -815,10 +830,10 @@ void MainWnd::SaveCache(const std::string& filename)
 		if(getLocked()){
 	   UpdateStatus();
     if(GetNetStatus()){
-	    //SaveCache(updateFile);
+	    //SaveCache(_updateFile);
 	    SaveCache(_current_page_type);
 	    if(1 == _current_page)
-		    //LoadCache(statusFile,_current_page);
+		    //LoadCache(_statusFile,_current_page);
 	    	    LoadCache(_current_page_type,_current_page);
     }
 		freeLocked();

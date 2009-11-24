@@ -238,6 +238,20 @@ bool FileExists(TCHAR* filename)
     return true;
   }
 }
+bool DirExists(const wstring& path, const wstring& folder)
+{
+	DWORD attributes = GetFileAttributes(dir(path, folder).c_str());
+	return attributes != 0xFFFFFFFF && (FILE_ATTRIBUTE_DIRECTORY & attributes) != 0;
+}
+bool Mkdirs(const wstring& folder)
+{
+	if (DirExists(folder))
+	{
+		return true;
+	}
+
+	return TRUE == CreateDirectory(folder.c_str(), NULL);
+}
 
 
 std::string getImageUrl(  const std::string& input)

@@ -79,7 +79,8 @@ class MainWnd:public CMzWndEx
 	bool getLocked() ;
 	void freeLocked();
 	virtual void OnTimer(UINT_PTR nIDEvent);
-	protected:
+	void SetUserDir(const std::string& path_);
+protected:
 	UiScrollWin m_ScrollWin;
 	UiToolbar_Icon m_Toolbar;
 	UiToolbar      m_Top;
@@ -108,7 +109,15 @@ private:
 	int _current_page;
 	
 	CMzString m_account;
-	//wstring m_pass;
+
+	std::string _statusFile;
+	std::string _messageFile;
+	std::string _friendsFile;
+	std::string _mentionsFile;
+	std::string _favoritsFile;
+	std::string _publicFile;
+	std::string _updateFile;
+	std::string _path;
 
 
 
