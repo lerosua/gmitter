@@ -36,10 +36,19 @@ BOOL SayWnd::OnInitDialog()
     }
 
     int y=0;
+    m_Toolbar_Top.SetID(MZ_IDC_POST_TOOLBAR_TOP);
+    m_Toolbar_Top.SetPos(0,y,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
+    m_Toolbar_Top.SetButton(0,true,true,L"清空");
+    m_Toolbar_Top.SetButton(1,true,true,Int2String(m_max_char));
+    m_Toolbar_Top.SetButton(2,true,true,L"插入");
+    AddUiWin(&m_Toolbar_Top);
+
+    y+=MZM_HEIGHT_TEXT_TOOLBAR;
     m_ScrollWin.SetID(MZ_IDC_POST_SCROLLWIN);
     m_ScrollWin.SetPos(0,y,GetWidth(),GetHeight()-y-MZM_HEIGHT_TEXT_TOOLBAR);
     AddUiWin(&m_ScrollWin);
-
+    
+    /*
     m_CaptionTop.SetID(MZ_IDC_POST_CATION_TOP);
     m_CaptionTop.SetPos(0,y,GetWidth(),70);
     m_CaptionTop.SetText(L"GMitter");
@@ -47,11 +56,11 @@ BOOL SayWnd::OnInitDialog()
 
     m_btn_clear.SetID(MZ_IDC_POST_CLEAR);
     m_btn_clear.SetPos(5,y+10,120,50);
-    //m_btn_clear.SetButtonType(MZC_BUTTON_GREEN);
     m_btn_clear.SetButtonType(MZC_BUTTON_WHITE_ROUND_BOTH);
     m_btn_clear.SetText(L"Clear");
     m_btn_clear.SetTextColor(RGB(200,200,200));
     m_ScrollWin.AddChild(&m_btn_clear);
+    */
 
     y+=70;
 
@@ -87,7 +96,7 @@ BOOL SayWnd::OnInitDialog()
     m_Toolbar.SetID(MZ_IDC_POST_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0,true,true,L"退出");
-    m_Toolbar.SetButton(1,true,true,Int2String(m_max_char));
+    //m_Toolbar.SetButton(1,true,true,Int2String(m_max_char));
     m_Toolbar.SetButton(2,true,true,L"发送");
     AddUiWin(&m_Toolbar);
 
@@ -144,14 +153,21 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    }
 	    }
 	    break;
-	    case MZ_IDC_POST_CLEAR:
-	    {
-		    m_pEdit.Clear();
-		    m_pEdit.Invalidate();
-		    m_pEdit.Update();
 
+	    case MZ_IDC_POST_TOOLBAR_TOP:
+	    {
+		    int nIndex=lParam;
+		    if(0 ==nIndex){
+			    m_pEdit.Clear();
+			    m_pEdit.Invalidate();
+			    m_pEdit.Update();
+		    }
+		    if(2==nIndex){
+			MzAutoMsgBoxEx(m_hWnd, L"未实现");
+		    }
 
 	    }
+	    
 	    break;
 
 	}
@@ -162,9 +178,9 @@ LRESULT SayWnd::MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam)
 {
 	switch(message){
 		case MZ_WM_UIMULTILINEEDIT_TEXT_CHANGE:
-			m_Toolbar.SetButton(1,true,true,Int2String(m_max_char - m_pEdit.GetCharCount()));
-			m_Toolbar.Invalidate();
-			m_Toolbar.Update();
+			m_Toolbar_Top.SetButton(1,true,true,Int2String(m_max_char - m_pEdit.GetCharCount()));
+			m_Toolbar_Top.Invalidate();
+			m_Toolbar_Top.Update();
 
 			break;
 	}

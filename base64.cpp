@@ -238,6 +238,20 @@ bool FileExists(TCHAR* filename)
     return true;
   }
 }
+bool DirExists(const wstring& path, const wstring& folder)
+{
+	DWORD attributes = GetFileAttributes(dir(path, folder).c_str());
+	return attributes != 0xFFFFFFFF && (FILE_ATTRIBUTE_DIRECTORY & attributes) != 0;
+}
+bool Mkdirs(const wstring& folder)
+{
+	if (DirExists(folder))
+	{
+		return true;
+	}
+
+	return TRUE == CreateDirectory(folder.c_str(), NULL);
+}
 
 
 std::string getImageUrl(  const std::string& input)
@@ -315,7 +329,8 @@ std::string getCreateTime(const std::string& input)
 		
 		t_pos = tmp.find("\",\"");
 		time_str=tmp.substr(0,t_pos);
-		return time_str;
+		//return time_str;
+		return time_str.substr(4,12);
 
 
 	}
@@ -343,4 +358,29 @@ std::string getStatusId(const std::string& input)
 	}
 	}
 	return "";
+}
+
+std::string getSource(const std::string& input)
+{
+	string time_str;
+	string tmp;
+	size_t pos = input.find("\"source\":");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+10,std::string::npos);	
+		
+		t_pos = tmp.find("\",\"");
+		time_str=tmp.substr(0,t_pos);
+		size_t h_pos=time_str.find("\">");
+		if(h_pos == std::string::npos)
+			return time_str;
+		else{
+			std::string out = time_str.substr(h_pos+2,std::string::npos);
+			size_t a_pos=out.find("</a>");
+			return out.substr(0,a_pos);
+
+		}
+	}
+	return "";
+
 }

@@ -22,7 +22,7 @@
 #include <mzfc_inc.h>
 #include "gmitter.h"
 
-#define MZ_IDC_CAPTION_TOP 130
+#define MZ_IDC_MAINWND_TOP 130
 #define MZ_IDC_TOOLBAR2 131
 #define MZ_IDC_SCROLLWIN2 132
 #define MZ_IDC_STATUS_LIST      133
@@ -92,20 +92,22 @@ class MainWnd:public CMzWndEx
 	bool getLocked() ;
 	void freeLocked();
 	virtual void OnTimer(UINT_PTR nIDEvent);
-	protected:
+	void SetUserDir(const std::string& path_);
+protected:
 	UiScrollWin m_ScrollWin;
 	UiToolbar_Icon m_Toolbar;
-	UiCaption      m_Top;
+	UiToolbar      m_Top;
+	//UiCaption      m_Top;
 	GMList		m_List;
 	GMitter		m_twitter;
 	BOOL		m_isDialConnect;
 
-	UiButton_Image m_btn_update;
-	UiButton_Image m_btn_write;
-	ImagingHelper  m_imgUpdate_normal;
-	ImagingHelper  m_imgUpdate_press;
-	ImagingHelper  m_imgWrite_normal;
-	ImagingHelper  m_imgWrite_press;
+	//UiButton_Image m_btn_update;
+	//UiButton_Image m_btn_write;
+	//ImagingHelper  m_imgUpdate_normal;
+	//ImagingHelper  m_imgUpdate_press;
+	//ImagingHelper  m_imgWrite_normal;
+	//ImagingHelper  m_imgWrite_press;
 	static const wstring MORE;
 
 private:
@@ -120,7 +122,15 @@ private:
 	int _current_page;
 	
 	CMzString m_account;
-	//wstring m_pass;
+
+	std::string _statusFile;
+	std::string _messageFile;
+	std::string _friendsFile;
+	std::string _mentionsFile;
+	std::string _favoritsFile;
+	std::string _publicFile;
+	std::string _updateFile;
+	std::string _path;
 
 
 

@@ -25,7 +25,7 @@ class GMitter
 {
 public:
 	GMitter();
-	bool Login(const std::string& account,const std::string& password);
+	bool Login(const std::string& account,const std::string& password,const std::string& source_="");
 	void SetStatus(const std::string& msg);
 	void SetStatus(const std::wstring& wmsg);
 	std::string toPercent(std::string str);
