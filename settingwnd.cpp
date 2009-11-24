@@ -113,6 +113,17 @@ BOOL SettingWnd::OnInitDialog()
     m_Btn_pagecount.SetImageWidth2(imgArrow_->GetImageWidth());
     m_Btn_pagecount.SetShowImage2(true);
 
+    y+=MZM_HEIGHT_BUTTONEX;
+    m_Btn_source.SetPos(0,y,GetWidth(),MZM_HEIGHT_BUTTONEX);
+    m_Btn_source.SetID(MZ_IDC_SETTINGWND_BTN_SOURCE);
+    m_Btn_source.SetText(L"自定义来源");
+
+    wstring temp=ConfIni::getSource();
+    m_Btn_source.SetText2(temp_page.c_str());
+    m_Btn_source.SetButtonType(MZC_BUTTON_LINE_BOTTOM);
+    m_Btn_source.EnableNotifyMessage(true);
+    m_ScrollWin.AddChild(&m_Btn_source);
+
     m_Toolbar.SetID(MZ_IDC_SETTINGWND_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     //m_Toolbar.SetButton(0,true,true,L"Cannel");
@@ -133,12 +144,18 @@ BOOL SettingWnd::OnInitDialog()
 		m_setInterWnd.select();
 
 		RECT rcWork_ = MzGetWorkArea();
-		m_pagecountwnd.set_select(ConfIni::getPageCount());
-		m_pagecountwnd.CreateModalDialog(rcWork_.left, rcWork_.top, GetWidth(), GetHeight(), m_hWnd);
-		m_pagecountwnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
-		m_pagecountwnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
-		m_pagecountwnd.select();
+		m_pageCountWnd.set_select(ConfIni::getPageCount());
+		m_pageCountWnd.CreateModalDialog(rcWork_.left, rcWork_.top, GetWidth(), GetHeight(), m_hWnd);
+		m_pageCountWnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
+		m_pageCountWnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
+		m_pageCountWnd.select();
 
+		RECT rcWork_s = MzGetWorkArea();
+		m_setSourceWnd.set_select(ConfIni::getSource());
+		m_setSourceWnd.CreateModalDialog(rcWork_s.left,rcWork_s.top, GetWidth(),GetHeight(),m_hWnd);
+		m_setSourceWnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
+		m_setSourceWnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
+		m_setSourceWnd.select();
 
     return TRUE;
 
@@ -184,9 +201,18 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    break;
 	    case MZ_IDC_SETTINGWND_BTN_PAGECOUNT:
 	    {
-		    int nRet= m_pagecountwnd.DoModal();
+		    int nRet= m_pageCountWnd.DoModal();
 		    ConfIni::setPageCount(nRet);
 		    update_page_count();
+	    }
+	    break;
+	    case MZ_IDC_SETTINGWND_BTN_SOURCE:
+	    {
+		    int nRet = m_setSourceWnd.DoModal();
+		    wstring temp=wstring(client[nRet]);
+		    ConfIni::setSource(temp);
+		    update_source();
+
 	    }
 	    break;
 
@@ -210,4 +236,14 @@ void SettingWnd::update_page_count()
 	m_Btn_pagecount.SetText2(temp.str().c_str());
 	m_Btn_pagecount.Invalidate();
 	m_Btn_pagecount.Update();
+}
+
+void SettingWnd::update_source()
+{
+	wstring temp = ConfIni::getSource();
+	m_Btn_source.SetText2(temp.c_str());
+	m_Btn_source.Invalidate();
+	m_Btn_source.Update();
+
+
 }
