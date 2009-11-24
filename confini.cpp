@@ -122,6 +122,7 @@ string ConfIni::int2string(int num_)
 wstring ConfIni::_account=L"";
 wstring ConfIni::_password=L"";
 wstring ConfIni::_twitter_api=L"http://li2z.cn/t/";
+wstring ConfIni::_twitter_source=L"twidroid";
 int ConfIni::_remember_password=1;
 int ConfIni::_update_interval=3;  //3 mintue;
 int ConfIni::_page_count=30;

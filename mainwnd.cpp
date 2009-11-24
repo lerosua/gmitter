@@ -48,10 +48,9 @@ MainWnd::~MainWnd()
 	CloseDialNet();
 
 }
-void MainWnd::StartTimer()
+void MainWnd::StartTimer(int min_)
 {
-	SetTimer(m_hWnd,MZ_IDC_TIMER,180*1000,NULL);
-
+	SetTimer(m_hWnd,MZ_IDC_TIMER,min_*60*1000,NULL);
 }
 BOOL MainWnd::OnInitDialog()
 {
@@ -537,7 +536,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	m_account = account;
 	LoadCache(_statusFile,_current_page);
-	StartTimer();
+	StartTimer(ConfIni::getUpdateInterval());
 	
 	m_Top.SetButton(1,true,true,m_account.C_Str());
 	return true;
@@ -794,7 +793,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	}
 
 	    fstream outfile;
-	    outfile.open(_updateFile,ios::out|ios::app);
+	    outfile.open(_updateFile.c_str(),ios::out|ios::app);
 	    //outfile.open(filename.c_str(),ios::out|ios::app);
 	    outfile<<endl;
 		string strline;
@@ -810,7 +809,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	    fstream outfile2;
 	    fstream infile2;
 	    outfile2.open(filename.c_str(),ios::out);
-	    infile2.open(_updateFile,ios::in);
+	    infile2.open(_updateFile.c_str(),ios::in);
 	    int count_ =0;
 	    while(getline(infile2,strline_)){
 		    outfile2<<strline_<<endl;

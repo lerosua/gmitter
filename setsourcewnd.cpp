@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  2009å¹´11æœˆ24æ—¥ 17æ—¶07åˆ†48ç§’
+ *        Created:  2009Äê11ÔÂ24ÈÕ 17Ê±07·Ö48Ãë
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -17,8 +17,9 @@
  */
 
 #include "setsourcewnd.h"
+#include "base64.h"
 
-using namespace std;
+const char* SetSourceWnd::client[SOURCE_MAX]={"iTweet","EchoFon","Gravity","twidroid","twhirl","dabr","twittai","Seesmic","Brizzly","Tweetie"};
 BOOL SetSourceWnd::OnInitDialog()
 {
 
@@ -44,13 +45,13 @@ BOOL SetSourceWnd::OnInitDialog()
 		m_btnCount[i].SetImage2(imgSelected);
 		m_btnCount[i].SetImageWidth2(imgSelected->GetImageWidth());
 		m_btnCount[i].SetShowImage2(false);
-		wstring temp=wstring(client[i]);
+		wstring temp=s2ws(string(client[i]));
 		m_btnCount[i].SetText(temp.c_str());
 	}
 
 	m_toolbar.SetID(MZ_IDC_SOURCEWND_TOOLBAR);
 	m_toolbar.SetPos(0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR);
-	m_toolbar.SetButton(0, true, true, L"è¿”å›ž");
+	m_toolbar.SetButton(0, true, true, L"·µ»Ø");
 	m_toolbar.EnableLeftArrow(true);
 	m_toolbar.EnableNotifyMessage(true);
 	AddUiWin(&m_toolbar);
@@ -66,11 +67,11 @@ void SetSourceWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	int index = lParam;
 
 	if(id>=MZ_IDC_SOURCEWND_CLINET0 && id<=MZ_IDC_SOURCEWND_CLINET9){
-		_select = id;
+		_select = id-MZ_IDC_SOURCEWND_CLINET0;
 		select();
 	}
 	if( MZ_IDC_SOURCEWND_TOOLBAR == id){
-		if (0 == index)			// ä¿å­˜è®¾ç½®å¹¶è¿”å›ž
+		if (0 == index)
 			EndModal(_select);
 	}
 }

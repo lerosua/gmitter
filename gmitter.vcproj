@@ -238,6 +238,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\setsourcewnd.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\settingwnd.cpp"
 				>
 			</File>
@@ -313,6 +317,10 @@
 			</File>
 			<File
 				RelativePath=".\setinterwnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\setsourcewnd.h"
 				>
 			</File>
 			<File

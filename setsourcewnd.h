@@ -6,7 +6,7 @@
  *    Description:  
  *
  *        Version:  1.0
- *        Created:  2009å¹´11æœˆ24æ—¥ 16æ—¶51åˆ†30ç§’
+ *        Created:  2009Äê11ÔÂ24ÈÕ 16Ê±51·Ö30Ãë
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -35,8 +35,10 @@
 #define MZ_IDC_SOURCEWND_CLINET9   951
 
 #define SOURCE_MAX 10
+using namespace std;
 
-wchar* client[SOURCE_MAX]={"iTweet","EchoFon","Gravity","twidroid","twhirl","dabr","twittai","Seesmic","Brizzly","Tweetie"};
+//char* client[SOURCE_MAX]={"iTweet","EchoFon","Gravity","twidroid","twhirl","dabr","twittai","Seesmic","Brizzly","Tweetie"};
+//wchar* client[SOURCE_MAX]={L"iTweet",L"EchoFon",L"Gravity",L"twidroid",L"twhirl",L"dabr",L"twittai",L"Seesmic",L"Brizzly",L"Tweetie"};
 
 class SetSourceWnd:public CMzWndEx
 {
@@ -53,6 +55,8 @@ class SetSourceWnd:public CMzWndEx
 
 	UiButtonEx m_btnCount[SOURCE_MAX];
 	int _select;
+public:
+	static const char* client[SOURCE_MAX];
 	
 };
 

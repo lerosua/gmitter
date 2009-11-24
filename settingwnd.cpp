@@ -18,7 +18,9 @@
 
 #include "settingwnd.h"
 #include "confini.h"
+#include "base64.h"
 #include <sstream>
+
 using namespace std;
 
 BOOL SettingWnd::OnInitDialog()
@@ -118,11 +120,15 @@ BOOL SettingWnd::OnInitDialog()
     m_Btn_source.SetID(MZ_IDC_SETTINGWND_BTN_SOURCE);
     m_Btn_source.SetText(L"自定义来源");
 
-    wstring temp=ConfIni::getSource();
-    m_Btn_source.SetText2(temp_page.c_str());
+    wstring tmp=ConfIni::getSource();
+    m_Btn_source.SetText2(tmp.c_str());
     m_Btn_source.SetButtonType(MZC_BUTTON_LINE_BOTTOM);
     m_Btn_source.EnableNotifyMessage(true);
     m_ScrollWin.AddChild(&m_Btn_source);
+
+    m_Btn_source.SetImage2(imgArrow_);
+    m_Btn_source.SetImageWidth2(imgArrow_->GetImageWidth());
+    m_Btn_source.SetShowImage2(true);
 
     m_Toolbar.SetID(MZ_IDC_SETTINGWND_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
@@ -151,7 +157,7 @@ BOOL SettingWnd::OnInitDialog()
 		m_pageCountWnd.select();
 
 		RECT rcWork_s = MzGetWorkArea();
-		m_setSourceWnd.set_select(ConfIni::getSource());
+		//m_setSourceWnd.set_select(ConfIni::getSource());
 		m_setSourceWnd.CreateModalDialog(rcWork_s.left,rcWork_s.top, GetWidth(),GetHeight(),m_hWnd);
 		m_setSourceWnd.SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_RIGHT_TO_LEFT_PUSH);
 		m_setSourceWnd.SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_LEFT_TO_RIGHT_PUSH);
@@ -209,7 +215,7 @@ void SettingWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 	    case MZ_IDC_SETTINGWND_BTN_SOURCE:
 	    {
 		    int nRet = m_setSourceWnd.DoModal();
-		    wstring temp=wstring(client[nRet]);
+			wstring temp=s2ws(string(SetSourceWnd::client[nRet]));
 		    ConfIni::setSource(temp);
 		    update_source();
 

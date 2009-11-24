@@ -96,8 +96,8 @@ class MainWnd:public CMzWndEx
 protected:
 	UiScrollWin m_ScrollWin;
 	UiToolbar_Icon m_Toolbar;
-	UiToolbar      m_Top;
-	//UiCaption      m_Top;
+	UiToolbar_Text      m_Top;
+	
 	GMList		m_List;
 	GMitter		m_twitter;
 	BOOL		m_isDialConnect;
