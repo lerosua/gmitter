@@ -30,10 +30,12 @@ GMitter::GMitter()
 	tw_source="EchoFon";
 }
 
-bool GMitter::Login(const std::string& account,const std::string& password)
+bool GMitter::Login(const std::string& account,const std::string& password,const std::string& source_)
 {
 	tw_uname=account;
 	tw_pass = password;
+	if(!source_.empty())
+		tw_source=source_;
 
 #if 1
 	std::string res=tw_api+"/account/verify_credentials.json";

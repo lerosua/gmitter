@@ -41,6 +41,8 @@ class ConfIni
 		static void parseString(string str) ;
 		static wstring getAccount(){ return _account;}
 		static wstring getPassword(){ return _password;}
+		static string  getSource() { return _twitter_source;}
+		static void setSource(const wstring& source_){ _twitter_source = ws2s(source_) ;}
 		static bool isRememberPassword(void) { return _remember_password > 0; };
 		static void setAccount(const wstring& account) { _account = account; };
 		static void setPassword(const wstring& password) { _password = password; };
@@ -59,6 +61,7 @@ class ConfIni
 		static wstring _account;
 		static wstring _password;
 		static wstring _twitter_api;
+		static string _twitter_source;
 		static int _remember_password;
 		static int _update_interval;
 		static int _page_count;
