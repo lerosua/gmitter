@@ -78,7 +78,7 @@ void ConfIni::save()
 	
 
 	rc_File << "Twitter_api = "<<ws2s(_twitter_api)<<endl;
-	rc_File << "Twitter_source = "<<_twitter_source<<endl;
+	rc_File << "Twitter_source = "<<ws2s(_twitter_source)<<endl;
 	rc_File << "update_interval = "<<int2string(_update_interval)<<endl;
 	rc_File << "page_count = "<<int2string(_page_count)<<endl;
         rc_File.close();
@@ -108,7 +108,7 @@ void ConfIni::parseString(string str) {
 	    _page_count = atoi(str_inter_.c_str());
     }
     if(str.find("Twitter_source")==0){
-	_twitter_api = (str.substr(pos+1,str.length()-pos));
+	_twitter_source = s2ws(str.substr(pos+1,str.length()-pos));
     }
 }
 

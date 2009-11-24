@@ -22,6 +22,7 @@
 #include <mzfc_inc.h>
 #include "setinterwnd.h"
 #include "pagecountwnd.h"
+#include "setsourcewnd.h"
 
 #define MZ_IDC_SETTINGWND_SCROLLWIN 900
 #define MZ_IDC_SETTINGWND_TOOLBAR 901
@@ -34,6 +35,7 @@
 #define MZ_IDC_SETTINGWND_BTN_INTER 913
 #define MZ_IDC_SETTINGWND_BTN_PAGECOUNT 914
 #define MZ_IDC_SETTINGWND_CAPTION_SHOW 915
+#define MZ_IDC_SETTINGWND_BTN_SOURCE   916
 
 class SettingWnd:public CMzWndEx
 {
@@ -43,6 +45,7 @@ class SettingWnd:public CMzWndEx
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	void update_inter_count();
 	void update_page_count();
+	void update_source();
 
 	protected:
 	UiScrollWin m_ScrollWin;
@@ -57,9 +60,11 @@ class SettingWnd:public CMzWndEx
 	UiCaption m_Captionshow;
 	UiButtonEx m_Btn_inter;
 	UiButtonEx m_Btn_pagecount;
+	UiButtonEx m_Btn_source;
 
-	PageCountWnd  m_pagecountwnd;
+	PageCountWnd  m_pageCountWnd;
 	SetInterWnd    m_setInterWnd;
+	SetSourceWnd   m_setSourceWnd;
 	
 	
 	
