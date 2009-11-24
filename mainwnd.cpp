@@ -523,6 +523,8 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 	m_account = account;
 	LoadCache(statusFile,_current_page);
 	StartTimer();
+	
+	m_Top.SetButton(1,true,true,m_account.C_Str());
 	return true;
 }
 	
@@ -633,7 +635,7 @@ if(big>= (_current_page-1)*ConfIni::getPageCount()){
 	str_time = getCreateTime(input);
 	str_source = getSource(input);
 	if(!str_source.empty());
-		str_time= str_time +" from "+str_source;
+		str_time= str_time +" "+str_source;
 	std::wstring wstr_msg;
 	std::wstring wstr_name;
 	std::wstring wstr_time;
@@ -712,7 +714,7 @@ do{
 		strp=str_content.substr(begin_pos,pos);
 	tmp=str_content.substr(pos+1,std::string::npos);
 
-	if(global_count_<=end_){
+	if(global_count_<end_){
 		Parser(strp,count);
 		global_count_++;
 	
