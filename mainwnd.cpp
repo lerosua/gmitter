@@ -122,7 +122,8 @@ BOOL MainWnd::OnInitDialog()
 void MainWnd::AddPostMsg(wchar_t* msg_)
 {
 
-	AddMsg(m_account.C_Str(),msg_,L"Just now");
+	if(STATUS_PAGE == _current_page)
+		AddMsg(m_account.C_Str(),msg_,L"¸Õ¸Õ");
 }
 
 void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)

@@ -26,6 +26,7 @@
 #define MZ_IDC_POST_CAPTION_BOTTOM 159
 #define MZ_IDC_POST_SCROLLWIN 160
 #define MZ_IDC_POST_CLEAR	161
+#define MZ_IDC_POST_TOOLBAR_TOP 152
 
 
 class MainWnd;
@@ -41,12 +42,13 @@ class SayWnd:public CMzWndEx
 	
 	protected:
 	UiToolbar_Text m_Toolbar;
+	UiToolbar_Text m_Toolbar_Top;
 	UiEdit m_pEdit;
-	UiCaption m_CaptionTop;
+	//UiCaption m_CaptionTop;
 	//UiCaption m_CaptionBottom;
 	UiScrollWin m_ScrollWin;
 	//UiButton_Image m_btn_clear;
-	UiButton m_btn_clear;
+	//UiButton m_btn_clear;
 
 	private:
 	MainWnd& m_pwnd;
