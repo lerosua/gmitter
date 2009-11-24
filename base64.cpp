@@ -354,8 +354,9 @@ std::string getStatusId(const std::string& input)
 		size_t st_pos;
 		if(spos!=std::string::npos){
 			stmp=time_str.substr(spos+6,std::string::npos);	
-		return stmp;
-	}
+			st_pos=stmp.find(",");
+			return stmp.substr(0,st_pos);
+		}
 	}
 	return "";
 }

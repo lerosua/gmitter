@@ -142,7 +142,6 @@ void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 	pmlid->StringTime = strTime;
 
 	li.Data = pmlid;
-	//m_List.InsertItem(li,num);
 	m_List.InsertItem(li,-1);
 }
 
@@ -181,7 +180,6 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 					if(nIndex+1 > ConfIni::getPageCount()){
 						_current_page++;
 						MzBeginWaitDlg(m_hWnd);
-						//LoadCache(_statusFile,_current_page);
 						LoadCache(_current_page_type,_current_page);
 						MzEndWaitDlg();
 					}
@@ -407,8 +405,8 @@ void GMList::MultiSelectItem(int nIndex,bool bSelect)
 	ListItem* pItem = GetItem(nIndex);
 	if(pItem){
 		MsgListItemData* mlid= (MsgListItemData*)pItem->Data;
-		if(mlid)
-			;//do something
+		//if(mlid)
+			//;//do something
 	}
 }
 
@@ -719,8 +717,10 @@ void MainWnd::LoadCache(const std::string& filename,int page_)
 	int count=0;
 do{
 	pos= str_content.find(",{");
-	if(pos==std::string::npos)
+	if(pos==std::string::npos){
+		Parser(str_content,1);	
 		break;
+	}
 
 	if(0==count)
 		strp=str_content.substr(1,pos-1);

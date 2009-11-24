@@ -88,7 +88,7 @@ class MainWnd:public CMzWndEx
 	void UpdateStatus();
 	/** 更新列表，会根据当前页的类型来更新*/
 	void UpdateList();
-	void StartTimer();
+	void StartTimer(int min_);
 	bool getLocked() ;
 	void freeLocked();
 	virtual void OnTimer(UINT_PTR nIDEvent);
