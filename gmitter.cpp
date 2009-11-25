@@ -23,12 +23,21 @@ bool GMitter::netstat=false;
 int GMitter::status = 0;
 GMitter::GMitter()
 {
-	tw_uname="pytw";
-	tw_pass="bones7456";
+	tw_uname="";
+	tw_pass="";
 	tw_version="1.0";
 	tw_request=0;
 	tw_source="twidroid";
 }
+bool GMitter::fakeLogin(const std::string& account,const std::string& password,const std::string& source_)
+{
+	tw_uname=account;
+	tw_pass = password;
+
+	return true;
+}
+
+
 
 bool GMitter::Login(const std::string& account,const std::string& password,const std::string& source_)
 {

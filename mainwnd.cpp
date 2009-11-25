@@ -124,7 +124,7 @@ void MainWnd::AddPostMsg(wchar_t* msg_)
 {
 
 	if(STATUS_PAGE == _current_page){
-		AddMsg(m_account.C_Str(),msg_,L"먼먼");
+		AddMsg(m_account.C_Str(),msg_,L"먼먼",0);
 		   m_List.ScrollTo(UI_SCROLLTO_TOP,0,false);
 		   m_List.Invalidate();
 		   m_List.Update();
@@ -147,7 +147,10 @@ void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
 	pmlid->StringTime = strTime;
 
 	li.Data = pmlid;
-	m_List.InsertItem(li,-1);
+	if(0 == num)
+		m_List.InsertItem(li,0);
+	else
+		m_List.InsertItem(li,-1);
 }
 
 void MainWnd::DrawNextItem()
@@ -536,6 +539,7 @@ bool MainWnd::fakeLogin(const CMzString& account,const CMzString& password)
 	ConfIni::setAccount(account.C_Str());
 
 	m_twitter.SetApi(ws2s(ConfIni::getTwitterApi()));
+	m_twitter.fakeLogin(s_account,s_pass);
 
 	if(ConfIni::isRememberPassword()){
 		ConfIni::setPassword(password.C_Str());
@@ -544,10 +548,6 @@ bool MainWnd::fakeLogin(const CMzString& account,const CMzString& password)
 	ConfIni::save();
 
 	m_account = account;
-	//LoadCache(_statusFile,_current_page);
-	//StartTimer(ConfIni::getUpdateInterval());
-	
-	//m_Top.SetButton(1,true,true,m_account.C_Str());
 	return true;
 }
 

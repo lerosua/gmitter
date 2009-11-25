@@ -56,7 +56,6 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit.EnableZoomIn(true);
     m_pEdit.SetReadOnly(false);
     m_pEdit.SetRightInvalid(20);
-    //m_pEdit.EnableGridlines(true);
     m_pEdit.EnableInsideScroll(true);
     
     m_pEdit.SetLineSpace(4);
@@ -66,7 +65,6 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit.SetMaxChar(140);
     m_pEdit.SetSipMode(IM_SIP_MODE_GEL_PY);
     m_pEdit.SetFocus(true);
-    //AddUiWin(&m_pEdit);
     m_ScrollWin.AddChild(&m_pEdit);
 
     y+=170;
@@ -75,7 +73,6 @@ BOOL SayWnd::OnInitDialog()
     m_Toolbar.SetID(MZ_IDC_POST_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0,true,true,L"ÍË³ö");
-    //m_Toolbar.SetButton(1,true,true,Int2String(m_max_char));
     m_Toolbar.SetButton(2,true,true,L"·¢ËÍ");
     AddUiWin(&m_Toolbar);
 
@@ -119,14 +116,12 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 				MzEndWaitDlg();
 				if(m_pwnd.GetNetStatus()){
 
-					//MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 					MzAutoMsgBoxEx(m_hWnd, L"·¢ËÍ³É¹¦");
 					m_pwnd.AddPostMsg(str.C_Str());
 					this->EndModal(ID_OK);
 				}
 				else
 					MzAutoMsgBoxEx(m_hWnd, L"·¢ËÍÊ§°Ü");
-					//MzMessageBoxEx(m_hWnd, L"·¢ËÍÊ§°Ü", L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
 					
 
 		    }
