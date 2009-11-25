@@ -73,6 +73,8 @@ class MainWnd:public CMzWndEx
 	/** 画下一页的函数*/
 	void DrawNextItem();
 	bool Login(const CMzString& account_,const CMzString& password_);
+	/** 不连接网络的登录，用于快速发推*/
+	bool fakeLogin(const CMzString& account_,const CMzString& password_);
 	void SendStatus(const wchar_t* msg);
 	/** 自动拨号，打开GPRS */
 	BOOL AutoDialNet();
@@ -102,12 +104,6 @@ protected:
 	GMitter		m_twitter;
 	BOOL		m_isDialConnect;
 
-	//UiButton_Image m_btn_update;
-	//UiButton_Image m_btn_write;
-	//ImagingHelper  m_imgUpdate_normal;
-	//ImagingHelper  m_imgUpdate_press;
-	//ImagingHelper  m_imgWrite_normal;
-	//ImagingHelper  m_imgWrite_press;
 	static const wstring MORE;
 
 private:
@@ -122,6 +118,7 @@ private:
 	int _current_page;
 	
 	CMzString m_account;
+	CMzString _last_author;
 
 	std::string _statusFile;
 	std::string _messageFile;
