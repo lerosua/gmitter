@@ -41,10 +41,15 @@ public:
 class GMList: public UiList
 {
 	public:
+		GMList();
+		~GMList();
 		virtual void OnRemoveItem(int nIndex);
 		void MultiSelectItem(int nIndex,bool bSelect);
 		virtual void DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prcUpdate);
 		virtual int CalcItemHeight(int index);
+		
+private:
+	CMzString _last_author;
 };
 
 //main window , it is list
@@ -105,7 +110,7 @@ protected:
 	BOOL		m_isDialConnect;
 
 	static const wstring MORE;
-
+    
 private:
 	std::string _status_id;
 	std::string _message_id;
@@ -118,7 +123,7 @@ private:
 	int _current_page;
 	
 	CMzString m_account;
-	CMzString _last_author;
+	
 
 	std::string _statusFile;
 	std::string _messageFile;

@@ -23,7 +23,7 @@
 #include "resource.h"
 #include "confini.h"
 #include "aboutwnd.h"
-
+#include "saywnd.h"
 
 BOOL LoginWnd::OnInitDialog()
 {

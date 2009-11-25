@@ -40,7 +40,7 @@ MainWnd::MainWnd():_status_id("")
 		   ,_current_page(1)
 		   ,_current_page_type(STATUS_PAGE)
 		   ,_path("\\Disk\\Program Files\\gmitter\\")
-		   ,_last_author(L"")
+		   
 {
 
 }
@@ -395,6 +395,13 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 
 }
 
+GMList::GMList():_last_author(L"")
+{
+}
+GMList::~GMList()
+{
+}
+
 void GMList::OnRemoveItem(int nIndex)
 {
 	ListItem* pItem = GetItem(nIndex);
@@ -454,7 +461,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
     rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
     if (pimg)
     {
-	if(_last_author != pmlid->StringAuthor)
+	 if(!(_last_author == pmlid->StringAuthor))
 	      pimg->Draw(hdcDst, &rcImg, false, false);
     }
 
@@ -465,7 +472,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 
-	if(_last_author != pmlid->StringAuthor)
+	if(!(_last_author == pmlid->StringAuthor))
 		MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
 	_last_author=pmlid->StringAuthor ;
@@ -681,7 +688,7 @@ if(big>= (_current_page-1)*ConfIni::getPageCount()){
 	str_msg=getStatusText(input);
 	str_time = getCreateTime(input);
 	str_source = getSource(input);
-	if(!str_source.empty());
+	if(!str_source.empty())
 		str_time= str_time +" "+str_source;
 	std::wstring wstr_msg;
 	std::wstring wstr_name;
