@@ -29,7 +29,7 @@ GMitter::GMitter()
 	tw_request=0;
 	tw_source="twidroid";
 }
-bool GMitter::fakeLogin(const std::string& account,const std::string& password,const std::string& source_)
+bool GMitter::fakeLogin(const std::string& account,const std::string& password)
 {
 	tw_uname=account;
 	tw_pass = password;
