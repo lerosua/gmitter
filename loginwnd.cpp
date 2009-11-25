@@ -110,7 +110,7 @@ BOOL LoginWnd::OnInitDialog()
 	// 初始化文字工具条，并添加到窗口中
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
     m_Toolbar.SetButton(0, true, true, L"退出");
-    //m_Toolbar.SetButton(1, true, true, L"Menu");
+    m_Toolbar.SetButton(1, true, true, L"快推");
     m_Toolbar.SetButton(2, true, true, L"登录");
     m_Toolbar.SetID(MZ_IDC_TOOLBAR1);
     AddUiWin(&m_Toolbar);
@@ -181,9 +181,16 @@ BOOL LoginWnd::OnInitDialog()
         }
         if (nIndex==1)
         {
-        CMzString str(128);
-        wsprintf(str.C_Str(), L"twitter loging test");
-	MzMessageBoxEx(m_hWnd, str.C_Str(), L"", MB_OK, SHK_RET_APPNOEXIT_SHELLTOP);
+
+	MainWnd m_wnd;
+	m_wnd.fakeLogin(m_Account.GetText(),m_Pass.GetText());
+	SayWnd *m_Saywnd=new SayWnd(m_wnd);
+	RECT rcWork = MzGetWorkArea();
+	m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
+	m_Saywnd->SetAnimateType_Show(MZ_ANIMTYPE_SCROLL_TOP_TO_BOTTOM_2);
+	m_Saywnd->SetAnimateType_Hide(MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2);
+	m_Saywnd->DoModal();
+
 
           return;
         }

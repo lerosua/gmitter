@@ -509,6 +509,7 @@ int GMList::CalcItemHeight(int index)
 void MainWnd::SetUserDir(const std::string& user_)
 {
 	wstring wdir_ = s2ws(_path+user_);
+	Mkdirs(L"\\Disk\\Program Files\\gmitter");
 	Mkdirs(wdir_.c_str());
 
 	_statusFile=_path+user_+"\\cache.json";
@@ -520,6 +521,30 @@ void MainWnd::SetUserDir(const std::string& user_)
 	_updateFile=_path+user_+"\\update.json";
 
 }
+bool MainWnd::fakeLogin(const CMzString& account,const CMzString& password)
+{
+	std::string s_account=ws2s(account.C_Str());
+	std::string s_pass=ws2s(password.C_Str());
+
+	ConfIni::setAccount(account.C_Str());
+
+	m_twitter.SetApi(ws2s(ConfIni::getTwitterApi()));
+
+	if(ConfIni::isRememberPassword()){
+		ConfIni::setPassword(password.C_Str());
+	}
+
+	ConfIni::save();
+
+	m_account = account;
+	//LoadCache(_statusFile,_current_page);
+	//StartTimer(ConfIni::getUpdateInterval());
+	
+	//m_Top.SetButton(1,true,true,m_account.C_Str());
+	return true;
+}
+
+
 bool MainWnd::Login(const CMzString& account,const CMzString& password)
 {
 	std::string s_account=ws2s(account.C_Str());
