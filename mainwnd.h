@@ -122,6 +122,7 @@ private:
 	int _current_page;
 	
 	CMzString m_account;
+	CMzString _last_author;
 
 	std::string _statusFile;
 	std::string _messageFile;

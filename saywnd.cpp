@@ -49,7 +49,7 @@ BOOL SayWnd::OnInitDialog()
     AddUiWin(&m_ScrollWin);
     
 
-    y+=70;
+    y=0;
 
     m_pEdit.SetPos(0,y,470,170);
     m_pEdit.SetID(MZ_IDC_POST_EDIT);

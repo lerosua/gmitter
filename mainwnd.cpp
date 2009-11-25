@@ -40,6 +40,7 @@ MainWnd::MainWnd():_status_id("")
 		   ,_current_page(1)
 		   ,_current_page_type(STATUS_PAGE)
 		   ,_path("\\Disk\\Program Files\\gmitter")
+		   ,_last_author(L"")
 {
 
 }
@@ -122,8 +123,12 @@ BOOL MainWnd::OnInitDialog()
 void MainWnd::AddPostMsg(wchar_t* msg_)
 {
 
-	if(STATUS_PAGE == _current_page)
+	if(STATUS_PAGE == _current_page){
 		AddMsg(m_account.C_Str(),msg_,L"¸Õ¸Õ");
+		   m_List.ScrollTo(UI_SCROLLTO_TOP,0,false);
+		   m_List.Invalidate();
+		   m_List.Update();
+	}
 }
 
 void MainWnd::AddMsg(wchar_t* author,wchar_t* msg,wchar_t* time_,int num)
@@ -449,7 +454,8 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
     rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
     if (pimg)
     {
-      pimg->Draw(hdcDst, &rcImg, false, false);
+	if(_last_author != pmlid->StringAuthor)
+	      pimg->Draw(hdcDst, &rcImg, false, false);
     }
 
 	// for author
@@ -458,7 +464,11 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	rcText.right=rcText.right - 200;
 	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
-	MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
+
+	if(_last_author != pmlid->StringAuthor)
+		MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
+
+	_last_author=pmlid->StringAuthor ;
 
 	//for timetrim
 	rcText.left = rcText.right;
@@ -700,6 +710,7 @@ void MainWnd::LoadCache(const std::string& filename,int page_)
 
 	int end_=page_*ConfIni::getPageCount();
 	int global_count_=0;
+	int count=0;
 
 	while(getline(infile,str_content)){
 		if(str_content.empty())
@@ -714,11 +725,12 @@ void MainWnd::LoadCache(const std::string& filename,int page_)
 	string tmp;
 	size_t begin_pos=0;
 	size_t pos;
-	int count=0;
 do{
 	pos= str_content.find(",{");
 	if(pos==std::string::npos){
-		Parser(str_content,1);	
+		Parser(str_content,count);	
+		global_count_++;
+		count++;
 		break;
 	}
 
@@ -731,7 +743,6 @@ do{
 	if(global_count_<end_){
 		Parser(strp,count);
 		global_count_++;
-	
 		count++;
 
 		str_content=tmp;

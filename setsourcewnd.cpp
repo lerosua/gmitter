@@ -19,7 +19,7 @@
 #include "setsourcewnd.h"
 #include "base64.h"
 
-const char* SetSourceWnd::client[SOURCE_MAX]={"iTweet","EchoFon","Gravity","twidroid","twhirl","dabr","twittai","Seesmic","Brizzly","Tweetie"};
+const char* SetSourceWnd::client[SOURCE_MAX]={"iTweet","twitterfon","Gravity","twidroid","twhirl","dabr","twittai","Seesmic","Twittelator","Tweetie"};
 BOOL SetSourceWnd::OnInitDialog()
 {
 
