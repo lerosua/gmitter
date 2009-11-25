@@ -129,7 +129,7 @@ private:
 	std::string _mentionsFile;
 	std::string _favoritsFile;
 	std::string _publicFile;
-	std::string _updateFile;
+	//std::string _updateFile;
 	std::string _path;
 
 

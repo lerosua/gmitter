@@ -39,7 +39,7 @@ MainWnd::MainWnd():_status_id("")
 		   ,_locked(false)
 		   ,_current_page(1)
 		   ,_current_page_type(STATUS_PAGE)
-		   ,_path("\\Disk\\Program Files\\gmitter")
+		   ,_path("\\Disk\\Program Files\\gmitter\\")
 {
 
 }
@@ -507,7 +507,7 @@ void MainWnd::SetUserDir(const std::string& user_)
 	_mentionsFile=_path+user_+"\\mentions.json";
 	_publicFile=_path+user_+"\\public.json";
 	_friendsFile=_path+user_+"\\friends.json";
-	_updateFile=_path+user_+"\\update.json";
+	//updateFile=_path+user_+"\\update.json";
 
 }
 bool MainWnd::Login(const CMzString& account,const CMzString& password)
@@ -718,7 +718,7 @@ void MainWnd::LoadCache(const std::string& filename,int page_)
 do{
 	pos= str_content.find(",{");
 	if(pos==std::string::npos){
-		Parser(str_content,1);	
+		Parser(str_content,0);	
 		break;
 	}
 
@@ -783,7 +783,6 @@ void MainWnd::SaveCache(const std::string& filename)
 {
 	    fstream infile;
 	    infile.open(filename.c_str(),ios::in);
-	    //infile.open(_updateFile,ios::in);
 	if(!infile){
 		//infile不存在，要新建
 		fstream pfile_;
@@ -793,8 +792,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	}
 
 	    fstream outfile;
-	    outfile.open(_updateFile.c_str(),ios::out|ios::app);
-	    //outfile.open(filename.c_str(),ios::out|ios::app);
+	    outfile.open(updateFile,ios::out|ios::app);
 	    outfile<<endl;
 		string strline;
 	    while(getline(infile,strline)){
@@ -802,14 +800,14 @@ void MainWnd::SaveCache(const std::string& filename)
 	    }
 	    outfile.close();
 	    infile.close();
-	//rename(_updateFile,_statusFile);
+	//rename(updateFile,_statusFile);
 
-	    //rename _updateFile to cacheFile
+	    //rename updateFile to cacheFile
 	    string strline_;
 	    fstream outfile2;
 	    fstream infile2;
 	    outfile2.open(filename.c_str(),ios::out);
-	    infile2.open(_updateFile.c_str(),ios::in);
+	    infile2.open(updateFile,ios::in);
 	    int count_ =0;
 	    while(getline(infile2,strline_)){
 		    outfile2<<strline_<<endl;
@@ -829,7 +827,7 @@ void MainWnd::SaveCache(const std::string& filename)
 		if(getLocked()){
 	   UpdateStatus();
     if(GetNetStatus()){
-	    //SaveCache(_updateFile);
+	    //SaveCache(updateFile);
 	    SaveCache(_current_page_type);
 	    if(1 == _current_page)
 		    //LoadCache(_statusFile,_current_page);

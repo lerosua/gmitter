@@ -27,7 +27,7 @@ GMitter::GMitter()
 	tw_pass="bones7456";
 	tw_version="1.0";
 	tw_request=0;
-	tw_source="EchoFon";
+	tw_source="twidroid";
 }
 
 bool GMitter::Login(const std::string& account,const std::string& password,const std::string& source_)
