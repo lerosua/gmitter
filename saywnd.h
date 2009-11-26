@@ -35,10 +35,12 @@ class SayWnd:public CMzWndEx
 	MZ_DECLARE_DYNAMIC(SayWnd);
 	public:
 	SayWnd(MainWnd&);
+	~SayWnd();
 	virtual BOOL OnInitDialog();
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam);
 	void SetText(const std::wstring& str_);
+	void onTimer(UINT_PTR nIDEvent);
 	
 	protected:
 	UiToolbar_Text m_Toolbar;
@@ -53,6 +55,7 @@ class SayWnd:public CMzWndEx
 	private:
 	MainWnd& m_pwnd;
 	int m_max_char;
+	DWORD m_accMsg;
 	
 };
 

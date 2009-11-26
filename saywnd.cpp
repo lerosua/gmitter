@@ -21,6 +21,8 @@
 #include <iostream>
 #include "mainwnd.h"
 #include "Mzfc\ConvertHelper.h"
+#include <acc_api.h>
+
 
 
 SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
@@ -28,6 +30,11 @@ SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
 {
 }
 
+SayWnd::~SayWnd()
+{
+
+	MzAccClose();
+}
 BOOL SayWnd::OnInitDialog()
 {
     if (!CMzWndEx::OnInitDialog())
@@ -76,6 +83,10 @@ BOOL SayWnd::OnInitDialog()
     m_Toolbar.SetButton(2,true,true,L"·¢ËÍ");
     AddUiWin(&m_Toolbar);
 
+    MzAccOpen();
+    SetTimer(m_hWnd,1,50,NULL);
+
+    m_accMsg = MzAccGetMessage();
     
     return TRUE;
 
@@ -157,6 +168,7 @@ LRESULT SayWnd::MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam)
 			m_Toolbar_Top.Update();
 
 			break;
+		case m_accMsg:
 	}
 
 	return CMzWndEx::MzDefWndProc(message, wParam, lParam);
@@ -166,5 +178,21 @@ LRESULT SayWnd::MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam)
 void SayWnd::SetText(const wstring& str_)
 {
 	m_pEdit.SetText(str_.c_str());
+
+}
+void SayWnd::onTimer(UINT_PTR nIDEvent)
+{
+switch(nIDEvent){
+	case 1:
+	{
+		signed char x;
+		signed char y;
+		signed char z;
+		MzAccGetXYZ(&x,&y,&z);
+
+
+
+
+	}
 
 }
