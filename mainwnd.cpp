@@ -92,7 +92,8 @@ BOOL MainWnd::OnInitDialog()
     m_Toolbar.LoadButtonIcon(2, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_SEARCH));
     m_Toolbar.LoadButtonIcon(3, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_FAV));
     m_Toolbar.LoadButtonIcon(4, MzGetInstanceHandle(),RT_RCDATA, MAKEINTRESOURCE(IDR_PNG_EXIT));
-    AddUiWin(&m_Toolbar);
+    m_Toolbar.SetHighLightButton(0);
+	AddUiWin(&m_Toolbar);
     return TRUE;
 }
 
@@ -442,7 +443,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
     rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
     if (pimg)
     {
-	 if(!(_last_author == pmlid->StringAuthor)|| (MESSAGE_PAGE == _current_page_type))
+	 if((!(_last_author == pmlid->StringAuthor)))
 	      pimg->Draw(hdcDst, &rcImg, false, false);
     }
 
@@ -453,7 +454,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 
-	if(!(_last_author == pmlid->StringAuthor)||(MESSAGE_PAGE == _current_page_type))
+	if((!(_last_author == pmlid->StringAuthor)))
 		MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
 	_last_author=pmlid->StringAuthor ;

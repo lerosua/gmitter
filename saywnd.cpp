@@ -84,7 +84,7 @@ BOOL SayWnd::OnInitDialog()
     AddUiWin(&m_Toolbar);
 
     MzAccOpen();
-    SetTimer(m_hWnd,1,50,NULL);
+    //SetTimer(m_hWnd,1,50,NULL);
 
     m_accMsg = MzAccGetMessage();
     
@@ -168,7 +168,23 @@ LRESULT SayWnd::MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam)
 			m_Toolbar_Top.Update();
 
 			break;
-		case m_accMsg:
+		default:
+		if(message == m_accMsg){
+			switch(wParam){
+				case SCREEN_PORTRAIT_P:
+					ScreenRotate(SCREEN_PORTRAIT_P);
+					break;
+				case SCREEN_PORTRAIT_N:
+					ScreenRotate(SCREEN_PORTRAIT_N);
+					break;
+				case SCREEN_LANDSCAPE_P:
+					ScreenRotate(SCREEN_LANDSCAPE_N);
+					break;
+				case SCREEN_LANDSCAPE_N:
+					ScreenRotate(SCREEN_LANDSCAPE_P);
+					break;
+			}
+		}
 	}
 
 	return CMzWndEx::MzDefWndProc(message, wParam, lParam);
@@ -180,6 +196,7 @@ void SayWnd::SetText(const wstring& str_)
 	m_pEdit.SetText(str_.c_str());
 
 }
+/*
 void SayWnd::onTimer(UINT_PTR nIDEvent)
 {
 switch(nIDEvent){
@@ -191,8 +208,16 @@ switch(nIDEvent){
 		MzAccGetXYZ(&x,&y,&z);
 
 
-
-
 	}
+
+}
+*/
+
+void SayWnd::ScreenRotate(int mode_)
+{
+	if( SCREEN_PORTRAIT_P == mode_ || SCREEN_PORTRAIT_N == mode_)
+		SetWindowPos(m_hWnd, 0 , 0,0,480,720);
+	else
+		SetWindowPos(m_hWnd, 0 , 0,0,720,480);
 
 }

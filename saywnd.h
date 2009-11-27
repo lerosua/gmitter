@@ -40,7 +40,8 @@ class SayWnd:public CMzWndEx
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT MzDefWndProc(UINT  message,WPARAM wParam, LPARAM lParam);
 	void SetText(const std::wstring& str_);
-	void onTimer(UINT_PTR nIDEvent);
+	//void onTimer(UINT_PTR nIDEvent);
+	void ScreenRotate(int mode_);
 	
 	protected:
 	UiToolbar_Text m_Toolbar;
