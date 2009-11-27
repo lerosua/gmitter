@@ -47,11 +47,19 @@ BOOL AboutWnd::OnInitDialog()
     AddUiWin(&m_Logo);
 
     y+=50;
-    m_Text.SetID(MZ_IDC_ABOUTWND_TEXT);
-    m_Text.SetPos(GetWidth()/8, y,GetWidth()*7/8,400);
-    m_Text.SetDrawTextFormat(DT_CENTER|DT_VCENTER| DT_WORDBREAK);
-    m_Text.SetText(MZ_ABOUT_TEXT);
-    AddUiWin(&m_Text);
+    for(i=0;i<ABOUT_NUM;i++){
+    m_Text[i].SetID(MZ_IDC_ABOUTWND_TEXT+i);
+    m_Text[i].SetPos(GetWidth()/8, y,GetWidth()*7/8,50);
+    m_Text[i].SetDrawTextFormat(DT_CENTER|DT_VCENTER| DT_WORDBREAK);
+    //m_Text[i].SetText(MZ_ABOUT_TEXT);
+    AddUiWin(&m_Text[i]);
+    y+=50;
+    }
+    m_Text[0].SetText(L"GMiterr copyright @lerosua");
+    m_Text[1].SetText(L"您的捐助将帮助软件发展得更好");
+    m_Text[2].SetText(L"支付宝:lerosua@gmail.com");
+    m_Text[3].SetText(L"非常感谢！");
+    m_Text[4].SetText(L"");
     
     m_Toolbar.SetID(MZ_IDC_ABOUTWND_TOOLBAR);
     m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
