@@ -65,32 +65,8 @@ BOOL MainWnd::OnInitDialog()
     m_Top.SetButton(0,true,true,L"刷新");
     m_Top.SetButton(1,true,true,L"推倒");
     m_Top.SetButton(2,true,true,L"发推");
-    //m_Top.SetText(L"推倒世界");
     AddUiWin(&m_Top);
 
-    //m_imgUpdate_normal.LoadImage(L"\\Disk\\Program Files\\gmitter\\res\\update.png");
-//    m_imgUpdate_normal.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE),TRUE,TRUE);
-//    m_imgUpdate_press.LoadImageFromRes(MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_UPDATE_PRESS),TRUE,TRUE);
-//    m_imgWrite_normal.LoadImageFromRes( MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE) ,TRUE,TRUE);
-//    m_imgWrite_press.LoadImageFromRes(  MzGetInstanceHandle(),RT_RCDATA,MAKEINTRESOURCE(IDR_PNG_WRITE_PRESS),TRUE,TRUE);
-//
-//    m_btn_update.SetID(MZ_IDC_UPDATE);
-//    m_btn_update.SetPos(2,2,50,50);
-//    m_btn_update.SetImage_Normal(&m_imgUpdate_normal);
-//    m_btn_update.SetImage_Pressed(&m_imgUpdate_press);
-//    m_btn_update.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
-//    m_btn_update.SetTextColor(RGB(255,255,255));
-//    AddUiWin(&m_btn_update);
-//
-//    m_btn_write.SetID(MZ_IDC_WRITE);
-//    m_btn_write.SetPos(GetWidth()-52,2,50,50);
-//    m_btn_write.SetImage_Normal(&m_imgWrite_normal);
-//    m_btn_write.SetImage_Pressed(&m_imgWrite_press);
-//    m_btn_write.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
-//    m_btn_write.SetTextColor(RGB(255,255,255));
-//	AddUiWin(&m_btn_write);
-
-    //m_ScrollWin.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
     m_ScrollWin.SetPos(0,MZM_HEIGHT_ICON_TOOLBAR-10,GetWidth(),GetHeight()-2*MZM_HEIGHT_TEXT_TOOLBAR);
     m_ScrollWin.SetID(MZ_IDC_SCROLLWIN2);
     m_ScrollWin.EnableScrollBarV(true);
@@ -454,7 +430,9 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 
 		HBRUSH bgBrush = CreateSolidBrush(RGB(220, 220, 220));
 		::FillRect(hdcDst, &bgRect, bgBrush);
+		::SetTextColor(hdcDst,RGB(255,255,255));
 		MzDrawText(hdcDst,L"下一页", prcItem,DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
+		_last_author=L"NULL";
 		return;
 	}
     // 绘制左边的小图像
@@ -464,7 +442,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
     rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
     if (pimg)
     {
-	 if(!(_last_author == pmlid->StringAuthor))
+	 if(!(_last_author == pmlid->StringAuthor)|| (MESSAGE_PAGE == _current_page_type))
 	      pimg->Draw(hdcDst, &rcImg, false, false);
     }
 
@@ -475,7 +453,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 
-	if(!(_last_author == pmlid->StringAuthor))
+	if(!(_last_author == pmlid->StringAuthor)||(MESSAGE_PAGE == _current_page_type))
 		MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
 	_last_author=pmlid->StringAuthor ;
@@ -510,7 +488,7 @@ int GMList::CalcItemHeight(int index)
 	MsgListItemData* pmlid = (MsgListItemData*)pItem->Data;
 
 	lines = pmlid->StringText.Length()/16+1;
-	height = 40+lines*24;
+	height = 48+lines*24;
 	height = height<100?100:height;
 	return height;
 

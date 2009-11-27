@@ -121,7 +121,7 @@ string ConfIni::int2string(int num_)
 
 wstring ConfIni::_account=L"";
 wstring ConfIni::_password=L"";
-wstring ConfIni::_twitter_api=L"";
+wstring ConfIni::_twitter_api=L"http://nest.onedd.net/api";
 wstring ConfIni::_twitter_source=L"twidroid";
 int ConfIni::_remember_password=1;
 int ConfIni::_update_interval=3;  //3 mintue;
