@@ -215,9 +215,16 @@ switch(nIDEvent){
 
 void SayWnd::ScreenRotate(int mode_)
 {
-	if( SCREEN_PORTRAIT_P == mode_ || SCREEN_PORTRAIT_N == mode_)
-		SetWindowPos(m_hWnd, 0 , 0,0,480,720);
-	else
-		SetWindowPos(m_hWnd, 0 , 0,0,720,480);
+#if 0
+	if( SCREEN_PORTRAIT_P == mode_ || SCREEN_PORTRAIT_N == mode_){
+		RECT rcWork = MzGetWorkArea();
+		SetWindowPos(m_hWnd, 0 , 0,0,RECT_WIDTH(rcWork),rcWork.bottom);
+	}
+	else{
+		RECT rcWork = MzGetWorkArea();
+		//SetWindowPos(m_hWnd, 0 , 0,0,720,480);
+		SetWindowPos(m_hWnd, 0 , 0,0,RECT_WIDTH(rcWork),rcWork.bottom);
+	}
+#endif
 
 }

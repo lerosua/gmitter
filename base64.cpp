@@ -294,7 +294,7 @@ std::string getScreenName(const std::string& input)
 	if(pos!=std::string::npos){
 		tmp=input.substr(pos+16,std::string::npos);	
 		
-		t_pos = tmp.find("\",\"");
+		t_pos = tmp.find("\"");
 		text_str=tmp.substr(0,t_pos);
 		return text_str;
 	}
