@@ -318,7 +318,19 @@ std::string getTimeZone(const std::string& input)
 }
 
 
+
 std::string getCreateTime(const std::string& input)
+{
+	size_t pos = input.find("\"created_at\":");
+	string tmp;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+14,std::string::npos);	
+		return getTime(tmp);
+	}
+	return getTime(input);
+
+}
+std::string getTime(const std::string& input)
 {
 	string time_str;
 	string tmp;

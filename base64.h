@@ -28,6 +28,7 @@ BOOL WCharToMByte_UTF8(LPCWSTR lpcwszStr, LPSTR lpszStr, DWORD dwMaxSize);
 
 /** for json parser*/
 std::string getCreateTime(const std::string& input);
+std::string getTime(const std::string& input);
 std::string getStatusText(const std::string& input);
 std::string getScreenName(const std::string& input);
 std::string getImageUrl(const std::string& input);
