@@ -103,6 +103,8 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    int nIndex=lParam;
 		    if(nIndex==0){
 			    /*退出发送窗口*/
+			    MzAccClose();
+			//SetWindowPos(m_hWnd, 0, TASK_BAR_HEIGHT, 480, 720-TASK_BAR_HEIGHT);
 			    EndModal(ID_CANCEL);
 			    return;
 		    }
@@ -213,18 +215,81 @@ switch(nIDEvent){
 }
 */
 
-void SayWnd::ScreenRotate(int mode_)
+void SayWnd::ScreenRotate(int RotateMode)
 {
-#if 0
-	if( SCREEN_PORTRAIT_P == mode_ || SCREEN_PORTRAIT_N == mode_){
-		RECT rcWork = MzGetWorkArea();
-		SetWindowPos(m_hWnd, 0 , 0,0,RECT_WIDTH(rcWork),rcWork.bottom);
-	}
-	else{
-		RECT rcWork = MzGetWorkArea();
-		//SetWindowPos(m_hWnd, 0 , 0,0,720,480);
-		SetWindowPos(m_hWnd, 0 , 0,0,RECT_WIDTH(rcWork),rcWork.bottom);
-	}
-#endif
+	//旋转屏幕
+    DEVMODE DevMode;
+
+    memset(&DevMode, 0, sizeof(DEVMODE));
+
+    DevMode.dmSize = sizeof(DEVMODE);
+
+    DevMode.dmFields = DM_DISPLAYQUERYORIENTATION;
+
+    if (DISP_CHANGE_SUCCESSFUL == ChangeDisplaySettingsEx(NULL, &DevMode, NULL, CDS_TEST, NULL)) 
+    {
+      DevMode.dmFields = DM_DISPLAYORIENTATION;
+      DWORD dDegree = DMDO_90;
+      switch(RotateMode)
+      {
+        case 0:
+        dDegree = DMDO_90;
+        break;
+        case 1:  
+        dDegree = DMDO_270;
+        break;
+        case 2:
+        dDegree = DMDO_0;
+        break;
+        case 3:
+        dDegree = DMDO_180;
+        break;
+      }
+      int y=38;
+	    if(MzIsSipOpen()){
+		    MzCloseSip();
+	    }
+
+      //当转为竖屏时更改窗口、单行编辑器和ToolbarText的位置大小
+      if (dDegree == DMDO_90 || dDegree == DMDO_270)
+      {
+        SetWindowPos(m_hWnd, 0, TASK_BAR_HEIGHT, 480, 720-TASK_BAR_HEIGHT);
+
+        m_Toolbar.SetTextBarType(ICON_TOOLBAR_TYPE_480);
+        m_Toolbar_Top.SetTextBarType(ICON_TOOLBAR_TYPE_480);
+
+        m_Toolbar.SetPos(0, GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR);  
+        m_Toolbar_Top.SetPos(0, y, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR);  
+
+	m_ScrollWin.SetPos(0,MZM_HEIGHT_TEXT_TOOLBAR+y,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR*2-y);
+	m_pEdit.SetPos(0,0,470,170);
+      }
+
+      //当转为横屏时更改窗口、单行编辑器和ToolbarText的位置大小
+      if (dDegree == DMDO_180 || dDegree == DMDO_0)
+      {
+        SetWindowPos(m_hWnd, 0, TASK_BAR_HEIGHT, 720, 480-TASK_BAR_HEIGHT);
+
+        m_Toolbar.SetTextBarType(TEXT_TOOLBAR_TYPE_720);
+        m_Toolbar_Top.SetTextBarType(TEXT_TOOLBAR_TYPE_720);
+
+        m_Toolbar.SetPos(0, GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR_w720);
+        m_Toolbar_Top.SetPos(0, y, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR_w720);
+
+	m_ScrollWin.SetPos(0,MZM_HEIGHT_TEXT_TOOLBAR+y,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR*2-y);
+        //m_pEdit.SetPos(MZM_MARGIN_MAX,MZM_MARGIN_MAX*2,GetWidth()-MZM_MARGIN_MAX*2,70);
+	m_pEdit.SetPos(0,0,700,170);
+      }
+      DevMode.dmDisplayOrientation = dDegree;
+
+      if(DISP_CHANGE_SUCCESSFUL == ChangeDisplaySettingsEx(NULL, &DevMode, NULL, 0, NULL))
+      {
+
+      }
+      else
+      {
+
+      }
+    }
 
 }

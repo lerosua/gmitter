@@ -184,7 +184,7 @@ BOOL LoginWnd::OnInitDialog()
 
 	MainWnd m_wnd;
 	m_wnd.fakeLogin(m_Account.GetText(),m_Pass.GetText());
-	m_wnd.AutoDialNet();
+	//m_wnd.AutoDialNet();
 	SayWnd *m_Saywnd=new SayWnd(m_wnd);
 	RECT rcWork = MzGetWorkArea();
 	m_Saywnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork),m_hWnd,0,WS_POPUP);
