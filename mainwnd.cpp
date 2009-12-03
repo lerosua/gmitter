@@ -433,7 +433,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 		::FillRect(hdcDst, &bgRect, bgBrush);
 		::SetTextColor(hdcDst,RGB(255,255,255));
 		MzDrawText(hdcDst,L"下一页", prcItem,DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
-		_last_author=L"NULL";
+		//_last_author=L"NULL";
 		return;
 	}
     // 绘制左边的小图像
@@ -443,7 +443,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
     rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
     if (pimg)
     {
-	 if((!(_last_author == pmlid->StringAuthor)))
+	 //if((!(_last_author == pmlid->StringAuthor)))
 	      pimg->Draw(hdcDst, &rcImg, false, false);
     }
 
@@ -454,10 +454,10 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 
-	if((!(_last_author == pmlid->StringAuthor)))
+	//if((!(_last_author == pmlid->StringAuthor)))
 		MzDrawText(hdcDst,pmlid->StringAuthor.C_Str(), &rcText,DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
-	_last_author=pmlid->StringAuthor ;
+	//_last_author=pmlid->StringAuthor ;
 
 	//for timetrim
 	rcText.left = rcText.right;
@@ -759,15 +759,21 @@ do{
 		str_content=tmp;
 	}else{
 		DrawNextItem();
-		break;
+		goto end;
+		//break;
 	}
 	
 
 }while(true);
-	  if(global_count_<end_)
+	  if(global_count_<end_){
 		   Parser(tmp,count);
+		global_count_++;
+		count++;
+	}else
+		DrawNextItem();
 	   str_content.clear();
    }
+end:
    infile.close();
 
    m_List.ScrollTo(UI_SCROLLTO_TOP,0,false);
