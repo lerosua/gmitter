@@ -58,7 +58,7 @@ BOOL SayWnd::OnInitDialog()
 
     y=0;
 
-    m_pEdit.SetPos(0,y,470,170);
+    m_pEdit.SetPos(0,y,470,MZ_IDC_EDIT_HEIGHT);
     m_pEdit.SetID(MZ_IDC_POST_EDIT);
     m_pEdit.EnableZoomIn(true);
     m_pEdit.SetReadOnly(false);
@@ -74,7 +74,7 @@ BOOL SayWnd::OnInitDialog()
     m_pEdit.SetFocus(true);
     m_ScrollWin.AddChild(&m_pEdit);
 
-    y+=170;
+    y+=MZ_IDC_EDIT_HEIGHT;
 
 
     m_Toolbar.SetID(MZ_IDC_POST_TOOLBAR);
@@ -111,10 +111,17 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    if(2==nIndex){
 			    /*发送处理*/
 
+			    if(m_pEdit.GetText().IsEmpty())
+				    return;
+			int nOK = MzMessageBoxEx(m_hWnd, L"确认发送吗", L"", MB_YESNO, SHK_RET_APPNOEXIT_SHELLTOP);
+			if(2==nOK)
+				return;
+
 			    /** 关闭键盘*/
 			    if(MzIsSipOpen()){
 				    MzCloseSip();
 			    }
+			    
 
 			    CMzString str(256);
 			    wsprintf(str.C_Str(),L"%s",m_pEdit.GetText().C_Str());
@@ -262,7 +269,8 @@ void SayWnd::ScreenRotate(int RotateMode)
         m_Toolbar_Top.SetPos(0, y, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR);  
 
 	m_ScrollWin.SetPos(0,MZM_HEIGHT_TEXT_TOOLBAR+y,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR*2-y);
-	m_pEdit.SetPos(0,0,470,170);
+	m_pEdit.SetPos(0,0,470,MZ_IDC_EDIT_HEIGHT);
+	this->UpdateWindow();
       }
 
       //当转为横屏时更改窗口、单行编辑器和ToolbarText的位置大小
@@ -278,7 +286,8 @@ void SayWnd::ScreenRotate(int RotateMode)
 
 	m_ScrollWin.SetPos(0,MZM_HEIGHT_TEXT_TOOLBAR+y,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR*2-y);
         //m_pEdit.SetPos(MZM_MARGIN_MAX,MZM_MARGIN_MAX*2,GetWidth()-MZM_MARGIN_MAX*2,70);
-	m_pEdit.SetPos(0,0,700,170);
+	m_pEdit.SetPos(0,0,700,MZ_IDC_EDIT_HEIGHT);
+	this->UpdateWindow();
       }
       DevMode.dmDisplayOrientation = dDegree;
 

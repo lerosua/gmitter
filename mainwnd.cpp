@@ -313,7 +313,9 @@ void MainWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    int nIndex=lParam;
 		    if(nIndex==4){
 			    /* 退出程序*/
-			   PostQuitMessage(0);
+			int nOK = MzMessageBoxEx(m_hWnd, L"确认退出吗", L"", MB_YESNO, SHK_RET_APPNOEXIT_SHELLTOP);
+			if(1==nOK)
+				PostQuitMessage(0);
         
 			    return;
 		    }
@@ -488,7 +490,7 @@ int GMList::CalcItemHeight(int index)
         ListItem* pItem = GetItem(index);
 	MsgListItemData* pmlid = (MsgListItemData*)pItem->Data;
 
-	lines = pmlid->StringText.Length()/16+1;
+	lines = pmlid->StringText.Length()/15+1;
 	height = 48+lines*24;
 	height = height<100?100:height;
 	return height;
@@ -555,7 +557,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	m_account = account;
 	LoadCache(_statusFile,_current_page);
-	StartTimer(ConfIni::getUpdateInterval());
+	//StartTimer(ConfIni::getUpdateInterval());
 	
 	m_Top.SetButton(1,true,true,m_account.C_Str());
 	return true;
@@ -765,6 +767,7 @@ do{
 	
 
 }while(true);
+#if 0
 	  if(global_count_<end_){
 		   Parser(tmp,count);
 		global_count_++;
@@ -773,6 +776,7 @@ do{
 		NULL;
 		//DrawNextItem();
 	}
+#endif
 	   str_content.clear();
    }
 _end:
@@ -849,7 +853,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	    infile2.close();
 }
 
-
+#if 0
  void MainWnd::OnTimer(UINT_PTR nIDEvent)
 {
 
@@ -868,6 +872,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	}
 
 }
+#endif
 bool MainWnd::getLocked()
 {
 	if(_locked)

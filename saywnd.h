@@ -28,6 +28,7 @@
 #define MZ_IDC_POST_CLEAR	161
 #define MZ_IDC_POST_TOOLBAR_TOP 152
 #define TASK_BAR_HEIGHT 0
+#define MZ_IDC_EDIT_HEIGHT 200
 
 
 class MainWnd;
