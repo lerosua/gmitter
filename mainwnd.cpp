@@ -177,7 +177,7 @@ LRESULT MainWnd::MzDefWndProc(UINT message,WPARAM wParam,LPARAM lParam)
 
 				
 				int nIndex=m_List.CalcIndexOfPos(x,y);
-				if(nIndex<0|| (nIndex+1 > ConfIni::getPageCount()))
+				if(nIndex<0|| (nIndex > ConfIni::getPageCount()))
 					break;
 				int id_ = GMUtils::popup_menu_status(m_hWnd,L"lerosua");
 				switch(id_){
@@ -451,7 +451,7 @@ void GMList::DrawItem(HDC hdcDst,int nIndex,RECT* prcItem,RECT* prcWin,RECT* prc
 	RECT rcText=*prcItem;
 	rcText.left=MZM_MARGIN_MAX*2;
 	rcText.right=rcText.right - 200;
-	rcText.bottom=rcText.top+RECT_HEIGHT(rcText)/3;
+	rcText.bottom=rcText.top+28;
 	::SetTextColor(hdcDst,RGB(0,200,0));
 
 	//if((!(_last_author == pmlid->StringAuthor)))
@@ -759,7 +759,7 @@ do{
 		str_content=tmp;
 	}else{
 		DrawNextItem();
-		goto end;
+		goto _end;
 		//break;
 	}
 	
@@ -769,11 +769,13 @@ do{
 		   Parser(tmp,count);
 		global_count_++;
 		count++;
-	}else
-		DrawNextItem();
+	}else{
+		NULL;
+		//DrawNextItem();
+	}
 	   str_content.clear();
    }
-end:
+_end:
    infile.close();
 
    m_List.ScrollTo(UI_SCROLLTO_TOP,0,false);
