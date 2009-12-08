@@ -276,12 +276,17 @@ std::string getStatusText(const std::string& input)
 	string tmp;
 	size_t pos = input.find(",\"text\":");
 	size_t t_pos;
+	size_t tpos;
 	if(pos!=std::string::npos){
 		tmp=input.substr(pos+9,std::string::npos);	
 		
 		t_pos = tmp.find("\"}");
 		text_str=tmp.substr(0,t_pos);
-		return text_str;
+		if(tpos!=std::string::npos){
+			return text_str.substr(0,tpos);
+		}else
+			return text_str;
+
 	}
 	return "";
 }
@@ -310,7 +315,7 @@ std::string getTimeZone(const std::string& input)
 	if(pos!=std::string::npos){
 		tmp=input.substr(pos+13,std::string::npos);	
 		
-		t_pos = tmp.find("\",\"");
+		t_pos = tmp.find("\"");
 		time_str=tmp.substr(0,t_pos);
 		return time_str;
 	}
@@ -339,7 +344,7 @@ std::string getTime(const std::string& input)
 	if(pos!=std::string::npos){
 		tmp=input.substr(pos+14,std::string::npos);	
 		
-		t_pos = tmp.find("\",\"");
+		t_pos = tmp.find("\"");
 		time_str=tmp.substr(0,t_pos);
 		//return time_str;
 		return time_str.substr(4,12);
