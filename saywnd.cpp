@@ -33,7 +33,7 @@ SayWnd::SayWnd(MainWnd& wnd):m_pwnd(wnd)
 SayWnd::~SayWnd()
 {
 
-	MzAccClose();
+	//MzAccClose();
 }
 BOOL SayWnd::OnInitDialog()
 {
@@ -83,10 +83,10 @@ BOOL SayWnd::OnInitDialog()
     m_Toolbar.SetButton(2,true,true,L"发送");
     AddUiWin(&m_Toolbar);
 
-    MzAccOpen();
+    //MzAccOpen();
     //SetTimer(m_hWnd,1,50,NULL);
 
-    m_accMsg = MzAccGetMessage();
+    //m_accMsg = MzAccGetMessage();
     
     return TRUE;
 
@@ -103,7 +103,7 @@ void SayWnd::OnMzCommand(WPARAM wParam,LPARAM lParam)
 		    int nIndex=lParam;
 		    if(nIndex==0){
 			    /*退出发送窗口*/
-			    MzAccClose();
+			    //MzAccClose();
 			//SetWindowPos(m_hWnd, 0, TASK_BAR_HEIGHT, 480, 720-TASK_BAR_HEIGHT);
 			    EndModal(ID_CANCEL);
 			    return;

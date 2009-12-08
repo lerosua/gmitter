@@ -91,7 +91,7 @@ class MainWnd:public CMzWndEx
 	void LoadCache(page_type type_,int page_);
 	void SaveCache(page_type type_);
 	void SaveCache(const std::string& filename_);
-	void Parser(const std::string& input,int big);
+	bool Parser(const std::string& input,int big);
 	void UpdateStatus();
 	/** 更新列表，会根据当前页的类型来更新*/
 	void UpdateList();

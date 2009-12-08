@@ -263,7 +263,7 @@ std::string getImageUrl(  const std::string& input)
 	if(pos!=std::string::npos){
 		tmp=input.substr(pos+22,std::string::npos);	
 		
-		t_pos = tmp.find("\",\"");
+		t_pos = tmp.find("\"");
 		text_str=tmp.substr(0,t_pos);
 		return text_str;
 	}
@@ -282,6 +282,7 @@ std::string getStatusText(const std::string& input)
 		
 		t_pos = tmp.find("\"}");
 		text_str=tmp.substr(0,t_pos);
+		tpos=text_str.find("\",\"");
 		if(tpos!=std::string::npos){
 			return text_str.substr(0,tpos);
 		}else
@@ -401,4 +402,36 @@ std::string getSource(const std::string& input)
 	}
 	return "";
 
+}
+
+std::string getFollowerC(const std::string& input)
+{
+	string time_str;
+	string tmp;
+	size_t pos = input.find("\"followers_count\":");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+18,std::string::npos);	
+		
+		t_pos = tmp.find(",\"");
+		time_str=tmp.substr(0,t_pos);
+		return time_str;
+	}
+	return "";
+}
+
+std::string getFriendsC(const std::string& input)
+{
+	string time_str;
+	string tmp;
+	size_t pos = input.find("\"friends_count\":");
+	size_t t_pos;
+	if(pos!=std::string::npos){
+		tmp=input.substr(pos+16,std::string::npos);	
+		
+		t_pos = tmp.find(",\"");
+		time_str=tmp.substr(0,t_pos);
+		return time_str;
+	}
+	return "";
 }

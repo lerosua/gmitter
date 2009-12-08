@@ -644,9 +644,12 @@ bool MainWnd::GetNetStatus()
 
 }
 
-void MainWnd::Parser(const std::string& input,int big)
+bool MainWnd::Parser(const std::string& input,int big)
 {
 	if(0==big){
+		std::string id_ = getStatusId(input);
+		if(id_.empty())
+			return false;
 		if( STATUS_PAGE == _current_page_type )
 			_status_id=getStatusId(input);
 		else if( FAVORITES_PAGE == _current_page_type)
@@ -665,7 +668,7 @@ if(big>= (_current_page-1)*ConfIni::getPageCount()){
 	std::string str_source;
 	str_name=getScreenName(input);
 	if(str_name.empty())
-		return;
+		return false;
 	str_msg=getStatusText(input);
 	str_time = getCreateTime(input);
 	str_source = getSource(input);
@@ -680,6 +683,7 @@ if(big>= (_current_page-1)*ConfIni::getPageCount()){
 
 	AddMsg((wchar_t*)wstr_name.c_str(),(wchar_t*)wstr_msg.c_str(),(wchar_t*)wstr_time.c_str(),big);
 	}
+	return true;
 }
 
 void MainWnd::LoadCache(page_type type_,int page_)
@@ -741,9 +745,11 @@ void MainWnd::LoadCache(const std::string& filename,int page_)
 do{
 	pos= str_content.find(",{");
 	if(pos==std::string::npos){
-		Parser(str_content,count);	
-		global_count_++;
-		count++;
+		if(Parser(str_content,count))	
+		{
+			global_count_++;
+			count++;
+		}
 		break;
 	}
 
@@ -754,9 +760,10 @@ do{
 	tmp=str_content.substr(pos+1,std::string::npos);
 
 	if(global_count_<end_){
-		Parser(strp,count);
-		global_count_++;
-		count++;
+		if(Parser(strp,count)){
+			global_count_++;
+			count++;
+		}
 
 		str_content=tmp;
 	}else{

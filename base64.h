@@ -35,6 +35,8 @@ std::string getImageUrl(const std::string& input);
 std::string getTimeZone(const std::string& input);
 std::string getStatusId(const std::string& input);
 std::string getSource(const std::string& input);
+std::string getFollowerC(const std::string& input);
+std::string getFriendsC(const std::string& input);
 
 bool FileExists(TCHAR* filename);
 bool DirExists(const wstring& path, const wstring& folder=L"");
