@@ -58,7 +58,7 @@ BOOL SayWnd::OnInitDialog()
 
     y=0;
 
-    m_pEdit.SetPos(0,y,470,MZ_IDC_EDIT_HEIGHT);
+    m_pEdit.SetPos(5,y,470,MZ_IDC_EDIT_HEIGHT);
     m_pEdit.SetID(MZ_IDC_POST_EDIT);
     m_pEdit.EnableZoomIn(true);
     m_pEdit.SetReadOnly(false);
@@ -87,6 +87,8 @@ BOOL SayWnd::OnInitDialog()
     //SetTimer(m_hWnd,1,50,NULL);
 
     //m_accMsg = MzAccGetMessage();
+    //SetBgColor(RGB(0,0,0));
+    SetBgColor(RGB(185,188,204));
     
     return TRUE;
 
