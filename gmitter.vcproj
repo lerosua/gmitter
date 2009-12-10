@@ -63,7 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfcsd.lib platformapi.lib callinterface.lib winsock.lib"
+				AdditionalDependencies="mzfcsd.lib platformapi.lib callinterface.lib wininet.lib"
 				OutputFile="$(OutDir)/gmitter.exe"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
@@ -210,7 +210,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\happyhttp.cpp"
+				RelativePath=".\httputils.cpp"
 				>
 			</File>
 			<File
@@ -292,7 +292,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\happyhttp.h"
+				RelativePath=".\httputils.h"
 				>
 			</File>
 			<File

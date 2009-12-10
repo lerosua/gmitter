@@ -18,7 +18,7 @@
 
 #include <string>
 #include <windows.h>
-#include "happyhttp.h"
+#include "httputils.h"
 
 using namespace std;
 class GMitter
@@ -30,12 +30,9 @@ public:
 	void SetStatus(const std::string& msg);
 	void SetStatus(const std::wstring& wmsg);
 	std::string toPercent(std::string str);
-	static void OnBegin(const happyhttp::Response* r, void* userdata);
-	static void OnComplete(const happyhttp::Response* r, void* userdata) ;
-	static void OnData(const happyhttp::Response* r, void* userdata, const unsigned char* data, int n) ;
 	bool GetNetStatus();
-	void sGet(std::string req="");
-	void sPost(std::string where="",std::string params="");
+	bool sGet(std::string req="");
+	bool sPost(std::string where="",std::string params="");
 	void UpdateStatus(const std::string& mid="");
 	void UpdateMentions(const std::string& id_="");
 	void UpdateDM(const std::string& id_="");

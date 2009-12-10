@@ -221,9 +221,6 @@ BOOL LoginWnd::OnInitDialog()
 		bool success = m_wnd.Login(m_Account.GetText(),m_Pass.GetText());
 		//bool success=m_wnd.fakeLogin(m_Account.GetText(),m_Pass.GetText());
 		MzEndWaitDlg();
-		//delete me
-		//m_wnd.AddMsg(L"lerosua",L"initial twitter",L"time Nov 2009 19:90");
-		//m_wnd.AddMsg(L"lerosua",L"1234567890qwertyuioplkjahdgfgzvxbbcvmfjeuyw",L"1∑÷÷”÷Æ«∞");
 		if(success)
 			m_wnd.DoModal();
 		else{
