@@ -542,7 +542,8 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	m_twitter.SetApi(ws2s(ConfIni::getTwitterApi()));
 
-	AutoDialNet();
+	if(!AutoDialNet())
+		return false;
 	if(m_twitter.Login(s_account,s_pass))
 		SetUserDir(s_account);
 	else{

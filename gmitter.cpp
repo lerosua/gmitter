@@ -99,7 +99,7 @@ bool GMitter::sPost(std::string where,std::string params)
 
     string enc;
     string tmp;
-    tmp = tw_uname + ':' + tw_pass;
+    tmp = tw_uname + ":" + tw_pass;
     enc=base64_encode(tmp);
     string auth="Authorization: Basic ";
     auth+=enc;
@@ -160,7 +160,7 @@ bool GMitter::sGet(std::string req)
 
     string enc;
     string tmp;
-    tmp = tw_uname + ':' + tw_pass;
+    tmp = tw_uname + ":" + tw_pass;
     enc=base64_encode(tmp);
     string auth="Authorization: Basic ";
     auth+=enc;
