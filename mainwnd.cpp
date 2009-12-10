@@ -558,7 +558,7 @@ bool MainWnd::Login(const CMzString& account,const CMzString& password)
 
 	m_account = account;
 	LoadCache(_statusFile,_current_page);
-	//StartTimer(ConfIni::getUpdateInterval());
+	StartTimer(ConfIni::getUpdateInterval());
 	
 	m_Top.SetButton(1,true,true,m_account.C_Str());
 	return true;
@@ -861,7 +861,7 @@ void MainWnd::SaveCache(const std::string& filename)
 	    infile2.close();
 }
 
-#if 0
+#if 1
  void MainWnd::OnTimer(UINT_PTR nIDEvent)
 {
 

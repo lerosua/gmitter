@@ -98,7 +98,7 @@ class MainWnd:public CMzWndEx
 	void StartTimer(int min_);
 	bool getLocked() ;
 	void freeLocked();
-	//virtual void OnTimer(UINT_PTR nIDEvent);
+	virtual void OnTimer(UINT_PTR nIDEvent);
 	void SetUserDir(const std::string& path_);
 protected:
 	UiScrollWin m_ScrollWin;
